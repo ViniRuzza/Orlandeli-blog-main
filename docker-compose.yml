@@ -1,0 +1,46 @@
+services:
+  # ======== STRAPI (CMS) ========
+  strapi:
+    build:
+      context: ./strapi
+      dockerfile: Dockerfile
+    container_name: orlandeli-strapi
+    restart: unless-stopped
+    env_file: ./strapi/.env
+    volumes:
+      # Persistir banco SQLite e uploads entre restarts
+      - strapi-data:/app/.tmp
+      - strapi-uploads:/app/public/uploads
+    ports:
+      # Expõe a porta 1337 apenas para acesso admin direto (opcional)
+      # Remova essa linha se quiser que o admin só seja acessível via Nginx
+      - "1337:1337"
+    networks:
+      - orlandeli-net
+
+  # ======== FRONTEND (Vite + Nginx) ========
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # O frontend se comunica com o Strapi via proxy do Nginx
+        # Em produção, use a URL pública do seu servidor
+        VITE_STRAPI_URL: ""
+    container_name: orlandeli-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - strapi
+    networks:
+      - orlandeli-net
+
+volumes:
+  strapi-data:
+  strapi-uploads:
+
+
+networks:
+  orlandeli-net:
+    driver: bridge
