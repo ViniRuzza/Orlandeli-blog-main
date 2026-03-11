@@ -6,78 +6,50 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar, MessageCircle, User, Send } from "lucide-react";
-
-import illustration1 from "@/assets/illustration-1.jpg";
-import illustration3 from "@/assets/illustration-3.jpg";
-import carouselCartoons from "@/assets/carousel-cartoons.jpg";
-
-const blogPosts = [
-  {
-    id: 1,
-    title: "O Processo Criativo por Trás de Yang",
-    excerpt: "Conheça como nasceu o universo de O Mundo de Yang, desde os primeiros esboços até a versão final.",
-    image: illustration1,
-    date: "2024-01-15",
-    categories: ["Bastidores", "Dicas"],
-    comments: 12,
-  },
-  {
-    id: 2,
-    title: "Dicas para Aspirantes a Cartunistas",
-    excerpt: "Compartilho algumas lições que aprendi ao longo de mais de 20 anos desenhando quadrinhos.",
-    image: carouselCartoons,
-    date: "2024-01-08",
-    categories: ["Dicas"],
-    comments: 24,
-  },
-  {
-    id: 3,
-    title: "Nova Coleção Infantil em Produção",
-    excerpt: "Estou trabalhando em uma nova série de livros infantis! Confira os primeiros conceitos.",
-    image: illustration3,
-    date: "2024-01-02",
-    categories: ["Novidades", "Eventos"],
-    comments: 8,
-  },
-];
+import { Calendar, MessageCircle, User, Send, Loader2 } from "lucide-react";
+import { usePostsBlog } from "@/hooks/usePostsBlog";
+import type { PostBlog } from "@/lib/types";
 
 export default function Blog() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedPost, setSelectedPost] = useState<typeof blogPosts[0] | null>(null);
+  const [selectedPost, setSelectedPost] = useState<PostBlog | null>(null);
   const [comment, setComment] = useState("");
   const location = useLocation();
 
+  const { data: posts = [], isLoading, isError } = usePostsBlog();
+
   const categories = useMemo(
-    () => Array.from(new Set(blogPosts.flatMap(p => p.categories))),
-    []
+    () => Array.from(new Set(posts.flatMap((p) => p.categorias))),
+    [posts]
   );
 
   useEffect(() => {
     const q = new URLSearchParams(location.search).get("q");
     if (!q) return;
-    const matched = categories.filter(c => c.toLowerCase().includes(q.toLowerCase()));
+    const matched = categories.filter((c) => c.toLowerCase().includes(q.toLowerCase()));
     if (matched.length > 0) {
       setSelectedCategories(matched);
     }
   }, [location.search, categories]);
 
   const toggleCategory = (cat: string) => {
-    setSelectedCategories(prev =>
-      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+    setSelectedCategories((prev) =>
+      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
     );
   };
 
-  const filteredPosts = blogPosts.filter(post =>
-    selectedCategories.length === 0 ||
-    post.categories.some(c => selectedCategories.includes(c))
+  const filteredPosts = posts.filter(
+    (post) =>
+      selectedCategories.length === 0 ||
+      post.categorias.some((c) => selectedCategories.includes(c))
   );
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric'
+    if (!dateString) return "";
+    return new Date(dateString).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
     });
   };
 
@@ -105,7 +77,7 @@ export default function Blog() {
       <section className="py-6 bg-background border-b border-border sticky top-16 z-30">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap gap-2 justify-center">
-            {categories.map(category => (
+            {categories.map((category) => (
               <Badge
                 key={category}
                 variant={selectedCategories.includes(category) ? "default" : "outline"}
@@ -136,7 +108,35 @@ export default function Blog() {
       {/* Blog Posts */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          {!selectedPost ? (
+          {/* Loading state */}
+          {isLoading && (
+            <div className="flex items-center justify-center py-20">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <span className="ml-3 text-muted-foreground">Carregando posts...</span>
+            </div>
+          )}
+
+          {/* Error state */}
+          {isError && (
+            <div className="text-center py-20">
+              <p className="text-destructive font-medium">Não foi possível carregar os posts.</p>
+              <p className="text-muted-foreground text-sm mt-1">
+                Verifique se o Strapi está em execução e tente novamente.
+              </p>
+            </div>
+          )}
+
+          {/* Empty state */}
+          {!isLoading && !isError && filteredPosts.length === 0 && (
+            <div className="text-center py-20 text-muted-foreground">
+              {posts.length === 0
+                ? "Nenhum post publicado ainda."
+                : "Nenhum post encontrado para a categoria selecionada."}
+            </div>
+          )}
+
+          {/* Posts grid */}
+          {!isLoading && !isError && !selectedPost && filteredPosts.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredPosts.map((post, idx) => (
                 <motion.article
@@ -147,42 +147,40 @@ export default function Blog() {
                   className="card-artistic group cursor-pointer"
                   onClick={() => setSelectedPost(post)}
                 >
-                  <div className="aspect-video overflow-hidden rounded-t-lg">
-                    <img 
-                      src={post.image} 
-                      alt={post.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
+                  {post.imagemUrl && (
+                    <div className="aspect-video overflow-hidden rounded-t-lg">
+                      <img
+                        src={post.imagemUrl}
+                        alt={post.titulo}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
+                  )}
                   <div className="p-5 space-y-3">
                     <div className="flex flex-wrap gap-1">
-                      {post.categories.map(cat => (
+                      {post.categorias.map((cat) => (
                         <Badge key={cat} variant="secondary" className="text-xs">
                           {cat}
                         </Badge>
                       ))}
                     </div>
                     <h2 className="font-serif text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
-                      {post.title}
+                      {post.titulo}
                     </h2>
-                    <p className="text-muted-foreground text-sm line-clamp-2">
-                      {post.excerpt}
-                    </p>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
-                        {formatDate(post.date)}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <MessageCircle className="h-3 w-3" />
-                        {post.comments} comentários
+                        {formatDate(post.data)}
                       </span>
                     </div>
                   </div>
                 </motion.article>
               ))}
             </div>
-          ) : (
+          )}
+
+          {/* Post detail */}
+          {!isLoading && selectedPost && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -197,56 +195,54 @@ export default function Blog() {
               </Button>
 
               <article className="space-y-8">
-                <div className="image-frame aspect-video">
-                  <img 
-                    src={selectedPost.image} 
-                    alt={selectedPost.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                {selectedPost.imagemUrl && (
+                  <div className="image-frame aspect-video">
+                    <img
+                      src={selectedPost.imagemUrl}
+                      alt={selectedPost.titulo}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
 
                 <div className="space-y-4">
                   <div className="flex flex-wrap gap-1">
-                    {selectedPost.categories.map(cat => (
-                      <Badge key={cat} variant="secondary">{cat}</Badge>
+                    {selectedPost.categorias.map((cat) => (
+                      <Badge key={cat} variant="secondary">
+                        {cat}
+                      </Badge>
                     ))}
                   </div>
                   <h1 className="font-serif text-3xl md:text-4xl font-bold text-foreground">
-                    {selectedPost.title}
+                    {selectedPost.titulo}
                   </h1>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
-                      {formatDate(selectedPost.date)}
+                      {formatDate(selectedPost.data)}
                     </span>
                   </div>
                 </div>
 
-                <div className="prose prose-lg max-w-none">
-                  <p className="text-foreground leading-relaxed">
-                    {selectedPost.excerpt}
-                  </p>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor 
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                  </p>
-                </div>
+                {/* Rich text content */}
+                <div
+                  className="prose prose-lg max-w-none text-foreground leading-relaxed"
+                  dangerouslySetInnerHTML={{ __html: selectedPost.conteudo }}
+                />
 
                 {/* Comments Section */}
                 <div className="border-t border-border pt-8 space-y-6">
                   <h3 className="font-serif text-xl font-semibold text-foreground">
-                    Comentários ({selectedPost.comments})
+                    Deixe um comentário
                   </h3>
 
                   {/* Comment Form */}
                   <div className="bg-muted p-6 rounded-lg space-y-4">
-                    <h4 className="font-medium text-foreground">Deixe seu comentário</h4>
                     <div className="grid grid-cols-2 gap-4">
                       <Input placeholder="Seu nome" />
                       <Input placeholder="Seu email" type="email" />
                     </div>
-                    <Textarea 
+                    <Textarea
                       placeholder="Escreva seu comentário..."
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}

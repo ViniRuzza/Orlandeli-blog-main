@@ -1,4 +1,5 @@
 // Tipos para as respostas do Strapi REST API
+// Gerado automaticamente — não editar manualmente as interfaces Strapi*
 
 export interface StrapiMediaFormat {
     url: string;
@@ -71,4 +72,22 @@ export interface Ilustracao {
     titulo: string;
     tags: string[];
     imagemUrl: string;
+}
+
+// Content Type: PostBlog
+export interface StrapiPostBlog {
+    titulo: string;
+    conteudo: string | null;
+    imagem: StrapiMedia | { data: StrapiMedia } | null;
+    data: string | null;
+    categorias: string[] | null;
+}
+
+export interface PostBlog {
+    id: number;
+    titulo: string;
+    conteudo: string;
+    imagemUrl: string;
+    data: string;
+    categorias: string[];
 }

@@ -6,6 +6,7 @@ import logo from "@/assets/logo.png";
 import { useQuadrinhos } from "@/hooks/useQuadrinhos";
 import { useIlustracoes } from "@/hooks/useIlustracoes";
 import { Label } from "recharts";
+import path from "path";
 
 const navLinks = [
   { label: "HOME", path: "/" },
@@ -13,6 +14,7 @@ const navLinks = [
   { label: "PORTFÓLIO", path: "/portfolio" },
   { label: "LOJA", path: "/loja" },
   { label: "BLOG", path: "/blog" },
+  {label: "O MUNDO DE YANG", path:"/Yang"},
   { label: "SOBRE", path: "/sobre" },
 ];
 

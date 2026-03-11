@@ -500,6 +500,38 @@ export interface ApiIlustraca0Ilustraca0 extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiPostBlogPostBlog extends Struct.CollectionTypeSchema {
+  collectionName: 'post_blogs';
+  info: {
+    displayName: 'Post de Blog';
+    pluralName: 'post-blogs';
+    singularName: 'post-blog';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    categorias: Schema.Attribute.JSON;
+    conteudo: Schema.Attribute.RichText;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    data: Schema.Attribute.Date & Schema.Attribute.Required;
+    imagem: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::post-blog.post-blog'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    titulo: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiQuadrinhoQuadrinho extends Struct.CollectionTypeSchema {
   collectionName: 'quadrinhos';
   info: {
@@ -1049,6 +1081,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::ilustraca0.ilustraca0': ApiIlustraca0Ilustraca0;
+      'api::post-blog.post-blog': ApiPostBlogPostBlog;
       'api::quadrinho.quadrinho': ApiQuadrinhoQuadrinho;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

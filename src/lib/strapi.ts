@@ -1,4 +1,4 @@
-import type { StrapiResponse, StrapiMedia, Quadrinho, Ilustracao } from "./types";
+import type { StrapiResponse, StrapiMedia, Quadrinho, Ilustracao, PostBlog } from "./types";
 
 export const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || "http://localhost:1337";
 
@@ -108,5 +108,28 @@ export function normalizeIlustracao(item: { id: number;[key: string]: unknown })
         titulo: (attrs.titulo as string) || "",
         tags,
         imagemUrl: strapiMediaUrl(imagem),
+    };
+}
+/**
+ * Normaliza um item de PostBlog do Strapi para o tipo usado no frontend.
+ */
+export function normalizePostBlog(item: { id: number;[key: string]: unknown }): PostBlog {
+    const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
+
+    const imagem = extractMedia(attrs.imagem);
+
+    // categorias é campo JSON (array de strings)
+    let categorias: string[] = [];
+    if (Array.isArray(attrs.categorias)) {
+        categorias = (attrs.categorias as string[]).filter((c) => typeof c === "string");
+    }
+
+    return {
+        id: item.id,
+        titulo: (attrs.titulo as string) || "",
+        conteudo: (attrs.conteudo as string) || "",
+        imagemUrl: strapiMediaUrl(imagem),
+        data: (attrs.data as string) || "",
+        categorias,
     };
 }

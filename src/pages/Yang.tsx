@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Users, Sword } from "lucide-react";
+import { ArrowRight, BookOpen, Users, Sword, Instagram } from "lucide-react";
 
 import carouselYang from "@/assets/carousel-yang.jpg";
 import bookYang1 from "@/assets/book-yang-1.jpg";
@@ -41,7 +41,8 @@ export default function Yang() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative min-h-[80vh] flex items-center overflow-hidden">
+      {/* Hero */}
+      <section className="relative py-12 md:py-16 overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${carouselYang})` }}
@@ -54,29 +55,30 @@ export default function Yang() {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-2xl text-accent-foreground"
           >
-            <span className="inline-block px-4 py-2 bg-background/20 rounded-full text-sm font-medium mb-6">
+            <span className="inline-block px-3 py-1 bg-background/20 rounded-full text-xs font-medium mb-4">
               Uma Saga Épica de Orlandeli
             </span>
-            <h1 className="font-serif text-5xl md:text-7xl font-bold mb-6">
+            {/* Título com tamanho reduzido para igualar à página Sobre */}
+            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4">
               O Mundo de Yang
             </h1>
-            <p className="text-xl text-accent-foreground/90 mb-8 leading-relaxed">
+            <p className="text-lg text-accent-foreground/90 mb-6 leading-relaxed">
               Em um oriente fantástico, um jovem guerreiro descobre que seu destino está 
               entrelaçado com forças ancestrais que podem salvar ou destruir seu mundo.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/loja">
-                <Button size="lg" variant="secondary" className="font-semibold">
-                  <BookOpen className="mr-2 h-5 w-5" />
+                <Button variant="secondary" className="font-semibold">
+                  <BookOpen className="mr-2 h-4 w-4" />
                   Comprar Livros
                 </Button>
               </Link>
-              <Link to="/quadrinhos">
-                <Button size="lg" variant="outline" className="border-accent-foreground/30 text-accent-foreground hover:bg-accent-foreground/10">
-                  Ler Capítulos
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
+              <a href="https://www.instagram.com/omundodeyang" target="_blank" rel="noopener noreferrer">
+                <Button variant="secondary" className="font-semibold">
+                  <Instagram className="mr-0.5 h-4 w-4" />
+                  O Mundo de Yang
+                  </Button>
+              </a>
             </div>
           </motion.div>
         </div>
