@@ -371,6 +371,9 @@ export function Header() {
 
               {/* Mobile nav links */}
               <div className="flex-1 py-4 overflow-y-auto">
+                <div className="px-4 pb-4">
+                  <SearchBar />
+                </div>
                 {navLinks.map((link) => (
                   <Link
                     key={link.path}
@@ -400,8 +403,8 @@ export function Header() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={social.label}
-                      className="p-2 rounded transition-colors"
-                      style={{ color: "#cccccc", backgroundColor: "#4a3a4a" }}
+                      className="p-2 rounded transition-colors bg-white/10 hover:bg-white/20"
+                      style={{ color: "#cccccc" }}
                     >
                       <social.icon className="h-5 w-5" />
                     </a>

@@ -42,12 +42,12 @@ const carouselSlides = [
 const featuredBooks = [
   {
     image: bookYang1,
-    title: "O Mundo de Yang - Vol. 1",
+    title: "O Mundo de Yang - O Caminho do Meio",
     link: "/loja"
   },
   {
     image: sulImg,
-    title: "O Mundo de Yangg - Rumo ao Sul",
+    title: "O Mundo de Yang - Rumo ao Sul",
     link: "/loja"
   },
   {
