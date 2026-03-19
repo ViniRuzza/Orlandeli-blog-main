@@ -52,7 +52,7 @@ const featuredBooks = [
   },
   {
     image: darumaImg,
-    title: "daruma",
+    title: "Daruma",
     link: "/loja"
   },
 ];
