@@ -1,6 +1,6 @@
 import type { StrapiResponse, StrapiMedia, Quadrinho, Ilustracao, PostBlog } from "./types";
 
-export const STRAPI_URL = import.meta.env.VITE_STRAPI_URL || "http://localhost:1337";
+export const STRAPI_URL = import.meta.env.VITE_STRAPI_URL ?? "http://localhost:1337";
 
 /**
  * Constrói a URL completa de uma mídia do Strapi.
@@ -65,6 +65,43 @@ function extractMediaArray(field: unknown): StrapiMedia[] {
 }
 
 /**
+ * Extrai categorias de um campo (suporta relação Strapi, array JSON ou string).
+ */
+function extractCategories(field: unknown): string[] {
+    if (!field) return [];
+
+    // Caso 1: Relação Strapi (pode vir como { data: [...] } ou direto conforme a versão)
+    let items: any[] = [];
+    if (typeof field === "object" && field !== null) {
+        if ("data" in field && Array.isArray((field as any).data)) {
+            items = (field as any).data;
+        } else if (Array.isArray(field)) {
+            items = field;
+        }
+    }
+
+    if (items.length > 0) {
+        return items.map((item) => {
+            // Extrai o nome/titulo do atributo ou do nível superior (v4 vs v5)
+            const source = item.attributes ?? item;
+            return source.nome || source.title || source.name || source.label || "";
+        }).filter(Boolean);
+    }
+
+    // Caso 2: Array de strings (JSON)
+    if (Array.isArray(field)) {
+        return field.map(c => typeof c === "string" ? c : "").filter(Boolean);
+    }
+
+    // Caso 3: String separada por vírgula
+    if (typeof field === "string") {
+        return field.split(",").map(c => c.trim()).filter(Boolean);
+    }
+
+    return [];
+}
+
+/**
  * Normaliza um item de Quadrinho do Strapi para o tipo usado no frontend.
  */
 export function normalizeQuadrinho(item: { id: number;[key: string]: unknown }): Quadrinho {
@@ -82,6 +119,7 @@ export function normalizeQuadrinho(item: { id: number;[key: string]: unknown }):
         stats: (attrs.stats as string) || "",
         capaUrl: strapiMediaUrl(capa),
         paginasUrls: paginas.map(strapiMediaUrl).filter(Boolean),
+        categorias: extractCategories(attrs.categorias),
     };
 }
 
@@ -118,18 +156,12 @@ export function normalizePostBlog(item: { id: number;[key: string]: unknown }): 
 
     const imagem = extractMedia(attrs.imagem);
 
-    // categorias é campo JSON (array de strings)
-    let categorias: string[] = [];
-    if (Array.isArray(attrs.categorias)) {
-        categorias = (attrs.categorias as string[]).filter((c) => typeof c === "string");
-    }
-
     return {
         id: item.id,
         titulo: (attrs.titulo as string) || "",
         conteudo: (attrs.conteudo as string) || "",
         imagemUrl: strapiMediaUrl(imagem),
         data: (attrs.data as string) || "",
-        categorias,
+        categorias: extractCategories(attrs.categorias),
     };
 }

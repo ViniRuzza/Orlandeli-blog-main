@@ -10,7 +10,7 @@ const socialLinks = [
 
 const quickLinks = [
   { label: "Home", path: "/" },
-  { label: "Quadrinhos", path: "/quadrinhos" },
+  { label: "Publicações", path: "/quadrinhos" },
   { label: "Portfólio", path: "/portfolio" },
   { label: "Loja", path: "/loja" },
   { label: "Blog", path: "/blog" },

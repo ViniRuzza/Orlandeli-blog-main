@@ -65,6 +65,7 @@ export interface Quadrinho {
     stats: string;
     capaUrl: string;
     paginasUrls: string[];
+    categorias: string[];
 }
 
 export interface Ilustracao {

@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ChevronLeft, ChevronRight, BookOpen, Loader2, AlertCircle } from "lucide-react";
+import { ChevronLeft, ChevronRight, BookOpen, Loader2, AlertCircle, Search } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { useQuadrinhos } from "@/hooks/useQuadrinhos";
 import type { Quadrinho } from "@/lib/types";
 
@@ -26,18 +28,37 @@ export default function Quadrinhos() {
   const [selectedComic, setSelectedComic] = useState<Quadrinho | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const location = useLocation();
+
+  const categories = useMemo(() => {
+    if (!comics) return [];
+    // Tenta pegar categorias se existirem, senão usa as tags/stats
+    return Array.from(new Set(comics.flatMap(c => (c as any).categorias || [c.stats])));
+  }, [comics]);
 
   useEffect(() => {
     const q = new URLSearchParams(location.search).get("q");
     if (q) setSearchQuery(q);
   }, [location.search]);
 
-  const filteredComics = comics?.filter(comic =>
-    !searchQuery ||
-    comic.titulo.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    comic.sinopse.toLowerCase().includes(searchQuery.toLowerCase())
-  ) ?? [];
+  const toggleCategory = (cat: string) => {
+    setSelectedCategories(prev =>
+      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+    );
+  };
+
+  const filteredComics = comics?.filter(comic => {
+    const matchesSearch = !searchQuery ||
+      comic.titulo.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      comic.sinopse.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const comicCats = (comic as any).categorias || [comic.stats];
+    const matchesCategory = selectedCategories.length === 0 || 
+      selectedCategories.some(cat => comicCats.includes(cat));
+
+    return matchesSearch && matchesCategory;
+  }) ?? [];
 
   const openComic = (comic: Quadrinho) => {
     setSelectedComic(comic);
@@ -54,13 +75,59 @@ export default function Quadrinhos() {
             animate={{ opacity: 1, y: 0 }}
           >
             <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Quadrinhos
+              Publicações
             </h1>
             <div className="section-divider mb-6" />
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Conheça as histórias em quadrinhos criadas por Orlandeli. Clique em cada título para ler a sinopse e ver algumas páginas.
+              Conheça as publicações criadas por Orlandeli. Clique em cada título para ler a sinopse e ver algumas páginas.
             </p>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Category Filter & Local Search */}
+      <section className="py-8 bg-background border-b border-border sticky top-[72px] z-30 shadow-sm">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="flex flex-col items-center gap-6">
+            {/* Local Search Bar */}
+            <div className="relative w-full max-w-md">
+               <Input
+                 type="text"
+                 placeholder="Buscar publicações..."
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 className="pl-10 h-10 rounded-full border-border bg-muted/30 focus:bg-background transition-all"
+               />
+               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            </div>
+
+            {/* Categories */}
+            <div className="flex flex-wrap gap-2 justify-center">
+              {categories.map((category) => (
+                <Badge
+                  key={category}
+                  variant={selectedCategories.includes(category) ? "default" : "outline"}
+                  className={`cursor-pointer px-4 py-1.5 text-xs transition-all rounded-full ${selectedCategories.includes(category)
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-muted hover:border-primary/50"
+                    }`}
+                  onClick={() => toggleCategory(category)}
+                >
+                  {category}
+                </Badge>
+              ))}
+              {selectedCategories.length > 0 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setSelectedCategories([])}
+                  className="text-destructive hover:text-white hover:bg-destructive px-3 py-1.5 h-auto text-xs rounded-full ml-2"
+                >
+                  Limpar
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -111,12 +178,12 @@ export default function Quadrinhos() {
                   className="card-artistic group cursor-pointer"
                   onClick={() => openComic(comic)}
                 >
-                  <div className="aspect-[2/3] overflow-hidden rounded-t-lg relative">
+                  <div className="aspect-[2/3] overflow-hidden rounded-t-lg relative bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2">
                     {comic.capaUrl ? (
                       <img
                         src={comic.capaUrl}
                         alt={comic.titulo}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
                       <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -157,12 +224,12 @@ export default function Quadrinhos() {
 
               <div className="grid md:grid-cols-2 gap-6 mt-4">
                 {/* Capa */}
-                <div className="image-frame aspect-[2/3]">
+                <div className="image-frame aspect-[2/3] bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2">
                   {selectedComic.capaUrl ? (
                     <img
                       src={selectedComic.capaUrl}
                       alt={selectedComic.titulo}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   ) : (
                     <div className="w-full h-full bg-muted flex items-center justify-center">

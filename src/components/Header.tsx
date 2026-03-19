@@ -10,7 +10,7 @@ import path from "path";
 
 const navLinks = [
   { label: "HOME", path: "/" },
-  { label: "QUADRINHOS", path: "/quadrinhos" },
+  { label: "PUBLICAÇÕES", path: "/quadrinhos" },
   { label: "PORTFÓLIO", path: "/portfolio" },
   { label: "LOJA", path: "/loja" },
   { label: "BLOG", path: "/blog" },
@@ -58,7 +58,7 @@ interface SearchResult {
 }
 
 const typeLabel: Record<SearchResultType, string> = {
-  quadrinho: "Quadrinhos",
+  quadrinho: "Publicações",
   portfolio: "Portfólio",
   blog: "Blog",
 };
@@ -153,100 +153,89 @@ function SearchBar() {
   const showDropdown = isOpen && query.length >= 2;
 
   return (
-    <div style={{ backgroundColor: "#93c748" }}>
-      <div className="container mx-auto px-4 py-2">
-        <div className="relative max-w-xl mx-auto" ref={containerRef}>
-          <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none"
-            style={{ color: "rgba(255,255,255,0.85)" }}
-          />
-          <input
-            type="text"
-            placeholder="Pesquisar..."
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setIsOpen(true);
-            }}
-            onFocus={() => setIsOpen(true)}
-            className="search-bar-input w-full pl-9 pr-8 py-1.5 text-sm rounded-md border focus:outline-none transition-colors"
-            style={{
-              backgroundColor: "rgba(255,255,255,0.2)",
-              borderColor: "rgba(255,255,255,0.4)",
-              color: "white",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLInputElement).style.backgroundColor = "rgba(255,255,255,0.28)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLInputElement).style.backgroundColor = "rgba(255,255,255,0.2)";
-            }}
-          />
-          {/* Placeholder branco via CSS global não funciona inline, então usamos um estilo em-linha via data attr */}
-          {query && (
-            <button
-              onClick={() => {
-                setQuery("");
-                setIsOpen(false);
-              }}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded-full hover:bg-white/20 transition-colors"
-              style={{ color: "white" }}
-              aria-label="Limpar pesquisa"
-            >
-              <X className="h-3.5 w-3.5" />
-            </button>
-          )}
+    <div className="relative" ref={containerRef}>
+      <Search
+        className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 pointer-events-none"
+        style={{ color: "rgba(255,255,255,0.5)" }}
+      />
+      <input
+        type="text"
+        placeholder="Pesquisar..."
+        value={query}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setIsOpen(true);
+        }}
+        onFocus={() => setIsOpen(true)}
+        className="w-full pl-8 pr-8 py-1.5 text-[11px] rounded-md border focus:outline-none transition-all"
+        style={{
+          backgroundColor: "rgba(255,255,255,0.05)",
+          borderColor: "rgba(255,255,255,0.2)",
+          color: "white",
+        }}
+      />
+      {query && (
+        <button
+          onClick={() => {
+            setQuery("");
+            setIsOpen(false);
+          }}
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded-full hover:bg-white/20 transition-colors"
+          style={{ color: "white" }}
+          aria-label="Limpar pesquisa"
+        >
+          <X className="h-3.5 w-3.5" />
+        </button>
+      )}
 
-          {/* Dropdown de resultados */}
-          <AnimatePresence>
-            {showDropdown && (
-              <motion.div
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.15 }}
-                className="absolute left-0 right-0 top-full mt-1 z-50 rounded-md shadow-xl overflow-hidden"
-                style={{ backgroundColor: "white", border: "1px solid #e5e7eb" }}
-              >
-                {results.length > 0 ? (
-                  results.map((result) => (
-                    <button
-                      key={result.id}
-                      className="w-full flex items-start gap-3 px-4 py-2.5 text-left border-b last:border-0 transition-colors hover:bg-gray-50"
-                      style={{ borderColor: "#f3f4f6" }}
-                      onClick={() => {
-                        navigate(`${result.path}?q=${encodeURIComponent(query)}`);
-                        setQuery("");
-                        setIsOpen(false);
-                      }}
-                    >
-                      <span
-                        className="text-xs font-bold px-2 py-0.5 rounded-full shrink-0 mt-0.5"
-                        style={{
-                          backgroundColor: typeBg[result.type],
-                          color: typeText[result.type],
-                        }}
-                      >
-                        {typeLabel[result.type]}
-                      </span>
-                      <div className="min-w-0">
-                        <p className="text-sm font-semibold text-gray-800 truncate">{result.title}</p>
-                        {result.subtitle && (
-                          <p className="text-xs text-gray-500 truncate">{result.subtitle}</p>
-                        )}
-                      </div>
-                    </button>
-                  ))
-                ) : (
-                  <div className="px-4 py-3 text-sm text-gray-500">
-                    Nenhum resultado encontrado para &ldquo;{query}&rdquo;
+      {/* Dropdown de resultados */}
+      <AnimatePresence>
+        {showDropdown && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.15 }}
+            className="absolute left-0 right-0 top-full mt-1 z-50 rounded-md shadow-xl overflow-hidden"
+            style={{ backgroundColor: "white", border: "1px solid #e5e7eb" }}
+          >
+            {results.length > 0 ? (
+              results.map((result) => (
+                <button
+                  key={result.id}
+                  className="w-full flex items-start gap-3 px-4 py-2.5 text-left border-b last:border-0 transition-colors hover:bg-gray-50"
+                  style={{ borderColor: "#f3f4f6" }}
+                  onClick={() => {
+                    navigate(`${result.path}?q=${encodeURIComponent(query)}`);
+                    setQuery("");
+                    setIsOpen(false);
+                  }}
+                >
+                  <span
+                    className="text-xs font-bold px-2 py-0.5 rounded-full shrink-0 mt-0.5"
+                    style={{
+                      backgroundColor: typeBg[result.type],
+                      color: typeText[result.type],
+                    }}
+                  >
+                    {typeLabel[result.type]}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-gray-800 truncate">{result.title}</p>
+                    {result.subtitle && (
+                      <p className="text-xs text-gray-500 truncate">{result.subtitle}</p>
+                    )}
                   </div>
-                )}
-              </motion.div>
+                </button>
+              ))
+            ) : (
+              <div className="px-4 py-3 text-sm text-gray-500">
+                Nenhum resultado encontrado para &ldquo;{query}&rdquo;
+              </div>
             )}
-          </AnimatePresence>
-        </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -273,32 +262,39 @@ export function Header() {
               />
             </Link>
 
-            {/* Desktop Nav Links */}
-            <div className="hidden lg:flex items-center gap-0">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className="relative px-3 py-1 text-xs font-bold tracking-wider transition-colors"
-                  style={{
-                    color: isActive(link.path) ? "#93c748" : "#cccccc",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#93c748")}
-                  onMouseLeave={(e) => {
-                    if (!isActive(link.path)) e.currentTarget.style.color = "#cccccc";
-                  }}
-                >
-                  {link.label}
-                  {isActive(link.path) && (
-                    <motion.span
-                      layoutId="nav-indicator"
-                      className="absolute bottom-0 left-0 right-0 h-0.5"
-                      style={{ backgroundColor: "#93c748" }}
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    />
-                  )}
-                </Link>
-              ))}
+            {/* Desktop Nav Links & Search */}
+            <div className="hidden lg:flex items-center gap-4">
+              <div className="flex items-center gap-0">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className="relative px-3 py-1 text-[11px] font-bold tracking-wider transition-colors"
+                    style={{
+                      color: isActive(link.path) ? "#93c748" : "#cccccc",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#93c748")}
+                    onMouseLeave={(e) => {
+                      if (!isActive(link.path)) e.currentTarget.style.color = "#cccccc";
+                    }}
+                  >
+                    {link.label}
+                    {isActive(link.path) && (
+                      <motion.span
+                        layoutId="nav-indicator"
+                        className="absolute bottom-[-22px] left-0 right-0 h-0.5"
+                        style={{ backgroundColor: "#93c748" }}
+                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      />
+                    )}
+                  </Link>
+                ))}
+              </div>
+
+              {/* Search Bar integrated into header */}
+              <div className="w-32 xl:w-48 ml-2">
+                <SearchBar />
+              </div>
             </div>
 
             {/* Social icons - desktop */}
@@ -333,8 +329,8 @@ export function Header() {
         </div>
       </nav>
 
-      {/* Search bar with green background */}
-      {location.pathname !== "/loja" && <SearchBar />}
+      {/* Thin Green Line at the bottom of header */}
+      <div className="h-1.5 w-full" style={{ backgroundColor: "#93c748" }} />
 
       {/* Mobile Menu */}
       <AnimatePresence>

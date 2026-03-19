@@ -9,10 +9,11 @@ import heroStudio from "@/assets/hero-studio.jpg";
 import carouselYang from "@/assets/carousel-yang.jpg";
 import carouselCartoons from "@/assets/carousel-cartoons.jpg";
 import artistPortrait from "@/assets/image.png";
+import sapinImg from "@/assets/sapin.jpeg";
 import { useIlustracoes } from "@/hooks/useIlustracoes";
 import bookYang1 from "@/assets/Yang_OmundoDoMeio.webp";
-import book2 from "@/assets/book-2.jpg";
-import book3 from "@/assets/book-3.jpg";
+import sulImg from "@/assets/sul.jpeg";
+import darumaImg from "@/assets/darumaa.jpeg";
 
 
 const carouselSlides = [
@@ -23,16 +24,16 @@ const carouselSlides = [
     cta: { label: "Conheça a Arte", link: "/portfolio" },
   },
   {
-    image: carouselYang,
+    image: sapinImg,
     title: "O Mundo de Yang",
     subtitle: "Uma aventura épica no oriente fantástico",
     cta: { label: "Explorar Universo", link: "/yang" },
   },
   {
-    image: carouselCartoons,
+    image: sulImg,
     title: "Cartuns Editoriais",
     subtitle: "Humor e crítica social com traço marcante",
-    cta: { label: "Ver Quadrinhos", link: "/quadrinhos" },
+    cta: { label: "Ver Publicações", link: "/quadrinhos" },
   },
 ];
 
@@ -42,19 +43,16 @@ const featuredBooks = [
   {
     image: bookYang1,
     title: "O Mundo de Yang - Vol. 1",
-    price: "R$ 49,90",
     link: "/loja"
   },
   {
-    image: book2,
-    title: "Crônicas Urbanas",
-    price: "R$ 39,90",
+    image: sulImg,
+    title: "O Mundo de Yangg - Rumo ao Sul",
     link: "/loja"
   },
   {
-    image: book3,
-    title: "Bichos da Floresta",
-    price: "R$ 35,90",
+    image: darumaImg,
+    title: "daruma",
     link: "/loja"
   },
 ];
@@ -184,11 +182,11 @@ export default function Index() {
                   className="card-artistic group overflow-hidden"
                 >
                   {item.imagemUrl && (
-                    <div className="aspect-square overflow-hidden">
+                    <div className="aspect-square overflow-hidden bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2">
                       <img
                         src={item.imagemUrl}
                         alt={item.titulo}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
                       />
                     </div>
                   )}
@@ -283,16 +281,15 @@ export default function Index() {
                 transition={{ delay: idx * 0.15 }}
                 className="card-artistic group"
               >
-                <div className="aspect-[2/3] overflow-hidden rounded-t-lg">
+                <div className="aspect-[2/3] overflow-hidden rounded-t-lg bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2">
                   <img
                     src={book.image}
                     alt={book.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
                 <div className="p-4 text-center">
                   <h3 className="font-serif font-semibold text-foreground mb-2">{book.title}</h3>
-                  <p className="text-primary font-bold text-lg mb-3">{book.price}</p>
                   <Link to={book.link}>
                     <Button variant="outline" size="sm" className="w-full border-wood text-wood-dark hover:bg-wood hover:text-background">
                       Ver na Loja
