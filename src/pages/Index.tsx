@@ -12,6 +12,7 @@ import artistPortrait from "@/assets/image.png";
 import placaYang1 from "@/assets/placas_yang_1.jpg.jpeg";
 import sapinImg from "@/assets/sapin.jpeg";
 import { useIlustracoes } from "@/hooks/useIlustracoes";
+import { useDestaques } from "@/hooks/useDestaques";
 import bookYang1 from "@/assets/Yang_OmundoDoMeio.webp";
 import sulImg from "@/assets/sul.jpeg";
 import darumaImg from "@/assets/darumaa.jpeg";
@@ -61,23 +62,33 @@ const featuredBooks = [
 export default function Index() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { data: todasIlustracoes = [], isLoading: isLoadingIlustracoes } = useIlustracoes();
+  const { data: destaquesData = [] } = useDestaques();
   const illustrations = todasIlustracoes.slice(0, 4);
+
+  const activeSlides = destaquesData.length > 0 
+    ? destaquesData.map(d => ({
+        image: d.imagemUrl,
+        title: d.titulo,
+        subtitle: d.legenda,
+        cta: { label: d.textoBotao || "Ver mais", link: d.link || "/" }
+      }))
+    : carouselSlides;
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % carouselSlides.length);
+      setCurrentSlide((prev) => (prev + 1) % activeSlides.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, []);
+  }, [activeSlides.length]);
 
   const goToSlide = (index: number) => setCurrentSlide(index);
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % carouselSlides.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + carouselSlides.length) % carouselSlides.length);
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % activeSlides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + activeSlides.length) % activeSlides.length);
 
   return (
     <Layout>
       {/* Hero Carousel */}
-      <section className="relative h-[70vh] min-h-[500px] overflow-hidden">
+      <section className="relative h-[60vh] min-h-[400px] overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
@@ -85,13 +96,20 @@ export default function Index() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.7 }}
-            className="absolute inset-0"
+            className="absolute inset-0 overflow-hidden bg-background"
           >
+            {/* Fundo Desfocado para preencher espaço vazio na tela de PC */}
             <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${carouselSlides[currentSlide].image})` }}
+              className="absolute inset-0 bg-cover bg-center blur-3xl opacity-50 scale-110"
+              style={{ backgroundImage: `url(${activeSlides[currentSlide]?.image})` }}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-foreground/80 via-foreground/40 to-transparent" />
+            {/* Recorte Estático para evitar de cortar a imagem (bg-contain) */}
+            <div
+              className="absolute inset-0 bg-contain bg-right md:bg-center bg-no-repeat mix-blend-normal"
+              style={{ backgroundImage: `url(${activeSlides[currentSlide]?.image})` }}
+            />
+            {/* Gradiente por cima para dar leitura ao texto */}
+            <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/50 to-transparent pointer-events-none" />
           </motion.div>
         </AnimatePresence>
 
@@ -105,14 +123,14 @@ export default function Index() {
             className="max-w-xl text-background"
           >
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
-              {carouselSlides[currentSlide].title}
+              {activeSlides[currentSlide]?.title}
             </h1>
             <p className="text-lg md:text-xl text-background/90 mb-8">
-              {carouselSlides[currentSlide].subtitle}
+              {activeSlides[currentSlide]?.subtitle}
             </p>
-            <Link to={carouselSlides[currentSlide].cta.link}>
+            <Link to={activeSlides[currentSlide]?.cta.link || "/"}>
               <Button size="lg" className="btn-wood">
-                {carouselSlides[currentSlide].cta.label}
+                {activeSlides[currentSlide]?.cta.label}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -128,7 +146,7 @@ export default function Index() {
             <ChevronLeft className="h-5 w-5 text-background" />
           </button>
           <div className="flex gap-2">
-            {carouselSlides.map((_, idx) => (
+            {activeSlides.map((_, idx) => (
               <button
                 key={idx}
                 onClick={() => goToSlide(idx)}
@@ -149,7 +167,7 @@ export default function Index() {
       </section>
 
       {/* Illustrations Grid */}
-      <section className="py-20 bg-muted">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -258,7 +276,7 @@ export default function Index() {
       </section>
 
       {/* Featured Books */}
-      <section className="py-20 bg-secondary">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

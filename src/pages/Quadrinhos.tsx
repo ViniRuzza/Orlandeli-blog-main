@@ -52,9 +52,9 @@ export default function Quadrinhos() {
     const matchesSearch = !searchQuery ||
       comic.titulo.toLowerCase().includes(searchQuery.toLowerCase()) ||
       comic.sinopse.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const comicCats = (comic as any).categorias || [comic.stats];
-    const matchesCategory = selectedCategories.length === 0 || 
+    const matchesCategory = selectedCategories.length === 0 ||
       selectedCategories.some(cat => comicCats.includes(cat));
 
     return matchesSearch && matchesCategory;
@@ -68,7 +68,7 @@ export default function Quadrinhos() {
   return (
     <Layout>
       {/* Header */}
-      <section className="py-16 bg-muted">
+      <section className="h-[60vh] min-h-[400px] w-full flex flex-col justify-center overflow-hidden bg-background">
         <div className="container mx-auto px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -86,19 +86,19 @@ export default function Quadrinhos() {
       </section>
 
       {/* Category Filter & Local Search */}
-      <section className="py-8 bg-background border-b border-border sticky top-[72px] z-30 shadow-sm">
+      <section className="py-8 bg-background">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="flex flex-col items-center gap-6">
             {/* Local Search Bar */}
             <div className="relative w-full max-w-md">
-               <Input
-                 type="text"
-                 placeholder="Buscar publicações..."
-                 value={searchQuery}
-                 onChange={(e) => setSearchQuery(e.target.value)}
-                 className="pl-10 h-10 rounded-full border-border bg-muted/30 focus:bg-background transition-all"
-               />
-               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Buscar publicações..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 h-10 rounded-full border-border bg-muted/30 focus:bg-background transition-all"
+              />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             </div>
 
             {/* Categories */}

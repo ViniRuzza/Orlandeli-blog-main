@@ -20,13 +20,13 @@ export default function Yang() {
     <Layout>
       {/* Hero */}
       {/* Hero */}
-      <section className="relative py-12 md:py-16 overflow-hidden">
-        <div 
+      <section className="relative h-[60vh] min-h-[400px] w-full flex flex-col justify-center overflow-hidden">
+        <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${carouselYang})` }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-accent/95 via-accent/70 to-transparent" />
-        
+
         <div className="relative z-10 container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -41,7 +41,7 @@ export default function Yang() {
               O Mundo de Yang
             </h1>
             <p className="text-lg text-accent-foreground/90 mb-6 leading-relaxed">
-              Em um oriente fantástico, um jovem guerreiro descobre que seu destino está 
+              Em um oriente fantástico, um jovem guerreiro descobre que seu destino está
               entrelaçado com forças ancestrais que podem salvar ou destruir seu mundo.
             </p>
             <div className="flex flex-wrap gap-4">
@@ -55,7 +55,7 @@ export default function Yang() {
                 <Button variant="secondary" className="font-semibold">
                   <Instagram className="mr-0.5 h-4 w-4" />
                   O Mundo de Yang
-                  </Button>
+                </Button>
               </a>
             </div>
           </motion.div>
@@ -84,8 +84,8 @@ export default function Yang() {
               viewport={{ once: true }}
               className="text-lg text-muted-foreground leading-relaxed mb-6"
             >
-              Numa terra onde a natureza e a magia se entrelaçam, Yang vive uma vida simples 
-              em uma pequena aldeia cercada por florestas de bambu. Tudo muda quando ele encontra 
+              Numa terra onde a natureza e a magia se entrelaçam, Yang vive uma vida simples
+              em uma pequena aldeia cercada por florestas de bambu. Tudo muda quando ele encontra
               uma antiga espada escondida em uma caverna sagrada.
             </motion.p>
             <motion.p
@@ -95,9 +95,9 @@ export default function Yang() {
               transition={{ delay: 0.1 }}
               className="text-lg text-muted-foreground leading-relaxed"
             >
-              A partir desse momento, Yang descobre que faz parte de uma linhagem de guerreiros 
-              destinados a proteger o equilíbrio entre o mundo dos humanos e o reino dos espíritos. 
-              Mas os Senhores da Sombra também despertaram, e eles farão de tudo para conquistar 
+              A partir desse momento, Yang descobre que faz parte de uma linhagem de guerreiros
+              destinados a proteger o equilíbrio entre o mundo dos humanos e o reino dos espíritos.
+              Mas os Senhores da Sombra também despertaram, e eles farão de tudo para conquistar
               ambos os mundos.
             </motion.p>
           </div>

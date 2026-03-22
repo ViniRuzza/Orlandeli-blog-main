@@ -64,7 +64,7 @@ export default function Portfolio() {
   return (
     <Layout>
       {/* Header */}
-      <section className="py-16 bg-muted">
+      <section className="h-[60vh] min-h-[400px] w-full flex flex-col justify-center overflow-hidden bg-background">
         <div className="container mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -80,7 +80,7 @@ export default function Portfolio() {
 
       {/* Filters — só exibe quando tiver dados */}
       {!isLoading && !isError && ilustracoes && ilustracoes.length > 0 && (
-        <section className="py-8 bg-background border-b border-border sticky top-16 z-30">
+        <section className="py-8 bg-background">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
               {/* Search */}
@@ -101,8 +101,8 @@ export default function Portfolio() {
                     key={tag}
                     variant={selectedTags.includes(tag) ? "default" : "outline"}
                     className={`cursor-pointer capitalize transition-all ${selectedTags.includes(tag)
-                        ? "bg-primary text-primary-foreground"
-                        : "hover:bg-muted"
+                      ? "bg-primary text-primary-foreground"
+                      : "hover:bg-muted"
                       }`}
                     onClick={() => toggleTag(tag)}
                   >

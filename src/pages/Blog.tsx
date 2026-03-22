@@ -64,7 +64,7 @@ export default function Blog() {
   return (
     <Layout>
       {/* Header */}
-      <section className="py-16 bg-muted">
+      <section className="h-[60vh] min-h-[400px] w-full flex flex-col justify-center overflow-hidden bg-background">
         <div className="container mx-auto px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -82,7 +82,7 @@ export default function Blog() {
       </section>
 
       {/* Category Filter & Local Search */}
-      <section className="py-8 bg-background border-b border-border sticky top-[72px] z-30 shadow-sm">
+      <section className="py-8 bg-background">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="flex flex-col items-center gap-6">
             {/* Local Search Bar */}
@@ -203,7 +203,7 @@ export default function Blog() {
                           12 comentários
                         </span>
                       </div>
-                      <button 
+                      <button
                         onClick={(e) => {
                           e.stopPropagation();
                           if (navigator.share) {

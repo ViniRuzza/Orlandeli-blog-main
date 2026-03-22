@@ -24,7 +24,7 @@ export default function Sobre() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative py-24 overflow-hidden">
+      <section className="relative h-[60vh] min-h-[400px] w-full flex flex-col justify-center overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroStudio})` }}
@@ -90,7 +90,7 @@ export default function Sobre() {
       </section>
 
       {/* Timeline */}
-      <section className="py-20 bg-muted">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="flex justify-center w-full max-w-5xl mx-auto">
             <img src={placaYang4} alt="Trajetória - Placa Yang 4" className="w-full h-auto shadow-card rounded-lg" />
@@ -136,7 +136,7 @@ export default function Sobre() {
       </section>
 
       {/* Skills */}
-      <section className="py-20 bg-secondary">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <motion.div

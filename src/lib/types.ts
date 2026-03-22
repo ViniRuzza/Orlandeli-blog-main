@@ -92,3 +92,21 @@ export interface PostBlog {
     data: string;
     categorias: string[];
 }
+
+// Content Type: Destaque / Banner (Carrossel)
+export interface StrapiDestaque {
+    titulo: string;
+    legenda: string;
+    imagem: StrapiMedia | { data: StrapiMedia } | null;
+    link: string;
+    textoBotao: string;
+}
+
+export interface Destaque {
+    id: number;
+    titulo: string;
+    legenda: string;
+    imagemUrl: string;
+    link: string;
+    textoBotao: string;
+}

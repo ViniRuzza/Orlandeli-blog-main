@@ -7,9 +7,13 @@ services:
     restart: unless-stopped
     env_file:
       - ./strapi/.env
+    environment:
+      - NODE_ENV=development
     ports:
       - "1337:1337"
     volumes:
+      - ./strapi/src:/app/src
+      - ./strapi/types:/app/types
       - strapi-uploads:/app/public/uploads
       - strapi-data:/app/.tmp
     networks:
