@@ -6,19 +6,20 @@ import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/Layout";
 
 import heroStudio from "@/assets/hero-studio.jpg";
-import carouselYang from "@/assets/carousel-yang.jpg";
+import carouselYang from "@/assets/placas_yang_5.jpg.jpeg";
 import carouselCartoons from "@/assets/carousel-cartoons.jpg";
 import artistPortrait from "@/assets/image.png";
+import placaYang1 from "@/assets/placas_yang_1.jpg.jpeg";
 import sapinImg from "@/assets/sapin.jpeg";
 import { useIlustracoes } from "@/hooks/useIlustracoes";
 import bookYang1 from "@/assets/Yang_OmundoDoMeio.webp";
 import sulImg from "@/assets/sul.jpeg";
 import darumaImg from "@/assets/darumaa.jpeg";
-
+import aCoisaImg from "@/assets/acoisa.jpeg";
 
 const carouselSlides = [
   {
-    image: artistPortrait,
+    image: placaYang1,
     title: "O Traço de Orlandeli",
     subtitle: "Cartuns, ilustrações e histórias que encantam há mais de 20 anos",
     cta: { label: "Conheça a Arte", link: "/portfolio" },
@@ -43,17 +44,17 @@ const featuredBooks = [
   {
     image: bookYang1,
     title: "O Mundo de Yang - O Caminho do Meio",
-    link: "/loja"
+    link: "https://orlandeli.commercesuite.com.br/livros/o-mundo-de-yang-caminho-do-meio"
   },
   {
-    image: sulImg,
-    title: "O Mundo de Yang - Rumo ao Sul",
-    link: "/loja"
+    image: aCoisaImg,
+    title: "A Coisa",
+    link: "https://orlandeli.commercesuite.com.br/livros/a-coisa"
   },
   {
     image: darumaImg,
     title: "Daruma",
-    link: "/loja"
+    link: "https://orlandeli.commercesuite.com.br/livros/daruma-129"
   },
 ];
 
@@ -243,7 +244,7 @@ export default function Index() {
                 É autor de diversas publicações. Como artista de quadrinhos, participou das antologias MSP 50 e Front.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                Vencedor do Troféu HQMix em 2002 como "melhor revista de humor" (Grump), 2018 como "melhor publicação juvenil" (Chico Bento - Arvorada) e em 2024 como melhor design gráfico (Lusco-Fusco). Vencedor do CCXP Awards em 2022 (Chico Bento - Verdade).
+                Vencedor do Troféu HQMix em 2002 como "melhor revista de humor" (Grump), 2018 como "melhor publicação juvenil" (Chico Bento - Arvorada) e em 2024 como melhor design gráfico (Lusco Fusco). Vencedor do CCXP Awards em 2022 (Chico Bento - Verdade) e conquistou o Prêmio Jabuti em 2025 (Mais uma história para o velho Smih).
               </p>
               <Link to="/sobre">
                 <Button className="bg-primary hover:bg-primary/90">
@@ -290,11 +291,11 @@ export default function Index() {
                 </div>
                 <div className="p-4 text-center">
                   <h3 className="font-serif font-semibold text-foreground mb-2">{book.title}</h3>
-                  <Link to={book.link}>
+                  <a href={book.link} target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" size="sm" className="w-full border-wood text-wood-dark hover:bg-wood hover:text-background">
                       Ver na Loja
                     </Button>
-                  </Link>
+                  </a>
                 </div>
               </motion.div>
             ))}

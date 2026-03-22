@@ -4,32 +4,10 @@ import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, Users, Sword, Instagram } from "lucide-react";
 
-import carouselYang from "@/assets/carousel-yang.jpg";
+import carouselYang from "@/assets/placas_yang_5.jpg.jpeg";
 import bookYang1 from "@/assets/book-yang-1.jpg";
 
-const volumes = [
-  {
-    number: 1,
-    title: "O Despertar",
-    cover: bookYang1,
-    description: "Yang encontra a espada mágica e descobre seu destino como protetor da floresta.",
-    status: "Disponível",
-  },
-  {
-    number: 2,
-    title: "Os Senhores da Sombra",
-    cover: bookYang1,
-    description: "A jornada de Yang o leva ao confronto com os temidos vilões que ameaçam seu mundo.",
-    status: "Em produção",
-  },
-  {
-    number: 3,
-    title: "A Grande Batalha",
-    cover: bookYang1,
-    description: "O épico confronto final que decidirá o destino de todo o universo.",
-    status: "Planejado",
-  },
-];
+
 
 const characters = [
   { name: "Yang", role: "Protagonista", description: "Um jovem guerreiro que descobre poderes ancestrais." },
@@ -126,65 +104,9 @@ export default function Yang() {
         </div>
       </section>
 
-      {/* Volumes */}
-      <section className="py-20 bg-muted">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Os Volumes
-            </h2>
-            <div className="section-divider" />
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {volumes.map((vol, idx) => (
-              <motion.div
-                key={vol.number}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.15 }}
-                className="card-artistic"
-              >
-                <div className="aspect-[2/3] overflow-hidden rounded-t-lg relative">
-                  <img 
-                    src={vol.cover} 
-                    alt={vol.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-3 left-3 w-10 h-10 rounded-full bg-accent flex items-center justify-center text-accent-foreground font-bold">
-                    {vol.number}
-                  </div>
-                </div>
-                <div className="p-5 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-serif text-lg font-semibold text-foreground">
-                      Volume {vol.number}: {vol.title}
-                    </h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{vol.description}</p>
-                  <span className={`inline-block text-xs font-medium px-2 py-1 rounded ${
-                    vol.status === "Disponível" 
-                      ? "bg-primary/20 text-primary" 
-                      : vol.status === "Em produção"
-                      ? "bg-wood/20 text-wood"
-                      : "bg-muted text-muted-foreground"
-                  }`}>
-                    {vol.status}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Characters */}
+      {/* 
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <motion.div
@@ -222,6 +144,7 @@ export default function Yang() {
           </div>
         </div>
       </section>
+      */}
 
       {/* CTA */}
       <section className="py-16 bg-accent">

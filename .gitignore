@@ -46,5 +46,9 @@ bun.lockb
 *.jpg
 !public/**/*.jpeg
 !public/**/*.jpg
+!src/**/*.jpeg
+!src/**/*.jpg
+!src/**/*.png
+!src/**/*.svg
 
 *.tar.gz

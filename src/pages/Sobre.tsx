@@ -4,6 +4,7 @@ import { Award, BookOpen, Palette, Calendar } from "lucide-react";
 
 import artistPortrait from "@/assets/image.png";
 import heroStudio from "@/assets/hero-studio.jpg";
+import placaYang4 from "@/assets/placas_yang_4.jpg.jpeg";
 
 const timeline = [
   { year: "1995", title: "Primeiros Traços", description: "Início da carreira como ilustrador freelancer em São Paulo." },
@@ -14,9 +15,9 @@ const timeline = [
 ];
 
 const awards = [
-  { name: "Prêmio Angelo Agostini", year: "2008", category: "Melhor Desenhista" },
-  { name: "Troféu HQ Mix", year: "2016", category: "Melhor Publicação Independente" },
-  { name: "CCXP Awards", year: "2019", category: "Artista Revelação" },
+  { name: "CCXP Awards", year: "2022", category: "Chico Bento - Verdade" },
+  { name: "Troféu HQ Mix", year: "2024", category: "Lusco Fusco - Marvin escreve poemas" },
+  { name: "Prêmio Jabuti", year: "2025", category: "Mais uma história para o velho Smih" },
 ];
 
 export default function Sobre() {
@@ -66,7 +67,7 @@ export default function Sobre() {
                 É autor de diversas publicações. Como artista de quadrinhos, participou das antologias MSP 50 e Front.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                Vencedor do Troféu HQMix em 2002 como "melhor revista de humor" (Grump), 2018 como "melhor publicação juvenil" (Chico Bento - Arvorada) e em 2024 como melhor design gráfico (Lusco-Fusco). Vencedor do CCXP Awards em 2022 (Chico Bento - Verdade).
+                Vencedor do Troféu HQMix em 2002 como "melhor revista de humor" (Grump), 2018 como "melhor publicação juvenil" (Chico Bento - Arvorada) e em 2024 como melhor design gráfico (Lusco Fusco). Vencedor do CCXP Awards em 2022 (Chico Bento - Verdade) e conquistou o Prêmio Jabuti em 2025 (Mais uma história para o velho Smih).
               </p>
             </motion.div>
 
@@ -91,43 +92,8 @@ export default function Sobre() {
       {/* Timeline */}
       <section className="py-20 bg-muted">
         <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="font-serif text-3xl font-bold text-foreground mb-4">
-              Trajetória
-            </h2>
-            <div className="section-divider" />
-          </motion.div>
-
-          <div className="max-w-3xl mx-auto">
-            {timeline.map((item, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, x: idx % 2 === 0 ? -30 : 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="flex gap-6 mb-8"
-              >
-                <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold">
-                    <Calendar className="h-5 w-5" />
-                  </div>
-                  {idx < timeline.length - 1 && (
-                    <div className="w-0.5 flex-1 bg-border mt-2" />
-                  )}
-                </div>
-                <div className="flex-1 pb-8">
-                  <span className="text-sm font-bold text-primary">{item.year}</span>
-                  <h3 className="font-serif text-xl font-semibold text-foreground mt-1">{item.title}</h3>
-                  <p className="text-muted-foreground mt-2">{item.description}</p>
-                </div>
-              </motion.div>
-            ))}
+          <div className="flex justify-center w-full max-w-5xl mx-auto">
+            <img src={placaYang4} alt="Trajetória - Placa Yang 4" className="w-full h-auto shadow-card rounded-lg" />
           </div>
         </div>
       </section>
