@@ -171,14 +171,15 @@ export function normalizePostBlog(item: { id: number;[key: string]: unknown }): 
  */
 export function normalizeDestaque(item: { id: number;[key: string]: unknown }): Destaque {
     const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
-    const imagem = extractMedia(attrs.imagem);
+    const rawImagem = attrs.imagem || attrs.Imagem;
+    const imagem = extractMedia(rawImagem);
 
     return {
         id: item.id,
-        titulo: (attrs.titulo as string) || "",
-        legenda: (attrs.legenda as string) || "",
+        titulo: (attrs.titulo as string) || (attrs.Titulo as string) || "",
+        legenda: (attrs.legenda as string) || (attrs.Legenda as string) || "",
         imagemUrl: strapiMediaUrl(imagem),
-        link: (attrs.link as string) || "",
-        textoBotao: (attrs.textoBotao as string) || "Saiba mais",
+        link: (attrs.link as string) || (attrs.Link as string) || "",
+        textoBotao: (attrs.textoBotao as string) || (attrs.texto_botao as string) || (attrs.TextoBotao as string) || "Saiba mais",
     };
 }

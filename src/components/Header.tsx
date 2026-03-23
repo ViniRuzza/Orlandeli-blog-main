@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo.png";
 import { useQuadrinhos } from "@/hooks/useQuadrinhos";
 import { useIlustracoes } from "@/hooks/useIlustracoes";
+import { usePostsBlog } from "@/hooks/usePostsBlog";
 import { Label } from "recharts";
 import path from "path";
 
@@ -24,27 +25,6 @@ const socialLinks = [
   { icon: Twitter, href: "https://twitter.com/orlandeli", label: "Twitter" },
   { icon: Youtube, href: "https://www.youtube.com/@orlandeli1", label: "YouTube" },
   {icon: Bookmark, href: "https://substack.com/@orlandeli", label: "Substack"}
-];
-
-const blogPosts = [
-  {
-    id: 1,
-    title: "O Processo Criativo por Trás de Yang",
-    category: "Bastidores",
-    excerpt: "Conheça como nasceu o universo de O Mundo de Yang, desde os primeiros esboços até a versão final.",
-  },
-  {
-    id: 2,
-    title: "Dicas para Aspirantes a Cartunistas",
-    category: "Dicas",
-    excerpt: "Compartilho algumas lições que aprendi ao longo de mais de 20 anos desenhando quadrinhos.",
-  },
-  {
-    id: 3,
-    title: "Nova Coleção Infantil em Produção",
-    category: "Novidades",
-    excerpt: "Estou trabalhando em uma nova série de livros infantis! Confira os primeiros conceitos.",
-  },
 ];
 
 type SearchResultType = "quadrinho" | "portfolio" | "blog";
@@ -81,6 +61,7 @@ function SearchBar() {
   const navigate = useNavigate();
   const { data: quadrinhos } = useQuadrinhos();
   const { data: ilustracoes } = useIlustracoes();
+  const { data: postsBlog } = usePostsBlog();
   const containerRef = useRef<HTMLDivElement>(null);
 
   const results = useMemo<SearchResult[]>(() => {
@@ -121,16 +102,16 @@ function SearchBar() {
     });
 
     // Blog
-    blogPosts.forEach((post) => {
+    (postsBlog || []).forEach((post) => {
       if (
-        post.title.toLowerCase().includes(q) ||
-        post.category.toLowerCase().includes(q) ||
-        post.excerpt.toLowerCase().includes(q)
+        post.titulo.toLowerCase().includes(q) ||
+        post.categorias.some((cat) => cat.toLowerCase().includes(q)) ||
+        post.conteudo.toLowerCase().includes(q)
       ) {
         items.push({
           id: `b-${post.id}`,
-          title: post.title,
-          subtitle: post.category,
+          title: post.titulo,
+          subtitle: post.categorias.join(", ") || "Blog",
           type: "blog",
           path: "/blog",
         });
@@ -138,7 +119,7 @@ function SearchBar() {
     });
 
     return items.slice(0, 8);
-  }, [query, quadrinhos, ilustracoes]);
+  }, [query, quadrinhos, ilustracoes, postsBlog]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {

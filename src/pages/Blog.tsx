@@ -64,7 +64,7 @@ export default function Blog() {
   return (
     <Layout>
       {/* Header */}
-      <section className="h-[60vh] min-h-[400px] w-full flex flex-col justify-center overflow-hidden bg-background">
+      <section className="h-[60vh] min-h-[400px] w-full flex flex-col justify-center overflow-hidden bg-[#F9F6F0] dark:bg-[#1f1a14]">
         <div className="container mx-auto px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -209,8 +209,11 @@ export default function Blog() {
                           if (navigator.share) {
                             navigator.share({
                               title: post.titulo,
-                              url: window.location.href + "?post=" + post.id
+                              url: window.location.origin + "/blog?post=" + post.id
                             });
+                          } else {
+                            navigator.clipboard.writeText(window.location.origin + "/blog?post=" + post.id);
+                            alert("Link copiado para a área de transferência!");
                           }
                         }}
                         className="flex items-center gap-1 hover:text-primary transition-colors font-medium"

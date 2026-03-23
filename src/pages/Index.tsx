@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/Layout";
 
 import heroStudio from "@/assets/hero-studio.jpg";
-import carouselYang from "@/assets/placas_yang_5.jpg.jpeg";
+import carouselYang from "@/assets/carrossel_2.jpg.jpeg";
 import carouselCartoons from "@/assets/carousel-cartoons.jpg";
 import artistPortrait from "@/assets/image.png";
 import placaYang1 from "@/assets/placas_yang_1.jpg.jpeg";
@@ -60,38 +60,50 @@ const featuredBooks = [
 ];
 
 export default function Index() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [slideCounter, setSlideCounter] = useState(0);
   const { data: todasIlustracoes = [], isLoading: isLoadingIlustracoes } = useIlustracoes();
-  const { data: destaquesData = [] } = useDestaques();
+  const { data: destaquesData = [], isLoading: isLoadingDestaques } = useDestaques();
   const illustrations = todasIlustracoes.slice(0, 4);
 
-  const activeSlides = destaquesData.length > 0 
-    ? destaquesData.map(d => ({
-        image: d.imagemUrl,
-        title: d.titulo,
-        subtitle: d.legenda,
-        cta: { label: d.textoBotao || "Ver mais", link: d.link || "/" }
-      }))
-    : carouselSlides;
+  // Fallback to static slides ONLY if we finished loading and there's no data
+  const activeSlides = isLoadingDestaques
+    ? [{ image: "", title: "", subtitle: "", cta: { label: "Carregando...", link: "#" } }]
+    : (destaquesData.length > 0 
+      ? destaquesData.map(d => ({
+          image: d.imagemUrl,
+          title: d.titulo,
+          subtitle: d.legenda,
+          cta: { label: d.textoBotao || "Ver mais", link: d.link || "/" }
+        }))
+      : carouselSlides);
+
+  const safeLength = activeSlides.length > 0 ? activeSlides.length : 1;
+  const currentSlide = ((slideCounter % safeLength) + safeLength) % safeLength;
 
   useEffect(() => {
+    if (activeSlides.length <= 1 && !isLoadingDestaques) return; // don't slide if only 1 item
+
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % activeSlides.length);
+      setSlideCounter((prev) => prev + 1);
     }, 6000);
     return () => clearInterval(timer);
-  }, [activeSlides.length]);
+  }, [activeSlides.length, isLoadingDestaques]);
 
-  const goToSlide = (index: number) => setCurrentSlide(index);
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % activeSlides.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + activeSlides.length) % activeSlides.length);
+  const goToSlide = (index: number) => {
+    // Determine shortest path to clicked dot to keep counter moving forward if possible
+    // But for simplicity, just setting the exact index difference:
+    setSlideCounter(index);
+  };
+  const nextSlide = () => setSlideCounter((prev) => prev + 1);
+  const prevSlide = () => setSlideCounter((prev) => prev - 1);
 
   return (
     <Layout>
       {/* Hero Carousel */}
-      <section className="relative h-[60vh] min-h-[400px] overflow-hidden">
+      <section className="relative h-[60vh] min-h-[400px] overflow-hidden bg-muted/20">
         <AnimatePresence mode="wait">
           <motion.div
-            key={currentSlide}
+            key={slideCounter}
             initial={{ opacity: 0, scale: 1.1 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -100,13 +112,13 @@ export default function Index() {
           >
             {/* Fundo Desfocado para preencher espaço vazio na tela de PC */}
             <div
-              className="absolute inset-0 bg-cover bg-center blur-3xl opacity-50 scale-110"
-              style={{ backgroundImage: `url(${activeSlides[currentSlide]?.image})` }}
+              className={`absolute inset-0 bg-cover bg-center blur-3xl opacity-50 scale-110 ${isLoadingDestaques ? "animate-pulse bg-muted" : ""}`}
+              style={{ backgroundImage: `url("${activeSlides[currentSlide]?.image}")` }}
             />
-            {/* Recorte Estático para evitar de cortar a imagem (bg-contain) */}
+            {/* Imagem em destaque (bg-cover) */}
             <div
-              className="absolute inset-0 bg-contain bg-right md:bg-center bg-no-repeat mix-blend-normal"
-              style={{ backgroundImage: `url(${activeSlides[currentSlide]?.image})` }}
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat mix-blend-normal"
+              style={{ backgroundImage: `url("${activeSlides[currentSlide]?.image}")` }}
             />
             {/* Gradiente por cima para dar leitura ao texto */}
             <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/50 to-transparent pointer-events-none" />
@@ -115,7 +127,7 @@ export default function Index() {
 
         <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
           <motion.div
-            key={`text-${currentSlide}`}
+            key={`text-${slideCounter}`}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -30 }}
@@ -128,12 +140,14 @@ export default function Index() {
             <p className="text-lg md:text-xl text-background/90 mb-8">
               {activeSlides[currentSlide]?.subtitle}
             </p>
-            <Link to={activeSlides[currentSlide]?.cta.link || "/"}>
-              <Button size="lg" className="btn-wood">
-                {activeSlides[currentSlide]?.cta.label}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
+            {!isLoadingDestaques && (
+              <Link to={activeSlides[currentSlide]?.cta.link || "/"}>
+                <Button size="lg" className="btn-wood">
+                  {activeSlides[currentSlide]?.cta.label}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            )}
           </motion.div>
         </div>
 
@@ -141,7 +155,8 @@ export default function Index() {
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-4">
           <button
             onClick={prevSlide}
-            className="p-2 rounded-full bg-background/20 hover:bg-background/40 backdrop-blur transition-colors"
+            disabled={activeSlides.length <= 1}
+            className="p-2 rounded-full bg-background/20 hover:bg-background/40 backdrop-blur transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <ChevronLeft className="h-5 w-5 text-background" />
           </button>
@@ -159,7 +174,8 @@ export default function Index() {
           </div>
           <button
             onClick={nextSlide}
-            className="p-2 rounded-full bg-background/20 hover:bg-background/40 backdrop-blur transition-colors"
+            disabled={activeSlides.length <= 1}
+            className="p-2 rounded-full bg-background/20 hover:bg-background/40 backdrop-blur transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <ChevronRight className="h-5 w-5 text-background" />
           </button>

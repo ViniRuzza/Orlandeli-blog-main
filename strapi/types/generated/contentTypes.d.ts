@@ -430,6 +430,38 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiDestaqueDestaque extends Struct.CollectionTypeSchema {
+  collectionName: 'destaques';
+  info: {
+    displayName: 'Destaque';
+    pluralName: 'destaques';
+    singularName: 'destaque';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Imagem: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    Legenda: Schema.Attribute.String;
+    Link: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::destaque.destaque'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    texto_botao: Schema.Attribute.String;
+    Titulo: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiIlustraca0Ilustraca0 extends Struct.CollectionTypeSchema {
   collectionName: 'ilustraca0s';
   info: {
@@ -1042,6 +1074,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::destaque.destaque': ApiDestaqueDestaque;
       'api::ilustraca0.ilustraca0': ApiIlustraca0Ilustraca0;
       'api::post-blog.post-blog': ApiPostBlogPostBlog;
       'api::quadrinho.quadrinho': ApiQuadrinhoQuadrinho;

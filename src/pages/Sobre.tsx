@@ -4,7 +4,6 @@ import { Award, BookOpen, Palette, Calendar } from "lucide-react";
 
 import artistPortrait from "@/assets/image.png";
 import heroStudio from "@/assets/hero-studio.jpg";
-import placaYang4 from "@/assets/placas_yang_4.jpg.jpeg";
 
 const timeline = [
   { year: "1995", title: "Primeiros Traços", description: "Início da carreira como ilustrador freelancer em São Paulo." },
@@ -90,10 +89,62 @@ export default function Sobre() {
       </section>
 
       {/* Timeline */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-center w-full max-w-5xl mx-auto">
-            <img src={placaYang4} alt="Trajetória - Placa Yang 4" className="w-full h-auto shadow-card rounded-lg" />
+      <section className="py-24 bg-background relative overflow-hidden" id="trajetoria">
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="font-serif text-3xl font-bold text-foreground mb-4">
+              A Trajetória
+            </h2>
+            <div className="section-divider" />
+          </motion.div>
+
+          <div className="max-w-4xl mx-auto relative">
+            {/* Linha vertical central */}
+            <div className="absolute left-[28px] md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-1/2" />
+
+            <div className="space-y-12">
+              {timeline.map((item, idx) => {
+                const isEven = idx % 2 === 0;
+                return (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.5, delay: idx * 0.1 }}
+                    className={`relative flex items-center flex-col md:flex-row ${
+                      isEven ? 'md:flex-row-reverse' : ''
+                    } md:justify-between group`}
+                  >
+                    {/* Espaço em branco no lado oposto (desktop) */}
+                    <div className="hidden md:block md:w-[45%]" />
+
+                    {/* Botão circular central ("ano") */}
+                    <div className="absolute left-[28px] md:left-1/2 -translate-x-1/2 w-14 h-14 rounded-full bg-background border-4 border-muted flex items-center justify-center shadow-sm z-10 
+                      group-hover:border-primary group-hover:scale-110 transition-all duration-300 font-bold text-sm text-foreground group-hover:text-primary">
+                      {item.year}
+                    </div>
+
+                    {/* Conteúdo do Card */}
+                    <div className={`w-full md:w-[45%] pl-20 md:pl-0 ${isEven ? 'md:pr-12 md:text-right' : 'md:pl-12 md:text-left'}`}>
+                      <div className="card-artistic p-6 relative group-hover:border-primary/40 transition-colors cursor-default">
+                        <h3 className="font-serif text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                          {item.title}
+                        </h3>
+                        <p className="text-muted-foreground leading-relaxed text-sm">
+                          {item.description}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>

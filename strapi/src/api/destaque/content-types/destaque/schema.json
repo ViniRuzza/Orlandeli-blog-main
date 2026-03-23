@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "destaques",
+  "info": {
+    "singularName": "destaque",
+    "pluralName": "destaques",
+    "displayName": "Destaque"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Titulo": {
+      "type": "string"
+    },
+    "Legenda": {
+      "type": "string"
+    },
+    "Imagem": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "Link": {
+      "type": "string"
+    },
+    "texto_botao": {
+      "type": "string"
+    }
+  }
+}
