@@ -1,0 +1,54 @@
+services:
+  strapi:
+    build:
+      context: ./strapi
+      dockerfile: Dockerfile
+    container_name: orlandeli-strapi
+    restart: unless-stopped
+    env_file:
+      - ./strapi/.env
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "1337:1337"
+      - "5173:5173"
+    volumes:
+      - ./strapi/src:/app/src
+      - ./strapi/types:/app/types
+      - strapi-uploads:/app/public/uploads
+      - strapi-data:/app/.tmp
+    networks:
+      - orlandeli-net
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://0.0.0.0:1337/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 180s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_STRAPI_URL: ""
+    container_name: orlandeli-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      strapi:
+        condition: service_healthy
+    networks:
+      - orlandeli-net
+
+volumes:
+  strapi-data:
+  strapi-uploads:
+
+
+networks:
+  orlandeli-net:
+    driver: bridge

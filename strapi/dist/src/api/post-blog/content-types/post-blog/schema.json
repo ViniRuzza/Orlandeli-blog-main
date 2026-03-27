@@ -1,0 +1,37 @@
+{
+    "kind": "collectionType",
+    "collectionName": "post_blogs",
+    "info": {
+        "singularName": "post-blog",
+        "pluralName": "post-blogs",
+        "displayName": "Post de Blog"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "titulo": {
+            "type": "string",
+            "required": true
+        },
+        "conteudo": {
+            "type": "richtext"
+        },
+        "imagem": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": [
+                "images"
+            ]
+        },
+        "data": {
+            "type": "date",
+            "required": true
+        },
+        "categorias": {
+            "type": "json"
+        }
+    }
+}

@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "trajetoria_items",
+  "info": {
+    "singularName": "trajetoria-item",
+    "pluralName": "trajetoria-items",
+    "displayName": "Trajetória Item"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ano": {
+      "type": "string"
+    },
+    "titulo": {
+      "type": "string"
+    },
+    "descricao": {
+      "type": "text"
+    },
+    "imagem": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "ordem": {
+      "type": "integer"
+    }
+  }
+}

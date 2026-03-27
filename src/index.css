@@ -1,0 +1,244 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer base {
+  :root {
+    /* Orlandeli Design System - Pure White Palette */
+    --background: #ffffff;
+    --foreground: 30 10% 15%;
+
+    --card: #ffffff;
+    --card-foreground: 30 10% 15%;
+
+    --popover: #ffffff;
+    --popover-foreground: 30 10% 15%;
+
+    /* Primary: Sage Green */
+    --primary: 140 25% 35%;
+    --primary-foreground: 45 30% 97%;
+
+    /* Secondary: Warm Wood */
+    --secondary: #ffffff;
+    --secondary-foreground: 30 25% 25%;
+
+    /* Muted: Clean White */
+    --muted: #ffffff;
+    --muted-foreground: 30 10% 45%;
+
+    /* Accent: Deep Forest */
+    --accent: 145 30% 28%;
+    --accent-foreground: 45 30% 97%;
+
+    /* Wood tones */
+    --wood: 28 40% 45%;
+    --wood-light: 35 35% 75%;
+    --wood-dark: 25 45% 25%;
+
+    /* Olive/Sage variations */
+    --sage: 140 20% 45%;
+    --sage-light: 140 15% 85%;
+    --olive: 80 25% 35%;
+
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 45 30% 97%;
+
+    --border: 0 0% 93%;
+    --input: 0 0% 93%;
+    --ring: 140 25% 35%;
+
+    --radius: 0.5rem;
+
+    /* Sidebar */
+    --sidebar-background: #ffffff;
+    --sidebar-foreground: 30 10% 25%;
+    --sidebar-primary: 140 25% 35%;
+    --sidebar-primary-foreground: 45 30% 97%;
+    --sidebar-accent: 145 30% 28%;
+    --sidebar-accent-foreground: 45 30% 97%;
+    --sidebar-border: 35 20% 85%;
+    --sidebar-ring: 140 25% 35%;
+
+    /* Custom gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(140 25% 35%) 0%, hsl(145 30% 28%) 100%);
+    --gradient-wood: linear-gradient(180deg, hsl(35 35% 75%) 0%, hsl(28 40% 45%) 100%);
+    --gradient-cream: linear-gradient(180deg, hsl(45 30% 97%) 0%, hsl(40 20% 92%) 100%);
+
+    /* Shadows */
+    --shadow-soft: none;
+    --shadow-card: none;
+    --shadow-elevated: none;
+  }
+
+  .dark {
+    --background: hsl(30 15% 10%);
+    --foreground: 45 20% 92%;
+
+    --card: hsl(30 15% 14%);
+    --card-foreground: 45 20% 92%;
+
+    --popover: hsl(30 15% 10%);
+    --popover-foreground: 45 20% 92%;
+
+    --primary: 140 30% 50%;
+    --primary-foreground: 30 15% 10%;
+
+    --secondary: hsl(30 25% 22%);
+    --secondary-foreground: 45 20% 92%;
+
+    --muted: hsl(30 20% 18%);
+    --muted-foreground: 40 15% 60%;
+
+    --accent: 145 35% 45%;
+    --accent-foreground: 30 15% 10%;
+
+    --wood: 28 35% 55%;
+    --wood-light: 35 30% 40%;
+    --wood-dark: 25 40% 18%;
+
+    --sage: 140 25% 55%;
+    --sage-light: 140 20% 25%;
+    --olive: 80 20% 45%;
+
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 45 20% 92%;
+
+    --border: 30 20% 22%;
+    --input: 30 20% 22%;
+    --ring: 140 30% 50%;
+
+    --sidebar-background: hsl(30 15% 12%);
+    --sidebar-foreground: 45 20% 90%;
+    --sidebar-primary: 140 30% 50%;
+    --sidebar-primary-foreground: 30 15% 10%;
+    --sidebar-accent: 145 35% 45%;
+    --sidebar-accent-foreground: 30 15% 10%;
+    --sidebar-border: 30 20% 22%;
+    --sidebar-ring: 140 30% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Playfair Display', serif;
+    @apply font-semibold tracking-tight;
+  }
+}
+
+/* Search bar placeholder */
+.search-bar-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@layer components {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-hero);
+  }
+
+  .card-artistic {
+    @apply bg-card rounded-lg border border-border;
+    box-shadow: var(--shadow-card);
+    transition: all 0.3s ease;
+  }
+
+  .card-artistic:hover {
+    box-shadow: var(--shadow-elevated);
+    transform: translateY(-4px);
+  }
+
+  .btn-wood {
+    @apply px-6 py-3 rounded-md font-medium transition-all duration-300;
+    background: hsl(var(--wood));
+    color: hsl(var(--background));
+  }
+
+  .btn-wood:hover {
+    background: hsl(var(--wood-dark));
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .section-divider {
+    @apply w-24 h-1 mx-auto rounded-full;
+    background: hsl(var(--sage));
+  }
+
+  .image-frame {
+    @apply relative overflow-hidden rounded-lg;
+    box-shadow: var(--shadow-card);
+  }
+
+  .image-frame::before {
+    content: '';
+    @apply absolute inset-0 rounded-lg pointer-events-none;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.4s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}

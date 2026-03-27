@@ -1,0 +1,47 @@
+{
+    "kind": "collectionType",
+    "collectionName": "quadrinhos",
+    "info": {
+        "singularName": "quadrinho",
+        "pluralName": "quadrinhos",
+        "displayName": "quadrinho"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "pluginOptions": {},
+    "attributes": {
+        "titulo": {
+            "type": "string"
+        },
+        "sinopse": {
+            "type": "string"
+        },
+        "capa": {
+            "type": "media",
+            "multiple": false,
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ]
+        },
+        "paginas": {
+            "type": "media",
+            "multiple": true,
+            "allowedTypes": [
+                "images",
+                "files",
+                "videos",
+                "audios"
+            ]
+        },
+        "stats": {
+            "type": "string"
+        },
+        "ano": {
+            "type": "integer"
+        }
+    }
+}

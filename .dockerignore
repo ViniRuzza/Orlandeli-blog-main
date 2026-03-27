@@ -1,0 +1,7 @@
+node_modules
+dist
+strapi
+.git
+*.md
+.env*
+*.log
