@@ -17,6 +17,21 @@ import bookYang1 from "@/assets/Yang_OmundoDoMeio.webp";
 import sulImg from "@/assets/sul.jpeg";
 import darumaImg from "@/assets/darumaa.jpeg";
 import aCoisaImg from "@/assets/acoisa.jpeg";
+import iconeYang from "@/assets/iconehome_yang.png";
+import iconeLoja from "@/assets/iconehome_loja.png";
+import iconePortfolio from "@/assets/iconehome_portfolio.png";
+import iconePublicacoes from "@/assets/iconehome_publicacoes.png";
+import iconeBlog from "@/assets/iconehome_blog.png";
+import iconeSobre from "@/assets/carica_orlandeli.png"
+
+const HOME_NAV_ICONS = [
+  { label: "Publicações", image: iconePublicacoes, link: "/quadrinhos" },
+  { label: "Portfólio", image: iconePortfolio, link: "/portfolio" },
+  { label: "Loja", image: iconeLoja, link: "/loja" },
+  { label: "Blog", image: iconeBlog, link: "/blog" },
+  { label: "Yang", image: iconeYang, link: "/yang" },
+  {label: "Sobre", image: iconeSobre, link: "/sobre" }
+];
 
 const carouselSlides = [
   {
@@ -179,6 +194,39 @@ export default function Index() {
           >
             <ChevronRight className="h-5 w-5 text-background" />
           </button>
+        </div>
+      </section>
+
+      {/* Home Navigation Icons */}
+      <section className="py-10 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap gap-8 justify-center items-end">
+            {HOME_NAV_ICONS.map(({ label, image, link }, idx) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.08 }}
+              >
+                <Link
+                  to={link}
+                  className="flex flex-col items-center gap-2 group focus:outline-none"
+                >
+                  <div className="relative w-28 h-28 rounded-full overflow-hidden border-4 border-transparent transition-all duration-300 group-hover:border-primary/60 group-hover:scale-105 group-hover:shadow-[0_0_12px_2px_hsl(var(--primary)/0.35)]">
+                    <img
+                      src={image}
+                      alt={label}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span className="text-xs font-semibold text-muted-foreground group-hover:text-primary transition-colors duration-200">
+                    {label}
+                  </span>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 

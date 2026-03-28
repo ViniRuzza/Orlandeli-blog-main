@@ -31,7 +31,7 @@
       "required": true
     },
     "categorias": {
-      "type": "json"
+      "type": "string"
     }
   }
 }

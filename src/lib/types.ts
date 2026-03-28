@@ -56,6 +56,7 @@ export interface StrapiQuadrinho {
 export interface StrapiIlustracao {
     titulo: string;
     tags: string[] | string | null;
+    legenda: string | null;
     imagem: StrapiMedia | { data: StrapiMedia } | null;
 }
 
@@ -78,6 +79,7 @@ export interface Ilustracao {
     titulo: string;
     tags: string[];
     imagemUrl: string;
+    legenda: string;
 }
 
 // Content Type: YangPost
@@ -120,6 +122,42 @@ export interface PostBlog {
     categorias: string[];
 }
 
+// Content Type: YangLivro
+export interface StrapiYangLivro {
+    titulo: string;
+    sinopse: string | null;
+    linkCompra: string | null;
+    ano: number | null;
+    ordem: number | null;
+    capa: StrapiMedia | { data: StrapiMedia } | null;
+}
+
+export interface YangLivro {
+    id: number;
+    titulo: string;
+    sinopse: string;
+    linkCompra: string;
+    ano: number;
+    ordem: number;
+    capaUrl: string;
+}
+
+// Content Type: YangPersonagem
+export interface StrapiYangPersonagem {
+    nome: string;
+    descricao: string | null;
+    ordem: number | null;
+    imagem: StrapiMedia | { data: StrapiMedia } | null;
+}
+
+export interface YangPersonagem {
+    id: number;
+    nome: string;
+    descricao: string;
+    ordem: number;
+    imagemUrl: string;
+}
+
 // Content Type: TrajetoriaItem
 export interface StrapiTrajetoria {
     ano: string;
@@ -134,6 +172,16 @@ export interface TrajetoriaItem {
     ano: string;
     titulo: string;
     descricao: string;
+    imagemUrl: string;
+    ordem: number;
+}
+
+// Content Type: Premio
+export interface Premio {
+    id: number;
+    nome: string;
+    ano: string;
+    categoria: string;
     imagemUrl: string;
     ordem: number;
 }

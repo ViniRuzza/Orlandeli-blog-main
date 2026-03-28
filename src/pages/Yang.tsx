@@ -3,11 +3,14 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Instagram, X, Calendar } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ArrowRight, BookOpen, Instagram, X, Calendar, ExternalLink, User } from "lucide-react";
 
 import cabecalhoVerdeYang from "@/assets/cabecalho_verde_yang.png";
 import { useYangPosts } from "@/hooks/useYangPosts";
-import type { YangPost } from "@/lib/types";
+import { useYangLivros } from "@/hooks/useYangLivros";
+import { useYangPersonagens } from "@/hooks/useYangPersonagens";
+import type { YangPost, YangLivro, YangPersonagem } from "@/lib/types";
 
 // Post de exemplo exibido quando não há dados no Strapi
 const EXEMPLO_POST: YangPost = {
@@ -196,7 +199,10 @@ function PostCard({ post, onClick, idx }: { post: YangPost; onClick: () => void;
 
 export default function Yang() {
   const { data: yangPosts } = useYangPosts();
+  const { data: yangLivros = [] } = useYangLivros();
+  const { data: yangPersonagens = [] } = useYangPersonagens();
   const [postAberto, setPostAberto] = useState<YangPost | null>(null);
+  const [personagemAberto, setPersonagemAberto] = useState<YangPersonagem | null>(null);
 
   const posts = (!yangPosts || yangPosts.length === 0) ? [EXEMPLO_POST] : yangPosts;
 
@@ -235,8 +241,14 @@ export default function Yang() {
                   Comprar Livros
                 </Button>
               </Link>
+              <Link to="/blog?q=Yang">
+                <Button variant="default" className="font-semibold">
+                  <ArrowRight className="mr-2 h-4 w-4" />
+                  Posts Yang
+                </Button>
+              </Link>
               <a href="https://www.instagram.com/omundodeyang" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" className="font-semibold">
+                <Button variant="default" className="font-semibold">
                   <Instagram className="mr-0.5 h-4 w-4" />
                   O Mundo de Yang
                 </Button>
@@ -318,6 +330,174 @@ export default function Yang() {
           </div>
         </div>
       </section>
+
+      {/* Seção: Livros Publicados */}
+      {yangLivros.length > 0 && (
+        <section className="py-20 bg-background">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mb-10"
+            >
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-1">
+                Livros Publicados
+              </h2>
+              <p className="text-muted-foreground text-base font-medium">
+                A saga Yang em volumes
+              </p>
+              <div className="w-14 h-1 mt-3" style={{ backgroundColor: "#93c748" }} />
+            </motion.div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+              {yangLivros.map((livro, idx) => (
+                <motion.div
+                  key={livro.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="flex flex-col rounded-2xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300 group"
+                >
+                  {/* Capa */}
+                  <div className="aspect-square overflow-hidden bg-muted relative">
+                    {livro.capaUrl ? (
+                      <img
+                        src={livro.capaUrl}
+                        alt={livro.titulo}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full flex items-center justify-center"
+                        style={{ background: "linear-gradient(135deg, #1a2a1a 0%, #2d4a1e 50%, #93c748 100%)" }}
+                      >
+                        <BookOpen className="h-16 w-16 text-white/30" />
+                      </div>
+                    )}
+                    {livro.ano > 0 && (
+                      <span className="absolute top-3 left-3 text-xs font-bold px-2 py-1 rounded-full bg-black/60 text-white">
+                        {livro.ano}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Info */}
+                  <div className="p-3 flex flex-col gap-2 flex-1">
+                    <h3 className="font-serif text-sm font-bold text-foreground leading-snug">
+                      {livro.titulo}
+                    </h3>
+                    {livro.sinopse && (
+                      <p className="text-xs text-muted-foreground leading-relaxed flex-1 line-clamp-3">
+                        {livro.sinopse}
+                      </p>
+                    )}
+                    {livro.linkCompra && (
+                      <a href={livro.linkCompra} target="_blank" rel="noopener noreferrer">
+                        <Button size="sm" className="w-full mt-auto text-xs" style={{ backgroundColor: "#93c748", color: "#fff" }}>
+                          <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
+                          Comprar
+                        </Button>
+                      </a>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Seção: Personagens */}
+      {yangPersonagens.length > 0 && (
+        <section className="py-20 bg-muted/20">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mb-10"
+            >
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-1">
+                Personagens
+              </h2>
+              <p className="text-muted-foreground text-base font-medium">
+                Conheça os habitantes do universo Yang
+              </p>
+              <div className="w-14 h-1 mt-3" style={{ backgroundColor: "#93c748" }} />
+            </motion.div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+              {yangPersonagens.map((personagem, idx) => (
+                <motion.div
+                  key={personagem.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="flex flex-col rounded-2xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300 group cursor-pointer"
+                  onClick={() => setPersonagemAberto(personagem)}
+                >
+                  <div className="aspect-square overflow-hidden bg-muted relative">
+                    {personagem.imagemUrl ? (
+                      <img
+                        src={personagem.imagemUrl}
+                        alt={personagem.nome}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full flex items-center justify-center"
+                        style={{ background: "linear-gradient(135deg, #1a2a1a 0%, #2d4a1e 50%, #93c748 100%)" }}
+                      >
+                        <User className="h-16 w-16 text-white/30" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3 flex flex-col items-center">
+                    <h3 className="font-serif text-base font-bold text-foreground text-center leading-snug group-hover:text-primary transition-colors">
+                      {personagem.nome}
+                    </h3>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Modal Personagem */}
+      <Dialog open={!!personagemAberto} onOpenChange={() => setPersonagemAberto(null)}>
+        <DialogContent className="max-w-3xl p-0 overflow-hidden">
+          {personagemAberto && (
+            <div className="flex h-[560px]">
+              {/* Imagem ocupa toda a altura */}
+              {personagemAberto.imagemUrl && (
+                <div className="w-96 shrink-0 bg-muted">
+                  <img
+                    src={personagemAberto.imagemUrl}
+                    alt={personagemAberto.nome}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+              {/* Conteúdo lateral */}
+              <div className="flex flex-col gap-3 p-6 overflow-y-auto">
+                <h2 className="font-serif text-2xl font-bold text-foreground leading-tight">
+                  {personagemAberto.nome}
+                </h2>
+                <div className="w-10 h-1 shrink-0" style={{ backgroundColor: "#93c748" }} />
+                {personagemAberto.descricao && (
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {personagemAberto.descricao}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* CTA */}
       <section className="py-16 bg-accent">

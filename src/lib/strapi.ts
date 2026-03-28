@@ -1,4 +1,4 @@
-import type { StrapiResponse, StrapiMedia, Quadrinho, Ilustracao, PostBlog, Destaque, TrajetoriaItem, YangPost } from "./types";
+import type { StrapiResponse, StrapiMedia, Quadrinho, Ilustracao, PostBlog, Destaque, TrajetoriaItem, YangPost, YangLivro, YangPersonagem, Premio } from "./types";
 
 export const STRAPI_URL = import.meta.env.VITE_STRAPI_URL ?? "http://localhost:1337";
 
@@ -97,9 +97,10 @@ function extractCategories(field: unknown): string[] {
         return field.map(c => typeof c === "string" ? c : "").filter(Boolean);
     }
 
-    // Caso 3: String separada por vírgula
+    // Caso 3: String separada por ponto-e-vírgula (ou vírgula como fallback)
     if (typeof field === "string") {
-        return field.split(",").map(c => c.trim()).filter(Boolean);
+        const separator = field.includes(";") ? ";" : ",";
+        return field.split(separator).map(c => c.trim().replace(/^["']|["']$/g, "")).filter(Boolean);
     }
 
     return [];
@@ -152,6 +153,7 @@ export function normalizeIlustracao(item: { id: number;[key: string]: unknown })
         titulo: (attrs.titulo as string) || "",
         tags,
         imagemUrl: strapiMediaUrl(imagem),
+        legenda: (attrs.legenda as string) || "",
     };
 }
 /**
@@ -205,6 +207,55 @@ export function normalizeYangPost(item: { id: number;[key: string]: unknown }): 
         imagemCapaUrl: strapiMediaUrl(capa),
         imagensConteudoUrls: imagensArr.map(strapiMediaUrl).filter(Boolean),
         data: (attrs.data as string) || "",
+        ordem: (attrs.ordem as number) ?? 0,
+    };
+}
+
+/**
+ * Normaliza um livro do universo Yang do Strapi.
+ */
+export function normalizeYangLivro(item: { id: number;[key: string]: unknown }): YangLivro {
+    const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
+    const capa = extractMedia(attrs.capa);
+    return {
+        id: item.id,
+        titulo: (attrs.titulo as string) || "",
+        sinopse: (attrs.sinopse as string) || "",
+        linkCompra: (attrs.linkCompra as string) || "",
+        ano: (attrs.ano as number) ?? 0,
+        ordem: (attrs.ordem as number) ?? 0,
+        capaUrl: strapiMediaUrl(capa),
+    };
+}
+
+/**
+ * Normaliza um personagem do universo Yang do Strapi.
+ */
+export function normalizeYangPersonagem(item: { id: number;[key: string]: unknown }): YangPersonagem {
+    const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
+    const imagem = extractMedia(attrs.imagem);
+    return {
+        id: item.id,
+        nome: (attrs.nome as string) || "",
+        descricao: (attrs.descricao as string) || "",
+        ordem: (attrs.ordem as number) ?? 0,
+        imagemUrl: strapiMediaUrl(imagem),
+    };
+}
+
+/**
+ * Normaliza um item de Prêmio do Strapi para o tipo usado no frontend.
+ */
+export function normalizePremio(item: { id: number;[key: string]: unknown }): Premio {
+    const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
+    const imagem = extractMedia(attrs.imagem);
+
+    return {
+        id: item.id,
+        nome: (attrs.nome as string) || "",
+        ano: (attrs.ano as string) || "",
+        categoria: (attrs.categoria as string) || "",
+        imagemUrl: strapiMediaUrl(imagem),
         ordem: (attrs.ordem as number) ?? 0,
     };
 }

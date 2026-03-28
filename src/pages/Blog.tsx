@@ -125,70 +125,72 @@ export default function Blog() {
       </section>
 
       {/* Category Filter & Local Search */}
-      <section className="py-8 bg-background">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="flex flex-col items-center gap-6">
-            {/* Image Category Buttons */}
-            <div className="flex flex-wrap gap-6 justify-center items-end">
-              {CATEGORY_BUTTONS.map(({ label, image, category }) => {
-                const isActive = selectedCategories.includes(category.toLowerCase());
-                return (
+      {!isLoading && !isError && posts.length > 0 && (
+        <section className="py-8 bg-background">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="flex flex-col items-center gap-6">
+              {/* Image Category Buttons */}
+              <div className="flex flex-wrap gap-6 justify-center items-end">
+                {CATEGORY_BUTTONS.map(({ label, image, category }) => {
+                  const isActive = selectedCategories.includes(category.toLowerCase());
+                  return (
+                    <button
+                      key={category}
+                      onClick={() => toggleCategory(category)}
+                      className="flex flex-col items-center gap-2 group focus:outline-none"
+                    >
+                      <div
+                        className={`relative w-28 h-28 rounded-full overflow-hidden border-4 transition-all duration-300  ${isActive
+                          ? "border-[#93c748] scale-110 shadow-[0_0_12px_2px_#93c74860]"
+                          : "border-transparent group-hover:border-[#93c748]/60 group-hover:scale-105"
+                          }`}
+                      >
+                        <img
+                          src={image}
+                          alt={label}
+                          className="w-full h-full object-cover"
+                        />
+                        {isActive && (
+                          <div className="absolute inset-0 bg-[#93c748]/20 rounded-full" />
+                        )}
+                      </div>
+                      <span
+                        className={`text-xs font-semibold transition-colors duration-200 ${isActive ? "text-[#93c748]" : "text-muted-foreground group-hover:text-[#93c748]"
+                          }`}
+                      >
+                        {label}
+                      </span>
+                    </button>
+                  );
+                })}
+                {selectedCategories.length > 0 && (
                   <button
-                    key={category}
-                    onClick={() => toggleCategory(category)}
-                    className="flex flex-col items-center gap-2 group focus:outline-none"
+                    onClick={() => setSelectedCategories([])}
+                    className="flex flex-col items-center gap-2 group focus:outline-none mb-0.5"
                   >
-                    <div
-                      className={`relative w-28 h-28 rounded-full overflow-hidden border-4 transition-all duration-300  ${isActive
-                        ? "border-[#93c748] scale-110 shadow-[0_0_12px_2px_#93c74860]"
-                        : "border-transparent group-hover:border-[#93c748]/60 group-hover:scale-105"
-                        }`}
-                    >
-                      <img
-                        src={image}
-                        alt={label}
-                        className="w-full h-full object-cover"
-                      />
-                      {isActive && (
-                        <div className="absolute inset-0 bg-[#93c748]/20 rounded-full" />
-                      )}
+                    <div className="w-8 h-8 rounded-full bg-destructive/10 border-2 border-destructive/40 flex items-center justify-center group-hover:bg-destructive/20 transition-colors mt-6">
+                      <span className="text-destructive text-sm font-bold">✕</span>
                     </div>
-                    <span
-                      className={`text-xs font-semibold transition-colors duration-200 ${isActive ? "text-[#93c748]" : "text-muted-foreground group-hover:text-[#93c748]"
-                        }`}
-                    >
-                      {label}
-                    </span>
+                    <span className="text-[10px] font-medium text-destructive">Limpar</span>
                   </button>
-                );
-              })}
-              {selectedCategories.length > 0 && (
-                <button
-                  onClick={() => setSelectedCategories([])}
-                  className="flex flex-col items-center gap-2 group focus:outline-none mb-0.5"
-                >
-                  <div className="w-8 h-8 rounded-full bg-destructive/10 border-2 border-destructive/40 flex items-center justify-center group-hover:bg-destructive/20 transition-colors mt-6">
-                    <span className="text-destructive text-sm font-bold">✕</span>
-                  </div>
-                  <span className="text-[10px] font-medium text-destructive">Limpar</span>
-                </button>
-              )}
-            </div>
+                )}
+              </div>
 
-            {/* Local Search Bar */}
-            <div className="relative w-full max-w-md">
-              <Input
-                type="text"
-                placeholder="Buscar posts..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 h-10 rounded-full border-border bg-muted/30 focus:bg-background transition-all"
-              />
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              {/* Local Search Bar */}
+              <div className="relative w-full max-w-md">
+                <Input
+                  type="text"
+                  placeholder="Buscar posts..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 h-10 rounded-full border-border bg-muted/30 focus:bg-background transition-all"
+                />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Blog Posts */}
       <section className="py-16 bg-background">

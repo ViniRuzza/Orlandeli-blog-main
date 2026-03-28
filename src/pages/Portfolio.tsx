@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,68 @@ import { Search, X, AlertCircle, ImageOff } from "lucide-react";
 import cabecalhoVerdePortfolio from "@/assets/cabecalho_verde_portfolio.png";
 import { useIlustracoes } from "@/hooks/useIlustracoes";
 import type { Ilustracao } from "@/lib/types";
+
+function IllustrationModal({ item, onClose }: { item: Ilustracao; onClose: () => void }) {
+  return (
+    <AnimatePresence>
+      <motion.div
+        key="overlay"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm"
+        onClick={onClose}
+      >
+        <motion.div
+          key="modal"
+          initial={{ opacity: 0, scale: 0.92, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.92, y: 20 }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          className="relative bg-background w-full max-w-5xl max-h-[96vh] overflow-y-auto rounded-2xl shadow-2xl"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Botão fechar */}
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
+          >
+            <X className="h-5 w-5" />
+          </button>
+
+          {/* Imagem em destaque — ocupa quase tudo */}
+          <div className="w-full bg-black rounded-t-2xl flex items-center justify-center">
+            <img
+              src={item.imagemUrl}
+              alt={item.titulo}
+              className="w-full h-auto max-h-[80vh] object-contain"
+            />
+          </div>
+
+          {/* Título, legenda e tags */}
+          <div className="px-6 py-4 space-y-2">
+            <h2 className="font-serif text-lg font-bold text-foreground leading-tight">
+              {item.titulo}
+            </h2>
+            {item.legenda && (
+              <p className="text-sm text-muted-foreground leading-relaxed italic">{item.legenda}</p>
+            )}
+            {item.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1 pt-1">
+                {item.tags.map((tag) => (
+                  <Badge key={tag} variant="secondary" className="text-xs capitalize">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
 
 
 // Skeleton de card
@@ -232,30 +294,9 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Lightbox */}
+      {/* Modal */}
       {selectedImage && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-foreground/90 flex items-center justify-center p-4"
-          onClick={() => setSelectedImage(null)}
-        >
-          <button
-            className="absolute top-6 right-6 p-2 rounded-full bg-background/10 hover:bg-background/20 transition-colors"
-            onClick={() => setSelectedImage(null)}
-          >
-            <X className="h-6 w-6 text-background" />
-          </button>
-          <motion.img
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            src={selectedImage.imagemUrl}
-            alt={selectedImage.titulo}
-            className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          />
-        </motion.div>
+        <IllustrationModal item={selectedImage} onClose={() => setSelectedImage(null)} />
       )}
     </Layout>
   );

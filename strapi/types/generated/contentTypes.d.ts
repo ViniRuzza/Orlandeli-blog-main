@@ -506,7 +506,7 @@ export interface ApiPostBlogPostBlog extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    categorias: Schema.Attribute.JSON;
+    categorias: Schema.Attribute.String;
     conteudo: Schema.Attribute.RichText;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -596,6 +596,103 @@ export interface ApiTrajetoriaItemTrajetoriaItem
     ordem: Schema.Attribute.Integer;
     publishedAt: Schema.Attribute.DateTime;
     titulo: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiPremioPremio extends Struct.CollectionTypeSchema {
+  collectionName: 'premios';
+  info: {
+    displayName: 'Prêmio';
+    pluralName: 'premios';
+    singularName: 'premio';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    ano: Schema.Attribute.String & Schema.Attribute.Required;
+    categoria: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    imagem: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::premio.premio'
+    > &
+      Schema.Attribute.Private;
+    nome: Schema.Attribute.String & Schema.Attribute.Required;
+    ordem: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiYangLivroYangLivro extends Struct.CollectionTypeSchema {
+  collectionName: 'yang_livros';
+  info: {
+    displayName: 'Yang Livro';
+    pluralName: 'yang-livros';
+    singularName: 'yang-livro';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    ano: Schema.Attribute.Integer;
+    capa: Schema.Attribute.Media<'images'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    linkCompra: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::yang-livro.yang-livro'
+    > &
+      Schema.Attribute.Private;
+    ordem: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    sinopse: Schema.Attribute.Text;
+    titulo: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiYangPersonagemYangPersonagem
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'yang_personagens';
+  info: {
+    displayName: 'Yang Personagem';
+    pluralName: 'yang-personagens';
+    singularName: 'yang-personagem';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descricao: Schema.Attribute.Text;
+    imagem: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::yang-personagem.yang-personagem'
+    > &
+      Schema.Attribute.Private;
+    nome: Schema.Attribute.String & Schema.Attribute.Required;
+    ordem: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1117,7 +1214,10 @@ declare module '@strapi/strapi' {
       'api::ilustraca0.ilustraca0': ApiIlustraca0Ilustraca0;
       'api::post-blog.post-blog': ApiPostBlogPostBlog;
       'api::quadrinho.quadrinho': ApiQuadrinhoQuadrinho;
+      'api::premio.premio': ApiPremioPremio;
       'api::trajetoria-item.trajetoria-item': ApiTrajetoriaItemTrajetoriaItem;
+      'api::yang-livro.yang-livro': ApiYangLivroYangLivro;
+      'api::yang-personagem.yang-personagem': ApiYangPersonagemYangPersonagem;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
