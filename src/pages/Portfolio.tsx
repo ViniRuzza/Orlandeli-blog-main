@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search, X, AlertCircle, ImageOff } from "lucide-react";
 import { useIlustracoes } from "@/hooks/useIlustracoes";
 import type { Ilustracao } from "@/lib/types";
+import cabecalhoVerde from "@/assets/cabecalho_verde_portfolio.png";
 
 // Skeleton de card
 function IllustrationSkeleton() {
@@ -63,34 +64,29 @@ export default function Portfolio() {
 
   return (
     <Layout>
-      {/* Header */}
-      <section className="h-[60vh] min-h-[400px] w-full flex flex-col justify-center overflow-hidden bg-[#F9F6F0] dark:bg-[#1f1a14]">
-        <div className="container mx-auto px-4 text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Portfólio
-            </h1>
-            <div className="section-divider mb-6" />
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Explore a galeria de ilustrações, cartuns e artes criados ao longo de duas décadas de trabalho.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      {/* PORTFÓLIO Header */}
+      <div className="container mx-auto px-4 max-w-6xl text-center pt-12 pb-6">
+        <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight mb-2" style={{ color: "#9DB250" }}>
+          PORTFÓLIO
+        </h1>
+        <p className="text-sm md:text-base font-medium opacity-80" style={{ color: "#9DB250" }}>
+          ilustrações . quadrinhos . design
+        </p>
+      </div>
 
       {/* Filters — só exibe quando tiver dados */}
       {!isLoading && !isError && ilustracoes && ilustracoes.length > 0 && (
-        <section className="py-8 bg-background">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+        <section className="py-6 bg-background">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
               {/* Search */}
               <div className="relative w-full md:w-80">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Buscar ilustrações..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 h-10 rounded-full border-border bg-muted/30 focus:bg-background transition-all"
                 />
               </div>
 
@@ -100,7 +96,7 @@ export default function Portfolio() {
                   <Badge
                     key={tag}
                     variant={selectedTags.includes(tag) ? "default" : "outline"}
-                    className={`cursor-pointer capitalize transition-all ${selectedTags.includes(tag)
+                    className={`cursor-pointer capitalize transition-all rounded-full px-4 py-1 ${selectedTags.includes(tag)
                       ? "bg-primary text-primary-foreground"
                       : "hover:bg-muted"
                       }`}
@@ -114,7 +110,7 @@ export default function Portfolio() {
                     variant="ghost"
                     size="sm"
                     onClick={() => setSelectedTags([])}
-                    className="text-destructive hover:text-destructive"
+                    className="text-destructive hover:text-destructive h-8 px-2"
                   >
                     <X className="mr-1 h-3 w-3" />
                     Limpar
@@ -126,15 +122,15 @@ export default function Portfolio() {
         </section>
       )}
 
-      {/* Gallery Grid */}
-      <section className="py-12 bg-background">
-        <div className="container mx-auto px-4">
+      {/* Gallery Grid - Natural Aspect Ratios */}
+      <section className="pb-24 bg-background">
+        <div className="container mx-auto px-4 max-w-6xl">
 
           {/* Estado: carregando */}
           {isLoading && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <IllustrationSkeleton key={i} />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="aspect-[3/4] bg-muted animate-pulse rounded-sm" />
               ))}
             </div>
           )}
@@ -174,38 +170,28 @@ export default function Portfolio() {
 
           {/* Estado: com dados */}
           {!isLoading && !isError && filteredItems.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
               {filteredItems.map((item, idx) => (
                 <motion.div
                   key={item.id}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="card-artistic group cursor-pointer overflow-hidden"
+                  transition={{ delay: idx * 0.05 }}
+                  className="break-inside-avoid mb-4 group cursor-pointer"
                   onClick={() => setSelectedImage(item)}
                 >
-                  <div className="aspect-square overflow-hidden bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2">
+                  <div className="overflow-hidden transition-all duration-300 group-hover:opacity-90">
                     {item.imagemUrl ? (
                       <img
                         src={item.imagemUrl}
                         alt={item.titulo}
-                        className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
+                        className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                       />
                     ) : (
-                      <div className="w-full h-full bg-muted flex items-center justify-center">
+                      <div className="w-full aspect-square bg-muted flex items-center justify-center">
                         <ImageOff className="h-12 w-12 text-muted-foreground/40" />
                       </div>
                     )}
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-serif font-semibold text-foreground mb-2">{item.titulo}</h3>
-                    <div className="flex flex-wrap gap-1">
-                      {item.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs capitalize">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
                   </div>
                 </motion.div>
               ))}

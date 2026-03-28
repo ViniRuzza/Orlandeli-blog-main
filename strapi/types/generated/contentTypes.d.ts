@@ -430,6 +430,41 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiComentarioComentario extends Struct.CollectionTypeSchema {
+  collectionName: 'comentarios';
+  info: {
+    description: 'Coment\u00E1rios dos visitantes do site';
+    displayName: 'Coment\u00E1rio';
+    pluralName: 'comentarios';
+    singularName: 'comentario';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    aprovado: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    conteudo: Schema.Attribute.Text & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::comentario.comentario'
+    > &
+      Schema.Attribute.Private;
+    nome: Schema.Attribute.String & Schema.Attribute.Required;
+    postId: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiDestaqueDestaque extends Struct.CollectionTypeSchema {
   collectionName: 'destaques';
   info: {
@@ -540,6 +575,9 @@ export interface ApiQuadrinhoQuadrinho extends Struct.CollectionTypeSchema {
   attributes: {
     ano: Schema.Attribute.Integer;
     capa: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    categorias: Schema.Attribute.Enumeration<
+      ['Quadrinhos Autorais', 'Literatura Infantil/Infanto Juvenil']
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1074,6 +1112,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::comentario.comentario': ApiComentarioComentario;
       'api::destaque.destaque': ApiDestaqueDestaque;
       'api::ilustraca0.ilustraca0': ApiIlustraca0Ilustraca0;
       'api::post-blog.post-blog': ApiPostBlogPostBlog;

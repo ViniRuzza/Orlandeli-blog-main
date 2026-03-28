@@ -47,6 +47,9 @@ export interface StrapiQuadrinho {
     stats: string;
     capa: StrapiMedia | { data: StrapiMedia } | null;
     paginas: StrapiMedia[] | { data: StrapiMedia[] } | null;
+    secao: "quadrinhos_autorais" | "literatura_infantil" | null;
+    botaoTexto: string | null;
+    botaoLink: string | null;
 }
 
 // Content Type: Ilustracao
@@ -65,7 +68,9 @@ export interface Quadrinho {
     stats: string;
     capaUrl: string;
     paginasUrls: string[];
-    categorias: string[];
+    secao: "quadrinhos_autorais" | "literatura_infantil";
+    botaoTexto: string;
+    botaoLink: string;
 }
 
 export interface Ilustracao {
@@ -73,6 +78,28 @@ export interface Ilustracao {
     titulo: string;
     tags: string[];
     imagemUrl: string;
+}
+
+// Content Type: YangPost
+export interface StrapiYangPost {
+    titulo: string;
+    descricao: string;
+    conteudo: string | null;
+    imagemCapa: StrapiMedia | { data: StrapiMedia } | null;
+    imagensConteudo: StrapiMedia[] | { data: StrapiMedia[] } | null;
+    data: string | null;
+    ordem: number | null;
+}
+
+export interface YangPost {
+    id: number;
+    titulo: string;
+    descricao: string;
+    conteudo: string;
+    imagemCapaUrl: string;
+    imagensConteudoUrls: string[];
+    data: string;
+    ordem: number;
 }
 
 // Content Type: PostBlog
@@ -93,6 +120,24 @@ export interface PostBlog {
     categorias: string[];
 }
 
+// Content Type: TrajetoriaItem
+export interface StrapiTrajetoria {
+    ano: string;
+    titulo: string;
+    descricao: string;
+    imagem: StrapiMedia | { data: StrapiMedia } | null;
+    ordem: number | null;
+}
+
+export interface TrajetoriaItem {
+    id: number;
+    ano: string;
+    titulo: string;
+    descricao: string;
+    imagemUrl: string;
+    ordem: number;
+}
+
 // Content Type: Destaque / Banner (Carrossel)
 export interface StrapiDestaque {
     titulo: string;
@@ -110,3 +155,20 @@ export interface Destaque {
     link: string;
     textoBotao: string;
 }
+
+// Content Type: Comentario
+export interface StrapiComentario {
+    nome: string;
+    email: string;
+    conteudo: string;
+    aprovado: boolean;
+    postId: string;
+}
+
+export interface Comentario {
+    id: number;
+    nome: string;
+    conteudo: string;
+    data: string;
+}
+

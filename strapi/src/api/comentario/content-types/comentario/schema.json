@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "comentarios",
+  "info": {
+    "singularName": "comentario",
+    "pluralName": "comentarios",
+    "displayName": "Comentário",
+    "description": "Comentários dos visitantes do site"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nome": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "required": false
+    },
+    "conteudo": {
+      "type": "text",
+      "required": true
+    },
+    "aprovado": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "postId": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

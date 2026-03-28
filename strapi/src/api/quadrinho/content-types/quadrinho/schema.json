@@ -42,6 +42,13 @@
     },
     "ano": {
       "type": "integer"
+    },
+    "categorias": {
+      "type": "enumeration",
+      "enum": [
+        "Quadrinhos Autorais",
+        "Literatura Infantil/Infanto Juvenil"
+      ]
     }
   }
 }

@@ -1,4 +1,4 @@
-import type { StrapiResponse, StrapiMedia, Quadrinho, Ilustracao, PostBlog, Destaque } from "./types";
+import type { StrapiResponse, StrapiMedia, Quadrinho, Ilustracao, PostBlog, Destaque, TrajetoriaItem, YangPost } from "./types";
 
 export const STRAPI_URL = import.meta.env.VITE_STRAPI_URL ?? "http://localhost:1337";
 
@@ -81,6 +81,10 @@ function extractCategories(field: unknown): string[] {
     }
 
     if (items.length > 0) {
+        // JSON array de strings simples (ex: ["Yang", "SIC"])
+        if (typeof items[0] === "string") {
+            return items.filter(Boolean);
+        }
         return items.map((item) => {
             // Extrai o nome/titulo do atributo ou do nível superior (v4 vs v5)
             const source = item.attributes ?? item;
@@ -119,7 +123,9 @@ export function normalizeQuadrinho(item: { id: number;[key: string]: unknown }):
         stats: (attrs.stats as string) || "",
         capaUrl: strapiMediaUrl(capa),
         paginasUrls: paginas.map(strapiMediaUrl).filter(Boolean),
-        categorias: extractCategories(attrs.categorias),
+        secao: ((attrs.secao as string) || "quadrinhos_autorais") as "quadrinhos_autorais" | "literatura_infantil",
+        botaoTexto: (attrs.botaoTexto as string) || "",
+        botaoLink: (attrs.botaoLink as string) || "",
     };
 }
 
@@ -167,6 +173,43 @@ export function normalizePostBlog(item: { id: number;[key: string]: unknown }): 
 }
 
 /**
+ * Normaliza um item de Trajetória do Strapi para o tipo usado no frontend.
+ */
+export function normalizeTrajetoria(item: { id: number;[key: string]: unknown }): TrajetoriaItem {
+    const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
+    const imagem = extractMedia(attrs.imagem);
+
+    return {
+        id: item.id,
+        ano: (attrs.ano as string) || "",
+        titulo: (attrs.titulo as string) || "",
+        descricao: (attrs.descricao as string) || "",
+        imagemUrl: strapiMediaUrl(imagem),
+        ordem: (attrs.ordem as number) ?? 0,
+    };
+}
+
+/**
+ * Normaliza um post do universo Yang do Strapi.
+ */
+export function normalizeYangPost(item: { id: number;[key: string]: unknown }): YangPost {
+    const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
+    const capa = extractMedia(attrs.imagemCapa);
+    const imagensArr = extractMediaArray(attrs.imagensConteudo);
+
+    return {
+        id: item.id,
+        titulo: (attrs.titulo as string) || "",
+        descricao: (attrs.descricao as string) || "",
+        conteudo: (attrs.conteudo as string) || "",
+        imagemCapaUrl: strapiMediaUrl(capa),
+        imagensConteudoUrls: imagensArr.map(strapiMediaUrl).filter(Boolean),
+        data: (attrs.data as string) || "",
+        ordem: (attrs.ordem as number) ?? 0,
+    };
+}
+
+/**
  * Normaliza um item de Destaque (Carrossel) do Strapi para o tipo usado no frontend.
  */
 export function normalizeDestaque(item: { id: number;[key: string]: unknown }): Destaque {
@@ -183,3 +226,47 @@ export function normalizeDestaque(item: { id: number;[key: string]: unknown }): 
         textoBotao: (attrs.textoBotao as string) || (attrs.texto_botao as string) || (attrs.TextoBotao as string) || "Saiba mais",
     };
 }
+
+/**
+ * Normaliza um comentário.
+ */
+export function normalizeComentario(item: { id: number;[key: string]: unknown }): import("./types").Comentario {
+    const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
+    return {
+        id: item.id,
+        nome: (attrs.nome as string) || "Anônimo",
+        conteudo: (attrs.conteudo as string) || "",
+        data: (attrs.createdAt as string) || (attrs.publishedAt as string) || "",
+    };
+}
+
+/**
+ * Envia um novo comentário para o Strapi.
+ */
+export async function enviarComentario(dados: { nome: string; email: string; conteudo: string; postId: string }) {
+    const url = `${STRAPI_URL}/api/comentarios`;
+    const payload = {
+        data: {
+            nome: dados.nome,
+            email: dados.email,
+            conteudo: dados.conteudo,
+            postId: dados.postId,
+            aprovado: false, // Força a necessidade de aprovação
+        }
+    };
+
+    const res = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+        throw new Error("Erro ao enviar o comentário.");
+    }
+
+    return res.json();
+}
+

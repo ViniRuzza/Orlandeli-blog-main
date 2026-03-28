@@ -1,17 +1,12 @@
 import { motion } from "framer-motion";
 import { Layout } from "@/components/Layout";
-import { Award, BookOpen, Palette, Calendar } from "lucide-react";
+import { Award, BookOpen, Palette } from "lucide-react";
 
 import artistPortrait from "@/assets/image.png";
-import heroStudio from "@/assets/hero-studio.jpg";
+import cabecalhoVerdeSobre from "@/assets/cabecalho_verde_sobre.png";
+import { useTrajetoria } from "@/hooks/useTrajetoria";
+import type { TrajetoriaItem } from "@/lib/types";
 
-const timeline = [
-  { year: "1995", title: "Primeiros Traços", description: "Início da carreira como ilustrador freelancer em São Paulo." },
-  { year: "2000", title: "Primeiro Quadrinho", description: "Publicação da primeira história em quadrinhos em revista nacional." },
-  { year: "2008", title: "Reconhecimento", description: "Prêmio Angelo Agostini de melhor desenhista brasileiro." },
-  { year: "2015", title: "O Mundo de Yang", description: "Lançamento do primeiro volume da saga que se tornaria sua obra mais conhecida." },
-  { year: "2020", title: "Expansão Digital", description: "Início dos cursos online e ampliação da presença nas redes sociais." },
-];
 
 const awards = [
   { name: "CCXP Awards", year: "2022", category: "Chico Bento - Verdade" },
@@ -20,25 +15,34 @@ const awards = [
 ];
 
 export default function Sobre() {
+  const { data: trajetoria } = useTrajetoria();
+
   return (
     <Layout>
       {/* Hero */}
-      <section className="relative h-[60vh] min-h-[400px] w-full flex flex-col justify-center overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroStudio})` }}
-        />
-        <div className="absolute inset-0 bg-foreground/70" />
-
-        <div className="relative z-10 container mx-auto px-4 text-center text-background">
+      <section className="w-full overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, scale: 1.03 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+          className="w-full"
+        >
+          <img
+            src={cabecalhoVerdeSobre}
+            alt="Sobre Orlandeli"
+            className="w-full h-auto block"
+          />
+        </motion.div>
+        <div className="container mx-auto px-4 text-center py-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
           >
-            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-2" style={{ color: "#93c748" }}>
               Sobre Orlandeli
             </h1>
-            <p className="text-lg text-background/80 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Mais de duas décadas transformando ideias em traços que emocionam e divertem
             </p>
           </motion.div>
@@ -46,7 +50,7 @@ export default function Sobre() {
       </section>
 
       {/* Bio Section */}
-      <section className="py-20 bg-background">
+      <section className="py-12 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -103,48 +107,59 @@ export default function Sobre() {
             <div className="section-divider" />
           </motion.div>
 
-          <div className="max-w-4xl mx-auto relative">
-            {/* Linha vertical central */}
-            <div className="absolute left-[28px] md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-1/2" />
+          <div className="max-w-5xl mx-auto space-y-16">
+            {(trajetoria ?? []).map((item: TrajetoriaItem, idx: number) => {
+              const isEven = idx % 2 === 0;
+              return (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.5 }}
+                  className="grid md:grid-cols-[1fr_auto_1fr] gap-8 items-center"
+                >
+                  {/* Texto */}
+                  <div className={`space-y-3 ${isEven ? 'md:order-1' : 'md:order-3'}`}>
+                    <span className="inline-block text-sm font-bold px-3 py-1 rounded-full" style={{ backgroundColor: "#93c74822", color: "#93c748" }}>
+                      {item.ano}
+                    </span>
+                    <h3 className="font-serif text-2xl font-semibold text-foreground">
+                      {item.titulo}
+                    </h3>
+                    <div className="w-10 h-1" style={{ backgroundColor: "#93c748" }} />
+                    <p className="text-muted-foreground leading-relaxed">
+                      {item.descricao}
+                    </p>
+                  </div>
 
-            <div className="space-y-12">
-              {timeline.map((item, idx) => {
-                const isEven = idx % 2 === 0;
-                return (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.5, delay: idx * 0.1 }}
-                    className={`relative flex items-center flex-col md:flex-row ${
-                      isEven ? 'md:flex-row-reverse' : ''
-                    } md:justify-between group`}
-                  >
-                    {/* Espaço em branco no lado oposto (desktop) */}
-                    <div className="hidden md:block md:w-[45%]" />
+                  {/* Divisor vertical */}
+                  <div className="hidden md:flex md:order-2 flex-col items-center self-stretch py-2">
+                    <div className="w-px flex-1" style={{ backgroundColor: "#93c74840" }} />
+                    <div className="w-3 h-3 rounded-full my-2" style={{ backgroundColor: "#93c748" }} />
+                    <div className="w-px flex-1" style={{ backgroundColor: "#93c74840" }} />
+                  </div>
 
-                    {/* Botão circular central ("ano") */}
-                    <div className="absolute left-[28px] md:left-1/2 -translate-x-1/2 w-14 h-14 rounded-full bg-background border-4 border-muted flex items-center justify-center shadow-sm z-10 
-                      group-hover:border-primary group-hover:scale-110 transition-all duration-300 font-bold text-sm text-foreground group-hover:text-primary">
-                      {item.year}
-                    </div>
-
-                    {/* Conteúdo do Card */}
-                    <div className={`w-full md:w-[45%] pl-20 md:pl-0 ${isEven ? 'md:pr-12 md:text-right' : 'md:pl-12 md:text-left'}`}>
-                      <div className="card-artistic p-6 relative group-hover:border-primary/40 transition-colors cursor-default">
-                        <h3 className="font-serif text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                          {item.title}
-                        </h3>
-                        <p className="text-muted-foreground leading-relaxed text-sm">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
+                  {/* Imagem */}
+                  <div className={`overflow-hidden rounded-xl aspect-video bg-muted flex items-center justify-center ${isEven ? 'md:order-3' : 'md:order-1'}`}>
+                    {item.imagemUrl ? (
+                      <img
+                        src={item.imagemUrl}
+                        alt={item.titulo}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <BookOpen className="h-12 w-12 text-muted-foreground/30" />
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
+            {(!trajetoria || trajetoria.length === 0) && (
+              <p className="text-center text-muted-foreground py-12">
+                Nenhum item de trajetória cadastrado ainda. Adicione no painel do Strapi!
+              </p>
+            )}
           </div>
         </div>
       </section>
