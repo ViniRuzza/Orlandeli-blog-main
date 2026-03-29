@@ -6,7 +6,7 @@ export function useIlustracoes() {
     return useQuery<Ilustracao[]>({
         queryKey: ["ilustracoes"],
         queryFn: async () => {
-            const res = await fetchStrapi("/ilustraca0s?populate=*&sort=createdAt:desc");
+            const res = await fetchStrapi("/ilustraca0s?populate=*&sort=id:desc&pagination[pageSize]=100");
             return res.data.map((item) =>
                 normalizeIlustracao(item as unknown as { id: number;[key: string]: unknown })
             );

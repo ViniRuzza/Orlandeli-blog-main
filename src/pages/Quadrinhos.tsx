@@ -38,7 +38,7 @@ function ComicCard({ comic, onOpen, idx }: { comic: Quadrinho; onOpen: (c: Quadr
           <img
             src={comic.capaUrl}
             alt={comic.titulo}
-            className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-contain object-top transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full bg-muted flex items-center justify-center">
@@ -137,88 +137,80 @@ export default function Quadrinhos() {
       )}
 
       {/* Seção: Quadrinhos Autorais */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="mb-8"
-          >
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-2">
-              Quadrinhos Autorais
-            </h2>
-            <p className="text-muted-foreground text-base">
-              Obras e quadrinhos escritos e desenhados pelo Orlandeli
-            </p>
-            <div className="w-16 h-1 mt-3" style={{ backgroundColor: "#93c748" }} />
-          </motion.div>
+      {(isLoading || quadrinhosAutorais.length > 0) && (
+        <section className="py-16 bg-background">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="mb-8"
+            >
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-2">
+                Quadrinhos Autorais
+              </h2>
+              <p className="text-muted-foreground text-base">
+                Obras e quadrinhos escritos e desenhados pelo Orlandeli
+              </p>
+              <div className="w-16 h-1 mt-3" style={{ backgroundColor: "#93c748" }} />
+            </motion.div>
 
-          {isLoading && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <ComicCardSkeleton key={i} />
-              ))}
-            </div>
-          )}
+            {isLoading && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <ComicCardSkeleton key={i} />
+                ))}
+              </div>
+            )}
 
-          {!isLoading && !isError && quadrinhosAutorais.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {quadrinhosAutorais.map((comic, idx) => (
-                <ComicCard key={comic.id} comic={comic} onOpen={openComic} idx={idx} />
-              ))}
-            </div>
-          )}
-
-          {!isLoading && !isError && quadrinhosAutorais.length === 0 && (
-            <p className="text-muted-foreground text-center py-12">
-              Nenhum quadrinho cadastrado nessa categoria ainda.
-            </p>
-          )}
-        </div>
-      </section>
+            {!isLoading && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {quadrinhosAutorais.map((comic, idx) => (
+                  <ComicCard key={comic.id} comic={comic} onOpen={openComic} idx={idx} />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Seção: Literatura Infantil e Infanto Juvenil */}
-      <section className="py-16 bg-muted/20">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="mb-8"
-          >
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-2">
-              Literatura Infantil e Infanto Juvenil
-            </h2>
-            <p className="text-muted-foreground text-base">
-              Obras ilustradas pelo Orlandeli
-            </p>
-            <div className="w-16 h-1 mt-3" style={{ backgroundColor: "#93c748" }} />
-          </motion.div>
+      {(isLoading || literaturaInfantil.length > 0) && (
+        <section className="py-16 bg-muted/20">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="mb-8"
+            >
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-2">
+                Literatura Infantil e Infanto Juvenil
+              </h2>
+              <p className="text-muted-foreground text-base">
+                Obras ilustradas pelo Orlandeli
+              </p>
+              <div className="w-16 h-1 mt-3" style={{ backgroundColor: "#93c748" }} />
+            </motion.div>
 
-          {isLoading && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <ComicCardSkeleton key={i} />
-              ))}
-            </div>
-          )}
+            {isLoading && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <ComicCardSkeleton key={i} />
+                ))}
+              </div>
+            )}
 
-          {!isLoading && !isError && literaturaInfantil.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {literaturaInfantil.map((comic, idx) => (
-                <ComicCard key={comic.id} comic={comic} onOpen={openComic} idx={idx} />
-              ))}
-            </div>
-          )}
-
-          {!isLoading && !isError && literaturaInfantil.length === 0 && (
-            <p className="text-muted-foreground text-center py-12">
-              Nenhuma obra cadastrada nessa categoria ainda.
-            </p>
-          )}
-        </div>
-      </section>
+            {!isLoading && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {literaturaInfantil.map((comic, idx) => (
+                  <ComicCard key={comic.id} comic={comic} onOpen={openComic} idx={idx} />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Comic Detail Modal */}
       <Dialog open={!!selectedComic} onOpenChange={() => setSelectedComic(null)}>

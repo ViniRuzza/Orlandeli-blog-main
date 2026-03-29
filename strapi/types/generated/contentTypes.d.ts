@@ -430,41 +430,6 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiComentarioComentario extends Struct.CollectionTypeSchema {
-  collectionName: 'comentarios';
-  info: {
-    description: 'Coment\u00E1rios dos visitantes do site';
-    displayName: 'Coment\u00E1rio';
-    pluralName: 'comentarios';
-    singularName: 'comentario';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    aprovado: Schema.Attribute.Boolean &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<false>;
-    conteudo: Schema.Attribute.Text & Schema.Attribute.Required;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    email: Schema.Attribute.Email;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::comentario.comentario'
-    > &
-      Schema.Attribute.Private;
-    nome: Schema.Attribute.String & Schema.Attribute.Required;
-    postId: Schema.Attribute.String & Schema.Attribute.Required;
-    publishedAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface ApiDestaqueDestaque extends Struct.CollectionTypeSchema {
   collectionName: 'destaques';
   info: {
@@ -541,7 +506,7 @@ export interface ApiPostBlogPostBlog extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    categorias: Schema.Attribute.JSON;
+    categorias: Schema.Attribute.String;
     conteudo: Schema.Attribute.RichText;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -562,6 +527,38 @@ export interface ApiPostBlogPostBlog extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiPremioPremio extends Struct.CollectionTypeSchema {
+  collectionName: 'premios';
+  info: {
+    displayName: 'Pr\u00EAmio';
+    pluralName: 'premios';
+    singularName: 'premio';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    ano: Schema.Attribute.String & Schema.Attribute.Required;
+    categoria: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    imagem: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::premio.premio'
+    > &
+      Schema.Attribute.Private;
+    nome: Schema.Attribute.String & Schema.Attribute.Required;
+    ordem: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiQuadrinhoQuadrinho extends Struct.CollectionTypeSchema {
   collectionName: 'quadrinhos';
   info: {
@@ -574,10 +571,9 @@ export interface ApiQuadrinhoQuadrinho extends Struct.CollectionTypeSchema {
   };
   attributes: {
     ano: Schema.Attribute.Integer;
+    botaoLink: Schema.Attribute.String;
+    botaoTexto: Schema.Attribute.String;
     capa: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
-    categorias: Schema.Attribute.Enumeration<
-      ['Quadrinhos Autorais', 'Literatura Infantil/Infanto Juvenil']
-    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -592,9 +588,111 @@ export interface ApiQuadrinhoQuadrinho extends Struct.CollectionTypeSchema {
       true
     >;
     publishedAt: Schema.Attribute.DateTime;
+    secao: Schema.Attribute.Enumeration<
+      ['quadrinhos_autorais', 'literatura_infantil']
+    > &
+      Schema.Attribute.DefaultTo<'quadrinhos_autorais'>;
     sinopse: Schema.Attribute.String;
     stats: Schema.Attribute.String;
     titulo: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTrajetoriaItemTrajetoriaItem
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'trajetoria_items';
+  info: {
+    displayName: 'Trajet\u00F3ria Item';
+    pluralName: 'trajetoria-items';
+    singularName: 'trajetoria-item';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    ano: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descricao: Schema.Attribute.Text;
+    imagem: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::trajetoria-item.trajetoria-item'
+    > &
+      Schema.Attribute.Private;
+    ordem: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    titulo: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiYangLivroYangLivro extends Struct.CollectionTypeSchema {
+  collectionName: 'yang_livros';
+  info: {
+    displayName: 'Yang Livro';
+    pluralName: 'yang-livros';
+    singularName: 'yang-livro';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    ano: Schema.Attribute.Integer;
+    capa: Schema.Attribute.Media<'images'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    linkCompra: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::yang-livro.yang-livro'
+    > &
+      Schema.Attribute.Private;
+    ordem: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    sinopse: Schema.Attribute.Text;
+    titulo: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiYangPersonagemYangPersonagem
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'yang_personagens';
+  info: {
+    displayName: 'Yang Personagem';
+    pluralName: 'yang-personagens';
+    singularName: 'yang-personagem';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descricao: Schema.Attribute.Text;
+    imagem: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::yang-personagem.yang-personagem'
+    > &
+      Schema.Attribute.Private;
+    nome: Schema.Attribute.String & Schema.Attribute.Required;
+    ordem: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1112,11 +1210,14 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::comentario.comentario': ApiComentarioComentario;
       'api::destaque.destaque': ApiDestaqueDestaque;
       'api::ilustraca0.ilustraca0': ApiIlustraca0Ilustraca0;
       'api::post-blog.post-blog': ApiPostBlogPostBlog;
+      'api::premio.premio': ApiPremioPremio;
       'api::quadrinho.quadrinho': ApiQuadrinhoQuadrinho;
+      'api::trajetoria-item.trajetoria-item': ApiTrajetoriaItemTrajetoriaItem;
+      'api::yang-livro.yang-livro': ApiYangLivroYangLivro;
+      'api::yang-personagem.yang-personagem': ApiYangPersonagemYangPersonagem;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

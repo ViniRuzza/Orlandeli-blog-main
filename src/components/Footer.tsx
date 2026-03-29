@@ -75,11 +75,11 @@ export function Footer() {
             <h4 className="font-serif text-lg font-semibold">Contato</h4>
             <div className="space-y-3">
               <a
-                href="mailto:contato@orlandeli.com.br"
+                href="mailto:orlandeli50@icloud.com.br"
                 className="flex items-center gap-2 text-background/80 hover:text-background text-sm transition-colors"
               >
                 <Mail className="h-4 w-4" />
-                contato@orlandeli.com.br
+                orlandeli50@icloud.com.br
               </a>
               <div className="flex items-start gap-2 text-background/80 text-sm">
                 <MapPin className="h-4 w-4 mt-0.5" />

@@ -12,8 +12,8 @@ import type { PostBlog } from "@/lib/types";
 
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
-import { Comments } from "@/components/Comments";
 import cabecalhoVerdeBlog from "@/assets/cabecalho_verde_blog.png";
+import caricaOrlandeli from "@/assets/carica_orlandeli.png";
 import imgGrump from "@/assets/blog_categoria_grump.png";
 import imgSIC from "@/assets/blog_categoria_sic.png";
 import imgPiuPhiu from "@/assets/blog_categoria_piuephiu.png";
@@ -125,70 +125,72 @@ export default function Blog() {
       </section>
 
       {/* Category Filter & Local Search */}
-      <section className="py-8 bg-background">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="flex flex-col items-center gap-6">
-            {/* Image Category Buttons */}
-            <div className="flex flex-wrap gap-6 justify-center items-end">
-              {CATEGORY_BUTTONS.map(({ label, image, category }) => {
-                const isActive = selectedCategories.includes(category.toLowerCase());
-                return (
+      {!isLoading && !isError && posts.length > 0 && (
+        <section className="py-8 bg-background">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="flex flex-col items-center gap-6">
+              {/* Image Category Buttons */}
+              <div className="flex flex-wrap gap-6 justify-center items-end">
+                {CATEGORY_BUTTONS.map(({ label, image, category }) => {
+                  const isActive = selectedCategories.includes(category.toLowerCase());
+                  return (
+                    <button
+                      key={category}
+                      onClick={() => toggleCategory(category)}
+                      className="flex flex-col items-center gap-2 group focus:outline-none"
+                    >
+                      <div
+                        className={`relative w-28 h-28 rounded-full overflow-hidden border-4 transition-all duration-300  ${isActive
+                          ? "border-[#93c748] scale-110 shadow-[0_0_12px_2px_#93c74860]"
+                          : "border-transparent group-hover:border-[#93c748]/60 group-hover:scale-105"
+                          }`}
+                      >
+                        <img
+                          src={image}
+                          alt={label}
+                          className="w-full h-full object-cover"
+                        />
+                        {isActive && (
+                          <div className="absolute inset-0 bg-[#93c748]/20 rounded-full" />
+                        )}
+                      </div>
+                      <span
+                        className={`text-xs font-semibold transition-colors duration-200 ${isActive ? "text-[#93c748]" : "text-muted-foreground group-hover:text-[#93c748]"
+                          }`}
+                      >
+                        {label}
+                      </span>
+                    </button>
+                  );
+                })}
+                {selectedCategories.length > 0 && (
                   <button
-                    key={category}
-                    onClick={() => toggleCategory(category)}
-                    className="flex flex-col items-center gap-2 group focus:outline-none"
+                    onClick={() => setSelectedCategories([])}
+                    className="flex flex-col items-center gap-2 group focus:outline-none mb-0.5"
                   >
-                    <div
-                      className={`relative w-28 h-28 rounded-full overflow-hidden border-4 transition-all duration-300  ${isActive
-                        ? "border-[#93c748] scale-110 shadow-[0_0_12px_2px_#93c74860]"
-                        : "border-transparent group-hover:border-[#93c748]/60 group-hover:scale-105"
-                        }`}
-                    >
-                      <img
-                        src={image}
-                        alt={label}
-                        className="w-full h-full object-cover"
-                      />
-                      {isActive && (
-                        <div className="absolute inset-0 bg-[#93c748]/20 rounded-full" />
-                      )}
+                    <div className="w-8 h-8 rounded-full bg-destructive/10 border-2 border-destructive/40 flex items-center justify-center group-hover:bg-destructive/20 transition-colors mt-6">
+                      <span className="text-destructive text-sm font-bold">✕</span>
                     </div>
-                    <span
-                      className={`text-xs font-semibold transition-colors duration-200 ${isActive ? "text-[#93c748]" : "text-muted-foreground group-hover:text-[#93c748]"
-                        }`}
-                    >
-                      {label}
-                    </span>
+                    <span className="text-[10px] font-medium text-destructive">Limpar</span>
                   </button>
-                );
-              })}
-              {selectedCategories.length > 0 && (
-                <button
-                  onClick={() => setSelectedCategories([])}
-                  className="flex flex-col items-center gap-2 group focus:outline-none mb-0.5"
-                >
-                  <div className="w-8 h-8 rounded-full bg-destructive/10 border-2 border-destructive/40 flex items-center justify-center group-hover:bg-destructive/20 transition-colors mt-6">
-                    <span className="text-destructive text-sm font-bold">✕</span>
-                  </div>
-                  <span className="text-[10px] font-medium text-destructive">Limpar</span>
-                </button>
-              )}
-            </div>
+                )}
+              </div>
 
-            {/* Local Search Bar */}
-            <div className="relative w-full max-w-md">
-              <Input
-                type="text"
-                placeholder="Buscar posts..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 h-10 rounded-full border-border bg-muted/30 focus:bg-background transition-all"
-              />
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              {/* Local Search Bar */}
+              <div className="relative w-full max-w-md">
+                <Input
+                  type="text"
+                  placeholder="Buscar posts..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 h-10 rounded-full border-border bg-muted/30 focus:bg-background transition-all"
+                />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Blog Posts */}
       <section className="py-16 bg-background">
@@ -222,69 +224,68 @@ export default function Blog() {
 
           {/* Posts timeline */}
           {!isLoading && !isError && !selectedPost && filteredPosts.length > 0 && (
-            <div className="max-w-2xl mx-auto flex flex-col gap-12">
+            <div className="flex flex-col items-center gap-6 max-w-2xl mx-auto">
               {filteredPosts.map((post, idx) => (
                 <motion.article
                   key={post.id}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.1 }}
-                  className="flex flex-col gap-4 border-b border-border/40 pb-10 cursor-pointer"
-                  onClick={() => setSelectedPost(post)}
+                  className="w-full bg-card border border-border rounded-xl shadow-sm overflow-hidden"
                 >
-                  {/* Post Header */}
-                  <div className="flex flex-col gap-3">
-                    <div className="flex justify-between items-center">
-                      <div className="flex flex-wrap gap-2">
+                  {/* Post header */}
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <img
+                      src={caricaOrlandeli}
+                      alt="Orlandeli"
+                      className="w-10 h-10 rounded-full object-cover border-2 border-[#93c748]/40"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-foreground leading-none mb-0.5">Orlandeli</p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] text-muted-foreground flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          {formatDate(post.data)}
+                        </span>
                         {post.categorias.map((cat) => (
-                          <Badge key={cat} variant="secondary" className="bg-primary/10 text-primary hover:bg-primary/20 border-none font-medium">
+                          <Badge key={cat} variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-muted/50 text-muted-foreground border-none font-normal">
                             {cat}
                           </Badge>
                         ))}
                       </div>
-                      <span className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
-                        <Calendar className="h-3.5 w-3.5" />
-                        {formatDate(post.data)}
-                      </span>
                     </div>
-                    {(post.titulo && post.titulo.trim() !== "" && post.titulo !== "Sem Título") && (
-                      <h2 className="font-serif text-2xl font-bold text-foreground leading-snug group-hover:text-primary transition-colors">
-                        {post.titulo}
-                      </h2>
-                    )}
                   </div>
 
-                  {/* Post Content Snippet (se existir) */}
-                  {post.conteudo && post.conteudo.trim() !== "" && post.titulo !== "Exemplo — Post do Blog" && (
-                    <p className="text-muted-foreground text-[15px] leading-relaxed line-clamp-3">
-                      {post.conteudo.replace(/[#*`]/g, '').slice(0, 250)}...
+                  {/* Title */}
+                  <div className="px-4 pb-2">
+                    <h2 className="font-serif text-lg font-bold text-foreground leading-snug">
+                      {post.titulo}
+                    </h2>
+                    <p className="text-sm text-muted-foreground mt-1 line-clamp-3">
+                      {post.conteudo.replace(/[#*`]/g, '').slice(0, 180)}...
                     </p>
-                  )}
-                  {post.titulo === "Exemplo — Post do Blog" && (
-                    <p className="text-muted-foreground text-[15px] leading-relaxed line-clamp-3">
-                      {post.conteudo}
-                    </p>
-                  )}
+                  </div>
 
-                  {/* Post Image (Full size, Inteira, sem cortes) */}
+                  {/* Full image */}
                   {post.imagemUrl && (
-                    <div className="w-full relative mt-1 bg-muted/5 rounded-xl overflow-hidden">
+                    <div className="w-full bg-muted/10">
                       <img
                         src={post.imagemUrl}
                         alt={post.titulo}
-                        className="w-full h-auto object-contain rounded-xl"
-                        style={{ maxHeight: '80vh' }}
+                        className="w-full h-auto block"
                       />
                     </div>
                   )}
 
-                  {/* Action Bar */}
-                  <div className="flex items-center justify-between pt-2 mt-2 text-sm font-medium text-muted-foreground">
-                    <button className="flex items-center gap-2 hover:text-primary transition-colors py-2 px-4 rounded-lg hover:bg-muted/50">
+                  {/* Action bar */}
+                  <div className="flex items-center justify-between px-4 py-2 border-t border-border/50">
+                    <button
+                      onClick={() => setSelectedPost(post)}
+                      className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors font-medium px-3 py-1.5 rounded-md hover:bg-muted/40"
+                    >
                       <MessageCircle className="h-4 w-4" />
-                      Comentar
+                      Ver post completo
                     </button>
-                    
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -298,7 +299,7 @@ export default function Blog() {
                           alert("Link copiado para a área de transferência!");
                         }
                       }}
-                      className="flex items-center gap-2 hover:text-primary transition-colors py-2 px-4 rounded-lg hover:bg-muted/50"
+                      className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors font-medium px-3 py-1.5 rounded-md hover:bg-muted/40"
                     >
                       <Share2 className="h-4 w-4" />
                       Compartilhar
@@ -384,10 +385,6 @@ export default function Blog() {
                 {/* Rich text content */}
                 <div className="prose prose-xl md:prose-2xl max-w-none text-foreground leading-relaxed">
                   <ReactMarkdown remarkPlugins={[remarkBreaks]}>{selectedPost.conteudo}</ReactMarkdown>
-                </div>
-
-                <div className="pt-8 border-t border-border/50">
-                  <Comments postId={selectedPost.id.toString()} />
                 </div>
               </article>
             </motion.div>

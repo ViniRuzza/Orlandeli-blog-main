@@ -43,12 +43,19 @@
     "ano": {
       "type": "integer"
     },
-    "categorias": {
+    "secao": {
       "type": "enumeration",
       "enum": [
-        "Quadrinhos Autorais",
-        "Literatura Infantil/Infanto Juvenil"
-      ]
+        "quadrinhos_autorais",
+        "literatura_infantil"
+      ],
+      "default": "quadrinhos_autorais"
+    },
+    "botaoTexto": {
+      "type": "string"
+    },
+    "botaoLink": {
+      "type": "string"
     }
   }
 }

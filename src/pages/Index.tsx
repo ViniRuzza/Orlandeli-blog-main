@@ -17,22 +17,20 @@ import bookYang1 from "@/assets/Yang_OmundoDoMeio.webp";
 import sulImg from "@/assets/sul.jpeg";
 import darumaImg from "@/assets/darumaa.jpeg";
 import aCoisaImg from "@/assets/acoisa.jpeg";
-
-// Nav icons
-import iconeOrlandeli from "@/assets/icon_Orlandeli.png";
-import iconeBlog from "@/assets/iconehome_blog (1).png";
+import iconeYang from "@/assets/iconehome_yang.png";
 import iconeLoja from "@/assets/iconehome_loja.png";
 import iconePortfolio from "@/assets/iconehome_portfolio.png";
 import iconePublicacoes from "@/assets/iconehome_publicacoes.png";
-import iconeYang from "@/assets/iconehome_yang.png";
+import iconeBlog from "@/assets/iconehome_blog.png";
+import iconeSobre from "@/assets/carica_orlandeli.png"
 
-const navIcons = [
-  { icon: iconeOrlandeli, label: "Sobre", path: "/sobre" },
-  { icon: iconePublicacoes, label: "Publicações", path: "/quadrinhos" },
-  { icon: iconePortfolio, label: "Portfólio", path: "/portfolio" },
-  { icon: iconeLoja, label: "Loja", path: "/loja" },
-  { icon: iconeBlog, label: "Blog", path: "/blog" },
-  { icon: iconeYang, label: "O Mundo de Yang", path: "/yang" },
+const HOME_NAV_ICONS = [
+  { label: "Publicações", image: iconePublicacoes, link: "/quadrinhos" },
+  { label: "Portfólio", image: iconePortfolio, link: "/portfolio" },
+  { label: "Loja", image: iconeLoja, link: "/loja" },
+  { label: "Blog", image: iconeBlog, link: "/blog" },
+  { label: "Yang", image: iconeYang, link: "/yang" },
+  {label: "Sobre", image: iconeSobre, link: "/sobre" }
 ];
 
 const carouselSlides = [
@@ -199,38 +197,42 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Icon Nav Row */}
-      <section className="py-8 bg-[#F9F6F0] dark:bg-[#1f1a14] border-b border-border/30">
+      {/* Home Navigation Icons */}
+      <section className="py-10 bg-background">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center gap-6 md:gap-10">
-            {navIcons.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className="flex flex-col items-center gap-2 group focus:outline-none"
+          <div className="flex flex-wrap gap-8 justify-center items-end">
+            {HOME_NAV_ICONS.map(({ label, image, link }, idx) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.08 }}
               >
-                <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-transparent transition-all duration-300 group-hover:border-[#93c748]/60 group-hover:scale-105">
-                  <img
-                    src={item.icon}
-                    alt={item.label}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <span
-                  className="text-xs font-bold uppercase tracking-wider text-center transition-colors duration-200 text-[#3D2D38] group-hover:text-[#93c748]"
+                <Link
+                  to={link}
+                  className="flex flex-col items-center gap-2 group focus:outline-none"
                 >
-                  {item.label}
-                </span>
-              </Link>
+                  <div className="relative w-28 h-28 rounded-full overflow-hidden border-4 border-transparent transition-all duration-300 group-hover:border-primary/60 group-hover:scale-105 group-hover:shadow-[0_0_12px_2px_hsl(var(--primary)/0.35)]">
+                    <img
+                      src={image}
+                      alt={label}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span className="text-xs font-semibold text-muted-foreground group-hover:text-primary transition-colors duration-200">
+                    {label}
+                  </span>
+                </Link>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Illustrations Grid */}
-
       <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 max-w-6xl">
+        <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -260,17 +262,20 @@ export default function Index() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className="group cursor-pointer overflow-hidden"
+                  className="card-artistic group overflow-hidden"
                 >
                   {item.imagemUrl && (
-                    <div className="overflow-hidden transition-all duration-300 group-hover:opacity-90">
+                    <div className="aspect-square overflow-hidden bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2">
                       <img
                         src={item.imagemUrl}
                         alt={item.titulo}
-                        className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.02]"
+                        className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
                       />
                     </div>
                   )}
+                  <div className="p-4">
+                    <h3 className="font-medium text-foreground">{item.titulo}</h3>
+                  </div>
                 </motion.div>
               ))
             )}

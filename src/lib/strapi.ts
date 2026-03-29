@@ -1,4 +1,4 @@
-import type { StrapiResponse, StrapiMedia, Quadrinho, Ilustracao, PostBlog, Destaque, TrajetoriaItem, YangPost } from "./types";
+import type { StrapiResponse, StrapiMedia, Quadrinho, Ilustracao, PostBlog, Destaque, TrajetoriaItem, YangPost, YangLivro, YangPersonagem, Premio } from "./types";
 
 export const STRAPI_URL = import.meta.env.VITE_STRAPI_URL ?? "http://localhost:1337";
 
@@ -97,9 +97,10 @@ function extractCategories(field: unknown): string[] {
         return field.map(c => typeof c === "string" ? c : "").filter(Boolean);
     }
 
-    // Caso 3: String separada por vírgula
+    // Caso 3: String separada por ponto-e-vírgula (ou vírgula como fallback)
     if (typeof field === "string") {
-        return field.split(",").map(c => c.trim()).filter(Boolean);
+        const separator = field.includes(";") ? ";" : ",";
+        return field.split(separator).map(c => c.trim().replace(/^["']|["']$/g, "")).filter(Boolean);
     }
 
     return [];
@@ -152,6 +153,7 @@ export function normalizeIlustracao(item: { id: number;[key: string]: unknown })
         titulo: (attrs.titulo as string) || "",
         tags,
         imagemUrl: strapiMediaUrl(imagem),
+        legenda: (attrs.legenda as string) || "",
     };
 }
 /**
@@ -210,6 +212,55 @@ export function normalizeYangPost(item: { id: number;[key: string]: unknown }): 
 }
 
 /**
+ * Normaliza um livro do universo Yang do Strapi.
+ */
+export function normalizeYangLivro(item: { id: number;[key: string]: unknown }): YangLivro {
+    const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
+    const capa = extractMedia(attrs.capa);
+    return {
+        id: item.id,
+        titulo: (attrs.titulo as string) || "",
+        sinopse: (attrs.sinopse as string) || "",
+        linkCompra: (attrs.linkCompra as string) || "",
+        ano: (attrs.ano as number) ?? 0,
+        ordem: (attrs.ordem as number) ?? 0,
+        capaUrl: strapiMediaUrl(capa),
+    };
+}
+
+/**
+ * Normaliza um personagem do universo Yang do Strapi.
+ */
+export function normalizeYangPersonagem(item: { id: number;[key: string]: unknown }): YangPersonagem {
+    const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
+    const imagem = extractMedia(attrs.imagem);
+    return {
+        id: item.id,
+        nome: (attrs.nome as string) || "",
+        descricao: (attrs.descricao as string) || "",
+        ordem: (attrs.ordem as number) ?? 0,
+        imagemUrl: strapiMediaUrl(imagem),
+    };
+}
+
+/**
+ * Normaliza um item de Prêmio do Strapi para o tipo usado no frontend.
+ */
+export function normalizePremio(item: { id: number;[key: string]: unknown }): Premio {
+    const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
+    const imagem = extractMedia(attrs.imagem);
+
+    return {
+        id: item.id,
+        nome: (attrs.nome as string) || "",
+        ano: (attrs.ano as string) || "",
+        categoria: (attrs.categoria as string) || "",
+        imagemUrl: strapiMediaUrl(imagem),
+        ordem: (attrs.ordem as number) ?? 0,
+    };
+}
+
+/**
  * Normaliza um item de Destaque (Carrossel) do Strapi para o tipo usado no frontend.
  */
 export function normalizeDestaque(item: { id: number;[key: string]: unknown }): Destaque {
@@ -226,47 +277,3 @@ export function normalizeDestaque(item: { id: number;[key: string]: unknown }): 
         textoBotao: (attrs.textoBotao as string) || (attrs.texto_botao as string) || (attrs.TextoBotao as string) || "Saiba mais",
     };
 }
-
-/**
- * Normaliza um comentário.
- */
-export function normalizeComentario(item: { id: number;[key: string]: unknown }): import("./types").Comentario {
-    const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
-    return {
-        id: item.id,
-        nome: (attrs.nome as string) || "Anônimo",
-        conteudo: (attrs.conteudo as string) || "",
-        data: (attrs.createdAt as string) || (attrs.publishedAt as string) || "",
-    };
-}
-
-/**
- * Envia um novo comentário para o Strapi.
- */
-export async function enviarComentario(dados: { nome: string; email: string; conteudo: string; postId: string }) {
-    const url = `${STRAPI_URL}/api/comentarios`;
-    const payload = {
-        data: {
-            nome: dados.nome,
-            email: dados.email,
-            conteudo: dados.conteudo,
-            postId: dados.postId,
-            aprovado: false, // Força a necessidade de aprovação
-        }
-    };
-
-    const res = await fetch(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-    });
-
-    if (!res.ok) {
-        throw new Error("Erro ao enviar o comentário.");
-    }
-
-    return res.json();
-}
-

@@ -1,21 +1,18 @@
 import { motion } from "framer-motion";
 import { Layout } from "@/components/Layout";
-import { Award, BookOpen, Palette } from "lucide-react";
+import { BookOpen, Palette, Award, AlertCircle } from "lucide-react";
 
 import artistPortrait from "@/assets/image.png";
+import caricaOrlandeli from "@/assets/carica_orlandeli.png";
 import cabecalhoVerdeSobre from "@/assets/cabecalho_verde_sobre.png";
+import assOrlandeli from "@/assets/ASSORLANDELI.png";
 import { useTrajetoria } from "@/hooks/useTrajetoria";
+import { usePremios } from "@/hooks/usePremios";
 import type { TrajetoriaItem } from "@/lib/types";
 
-
-const awards = [
-  { name: "CCXP Awards", year: "2022", category: "Chico Bento - Verdade" },
-  { name: "Troféu HQ Mix", year: "2024", category: "Lusco Fusco - Marvin escreve poemas" },
-  { name: "Prêmio Jabuti", year: "2025", category: "Mais uma história para o velho Smih" },
-];
-
 export default function Sobre() {
-  const { data: trajetoria } = useTrajetoria();
+  const { data: trajetoria, isLoading: isLoadingTrajetoria, isError: isErrorTrajetoria } = useTrajetoria();
+  const { data: premios = [], isLoading: isLoadingPremios } = usePremios();
 
   return (
     <Layout>
@@ -39,9 +36,11 @@ export default function Sobre() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-2" style={{ color: "#93c748" }}>
-              Sobre Orlandeli
-            </h1>
+            <img
+              src={assOrlandeli}
+              alt="Sobre Orlandeli"
+              className="h-12 md:h-16 w-auto mx-auto mb-2"
+            />
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Mais de duas décadas transformando ideias em traços que emocionam e divertem
             </p>
@@ -89,6 +88,37 @@ export default function Sobre() {
               </div>
             </motion.div>
           </div>
+
+        </div>
+      </section>
+
+      {/* Traços */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-8"
+          >
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-2">
+              Traços
+            </h2>
+            <div className="w-16 h-1 mt-3 mx-auto" style={{ backgroundColor: "#93c748" }} />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="flex justify-center"
+          >
+            <img
+              src={caricaOrlandeli}
+              alt="Caricatura de Orlandeli"
+              className="w-[480px] md:w-[700px] h-auto"
+            />
+          </motion.div>
         </div>
       </section>
 
@@ -101,14 +131,28 @@ export default function Sobre() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="font-serif text-3xl font-bold text-foreground mb-4">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-2">
               A Trajetória
             </h2>
-            <div className="section-divider" />
+            <div className="w-16 h-1 mt-3 mx-auto" style={{ backgroundColor: "#93c748" }} />
           </motion.div>
 
           <div className="max-w-5xl mx-auto space-y-16">
-            {(trajetoria ?? []).map((item: TrajetoriaItem, idx: number) => {
+            {isLoadingTrajetoria && (
+              <div className="flex justify-center py-12">
+                <div className="w-8 h-8 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+              </div>
+            )}
+
+            {isErrorTrajetoria && (
+              <div className="flex flex-col items-center gap-3 py-12 text-center">
+                <AlertCircle className="h-10 w-10 text-destructive" />
+                <p className="font-medium text-foreground">Não foi possível carregar a trajetória.</p>
+                <p className="text-sm text-muted-foreground">Verifique se o Strapi está em execução e tente novamente.</p>
+              </div>
+            )}
+
+            {!isLoadingTrajetoria && !isErrorTrajetoria && (trajetoria ?? []).map((item: TrajetoriaItem, idx: number) => {
               const isEven = idx % 2 === 0;
               return (
                 <motion.div
@@ -155,7 +199,7 @@ export default function Sobre() {
                 </motion.div>
               );
             })}
-            {(!trajetoria || trajetoria.length === 0) && (
+            {!isLoadingTrajetoria && !isErrorTrajetoria && (!trajetoria || trajetoria.length === 0) && (
               <p className="text-center text-muted-foreground py-12">
                 Nenhum item de trajetória cadastrado ainda. Adicione no painel do Strapi!
               </p>
@@ -165,7 +209,7 @@ export default function Sobre() {
       </section>
 
       {/* Awards */}
-      <section className="py-20 bg-background">
+      {(isLoadingPremios || premios.length > 0) && <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -180,26 +224,38 @@ export default function Sobre() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {awards.map((award, idx) => (
+            {premios.map((premio, idx) => (
               <motion.div
-                key={idx}
+                key={premio.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="card-artistic p-6 text-center"
+                className="card-artistic overflow-hidden text-center"
               >
-                <div className="w-16 h-16 rounded-full bg-wood/20 flex items-center justify-center mx-auto mb-4">
-                  <Award className="h-8 w-8 text-wood" />
+                {premio.imagemUrl ? (
+                  <img
+                    src={premio.imagemUrl}
+                    alt={premio.nome}
+                    className="w-full h-auto block"
+                  />
+                ) : (
+                  <div className="w-full h-32 bg-wood/10 flex items-center justify-center">
+                    <Award className="h-10 w-10 text-wood/40" />
+                  </div>
+                )}
+                <div className="p-5">
+                  <h3 className="font-serif text-lg font-semibold text-foreground">{premio.nome}</h3>
+                  <p className="text-primary font-bold mt-1">{premio.ano}</p>
+                  {premio.categoria && (
+                    <p className="text-sm text-muted-foreground mt-2">{premio.categoria}</p>
+                  )}
                 </div>
-                <h3 className="font-serif text-lg font-semibold text-foreground">{award.name}</h3>
-                <p className="text-primary font-bold mt-1">{award.year}</p>
-                <p className="text-sm text-muted-foreground mt-2">{award.category}</p>
               </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* Skills */}
       <section className="py-20 bg-background">
