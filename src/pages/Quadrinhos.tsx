@@ -113,9 +113,27 @@ export default function Quadrinhos() {
             <h1 className="font-serif text-4xl md:text-5xl font-bold mb-3" style={{ color: "#93c748" }}>
               Publicações
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground font-medium tracking-wide mb-2">
-              Quadrinhos · Ilustrações · Literatura
-            </p>
+            {!isLoading && (
+              <nav className="flex flex-wrap justify-center items-center gap-2 mb-2">
+                {[
+                  { label: "Quadrinhos Autorais", href: "#quadrinhos-autorais", show: quadrinhosAutorais.length > 0 },
+                  { label: "Literatura Infantil e Infanto Juvenil", href: "#literatura-infantil", show: literaturaInfantil.length > 0 },
+                ].filter(item => item.show).map((item, idx, arr) => (
+                  <>
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {item.label}
+                    </a>
+                    {idx < arr.length - 1 && (
+                      <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ backgroundColor: "#93c748" }} />
+                    )}
+                  </>
+                ))}
+              </nav>
+            )}
             <div className="section-divider" />
           </motion.div>
         </div>
@@ -138,7 +156,7 @@ export default function Quadrinhos() {
 
       {/* Seção: Quadrinhos Autorais */}
       {(isLoading || quadrinhosAutorais.length > 0) && (
-        <section className="py-16 bg-background">
+        <section id="quadrinhos-autorais" className="py-16 bg-background">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -176,7 +194,7 @@ export default function Quadrinhos() {
 
       {/* Seção: Literatura Infantil e Infanto Juvenil */}
       {(isLoading || literaturaInfantil.length > 0) && (
-        <section className="py-16 bg-muted/20">
+        <section id="literatura-infantil" className="py-16 bg-muted/20">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
