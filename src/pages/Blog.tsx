@@ -222,71 +222,88 @@ export default function Blog() {
             </div>
           )}
 
-          {/* Posts grid */}
+          {/* Posts timeline */}
           {!isLoading && !isError && !selectedPost && filteredPosts.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="flex flex-col items-center gap-6 max-w-2xl mx-auto">
               {filteredPosts.map((post, idx) => (
                 <motion.article
                   key={post.id}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.1 }}
-                  className="card-artistic group cursor-pointer"
-                  onClick={() => setSelectedPost(post)}
+                  className="w-full bg-card border border-border rounded-xl shadow-sm overflow-hidden"
                 >
-                  {post.imagemUrl && (
-                    <div className="overflow-hidden rounded-t-lg bg-muted/10">
-                      <img
-                        src={post.imagemUrl}
-                        alt={post.titulo}
-                        className="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
-                  )}
-                  <div className="p-5 flex flex-col flex-1">
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {post.categorias.map((cat) => (
-                        <Badge key={cat} variant="secondary" className="text-[10px] px-2 py-0 h-5 bg-muted/50 text-muted-foreground border-none font-normal">
-                          {cat}
-                        </Badge>
-                      ))}
-                    </div>
-                    <h2 className="font-serif text-xl font-bold text-foreground group-hover:text-primary transition-colors mb-2 leading-snug">
-                      {post.titulo}
-                    </h2>
-                    <p className="text-sm text-muted-foreground line-clamp-2 mb-4 flex-1">
-                      {post.conteudo.replace(/[#*`]/g, '').slice(0, 100)}...
-                    </p>
-                    <div className="flex items-center justify-between pt-4 border-t border-border/50 text-[10px] text-muted-foreground">
-                      <div className="flex items-center gap-3">
-                        <span className="flex items-center gap-1">
+                  {/* Post header */}
+                  <div className="flex items-center gap-3 px-4 py-3">
+                    <img
+                      src={caricaOrlandeli}
+                      alt="Orlandeli"
+                      className="w-10 h-10 rounded-full object-cover border-2 border-[#93c748]/40"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-foreground leading-none mb-0.5">Orlandeli</p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] text-muted-foreground flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
                           {formatDate(post.data)}
                         </span>
-                        <span className="flex items-center gap-1">
-                          <MessageCircle className="h-3 w-3" />
-                          12 comentários
-                        </span>
+                        {post.categorias.map((cat) => (
+                          <Badge key={cat} variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-muted/50 text-muted-foreground border-none font-normal">
+                            {cat}
+                          </Badge>
+                        ))}
                       </div>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (navigator.share) {
-                            navigator.share({
-                              title: post.titulo,
-                              url: window.location.origin + "/blog?post=" + post.id
-                            });
-                          } else {
-                            navigator.clipboard.writeText(window.location.origin + "/blog?post=" + post.id);
-                            alert("Link copiado para a área de transferência!");
-                          }
-                        }}
-                        className="flex items-center gap-1 hover:text-primary transition-colors font-medium"
-                      >
-                        <Share2 className="h-3 w-3" />
-                        Compartilhar
-                      </button>
                     </div>
+                  </div>
+
+                  {/* Title */}
+                  <div className="px-4 pb-2">
+                    <h2 className="font-serif text-lg font-bold text-foreground leading-snug">
+                      {post.titulo}
+                    </h2>
+                    <p className="text-sm text-muted-foreground mt-1 line-clamp-3">
+                      {post.conteudo.replace(/[#*`]/g, '').slice(0, 180)}...
+                    </p>
+                  </div>
+
+                  {/* Full image */}
+                  {post.imagemUrl && (
+                    <div className="w-full bg-muted/10">
+                      <img
+                        src={post.imagemUrl}
+                        alt={post.titulo}
+                        className="w-full h-auto block"
+                      />
+                    </div>
+                  )}
+
+                  {/* Action bar */}
+                  <div className="flex items-center justify-between px-4 py-2 border-t border-border/50">
+                    <button
+                      onClick={() => setSelectedPost(post)}
+                      className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors font-medium px-3 py-1.5 rounded-md hover:bg-muted/40"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      Ver post completo
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (navigator.share) {
+                          navigator.share({
+                            title: post.titulo,
+                            url: window.location.origin + "/blog?post=" + post.id
+                          });
+                        } else {
+                          navigator.clipboard.writeText(window.location.origin + "/blog?post=" + post.id);
+                          alert("Link copiado para a área de transferência!");
+                        }
+                      }}
+                      className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors font-medium px-3 py-1.5 rounded-md hover:bg-muted/40"
+                    >
+                      <Share2 className="h-4 w-4" />
+                      Compartilhar
+                    </button>
                   </div>
                 </motion.article>
               ))}
