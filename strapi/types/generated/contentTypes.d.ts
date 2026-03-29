@@ -527,6 +527,38 @@ export interface ApiPostBlogPostBlog extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiPremioPremio extends Struct.CollectionTypeSchema {
+  collectionName: 'premios';
+  info: {
+    displayName: 'Pr\u00EAmio';
+    pluralName: 'premios';
+    singularName: 'premio';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    ano: Schema.Attribute.String & Schema.Attribute.Required;
+    categoria: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    imagem: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::premio.premio'
+    > &
+      Schema.Attribute.Private;
+    nome: Schema.Attribute.String & Schema.Attribute.Required;
+    ordem: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiQuadrinhoQuadrinho extends Struct.CollectionTypeSchema {
   collectionName: 'quadrinhos';
   info: {
@@ -596,38 +628,6 @@ export interface ApiTrajetoriaItemTrajetoriaItem
     ordem: Schema.Attribute.Integer;
     publishedAt: Schema.Attribute.DateTime;
     titulo: Schema.Attribute.String;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
-export interface ApiPremioPremio extends Struct.CollectionTypeSchema {
-  collectionName: 'premios';
-  info: {
-    displayName: 'Prêmio';
-    pluralName: 'premios';
-    singularName: 'premio';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    ano: Schema.Attribute.String & Schema.Attribute.Required;
-    categoria: Schema.Attribute.String;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    imagem: Schema.Attribute.Media<'images'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::premio.premio'
-    > &
-      Schema.Attribute.Private;
-    nome: Schema.Attribute.String & Schema.Attribute.Required;
-    ordem: Schema.Attribute.Integer;
-    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1213,8 +1213,8 @@ declare module '@strapi/strapi' {
       'api::destaque.destaque': ApiDestaqueDestaque;
       'api::ilustraca0.ilustraca0': ApiIlustraca0Ilustraca0;
       'api::post-blog.post-blog': ApiPostBlogPostBlog;
-      'api::quadrinho.quadrinho': ApiQuadrinhoQuadrinho;
       'api::premio.premio': ApiPremioPremio;
+      'api::quadrinho.quadrinho': ApiQuadrinhoQuadrinho;
       'api::trajetoria-item.trajetoria-item': ApiTrajetoriaItemTrajetoriaItem;
       'api::yang-livro.yang-livro': ApiYangLivroYangLivro;
       'api::yang-personagem.yang-personagem': ApiYangPersonagemYangPersonagem;

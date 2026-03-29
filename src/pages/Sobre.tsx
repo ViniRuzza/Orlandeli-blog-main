@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Layout } from "@/components/Layout";
 import { BookOpen, Palette, Award, AlertCircle } from "lucide-react";
 
-import artistPortrait from "@/assets/image.png";
+import artistPortrait from "@/assets/Orlandeli_FT.jpeg";
 import caricaOrlandeli from "@/assets/carica_orlandeli.png";
 import cabecalhoVerdeSobre from "@/assets/cabecalho_verde_sobre.png";
 import assOrlandeli from "@/assets/ASSORLANDELI.png";
@@ -41,45 +41,58 @@ export default function Sobre() {
               alt="Sobre Orlandeli"
               className="h-12 md:h-16 w-auto mx-auto mb-2"
             />
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Mais de duas décadas transformando ideias em traços que emocionam e divertem
-            </p>
+            <nav className="flex flex-wrap justify-center items-center gap-2 mt-4">
+              {[
+                { label: "O Artista", href: "#artista" },
+                { label: "Traços", href: "#tracos" },
+                { label: "Trajetória", href: "#trajetoria" },
+                { label: "Prêmios", href: "#premios" },
+              ].map((item, idx, arr) => (
+                <>
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                  {idx < arr.length - 1 && (
+                    <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ backgroundColor: "#93c748" }} />
+                  )}
+                </>
+              ))}
+            </nav>
           </motion.div>
         </div>
       </section>
 
       {/* Bio Section */}
-      <section className="py-12 bg-background">
+      <section id="artista" className="py-12 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="max-w-3xl mx-auto space-y-6">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="order-2 md:order-1 space-y-6"
+              className="space-y-6"
             >
               <h2 className="font-serif text-3xl font-bold text-foreground">
                 O Artista
               </h2>
-              <div className="section-divider !mx-0" />
+              <div className="w-16 h-1" style={{ backgroundColor: "#93c748" }} />
               <p className="text-muted-foreground leading-relaxed">
-                Walmir Americo Orlandeli mora no Brasil e é um artista de quadrinhos, cartunista e ilustrador.
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                É autor de diversas publicações. Como artista de quadrinhos, participou das antologias MSP 50 e Front.
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                Vencedor do Troféu HQMix em 2002 como "melhor revista de humor" (Grump), 2018 como "melhor publicação juvenil" (Chico Bento - Arvorada) e em 2024 como melhor design gráfico (Lusco Fusco). Vencedor do CCXP Awards em 2022 (Chico Bento - Verdade) e conquistou o Prêmio Jabuti em 2025 (Mais uma história para o velho Smih).
+                Walmir Americo Orlandeli é quadrinista e ilustrador. Formado em Comunicação Social pela faculdade Unilago.
+                Sócio proprietário da empresa W.A. Orlandeli - ME, onde realiza projetos de ilustração e design gráfico além de administrar o selo editorial Gambatte.
               </p>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="order-1 md:order-2"
+              className="flex justify-center"
             >
-              <div className="image-frame aspect-square max-w-md mx-auto">
+              <div className="image-frame aspect-[4/3] max-w-xl w-full">
                 <img
                   src={artistPortrait}
                   alt="Orlandeli"
@@ -87,13 +100,46 @@ export default function Sobre() {
                 />
               </div>
             </motion.div>
-          </div>
 
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="space-y-4"
+            >
+              <p className="text-muted-foreground leading-relaxed">
+                Já publicou em várias revistas e jornais, entre eles: Jornal Folha de São Paulo, revista Época, Revista Superinteressante etc.
+              </p>
+              <p className="text-muted-foreground leading-relaxed font-medium">Publicou os seguintes álbuns em quadrinhos:</p>
+              <ul className="columns-2 text-muted-foreground text-sm space-y-1 list-disc pl-4">
+                <li>Eu matei o Libório</li>
+                <li>Grump - Um dia eu chego lá</li>
+                <li>SIC</li>
+                <li>Daruma</li>
+                <li>O mundo de Yang</li>
+                <li>O mundo de Yang - Rumo ao Sul</li>
+                <li>O mundo de Yang - Dois cortes</li>
+                <li>O mundo de Yang - Caminho do meio</li>
+                <li>O Sinal</li>
+                <li>Os olhos de Barthô</li>
+                <li>Chico Bento - Arvorada</li>
+                <li>Chico Bento - Verdade</li>
+                <li>Chico Bento - Viola</li>
+                <li>A Coisa</li>
+                <li>Depois que eu matei o Libório</li>
+                <li>Lusco Fusco - O mundo acabou</li>
+                <li>Lusco Fusco - Marvin escreve poemas</li>
+                <li>Lusco Fusco - Este lugar não está no mapa</li>
+                <li>Lusco Fusco - Coloquei minha tristeza em uma garrafa</li>
+                <li>Mais uma história para o velho Smith</li>
+              </ul>
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Traços */}
-      <section className="py-16 bg-background">
+      <section id="tracos" className="py-16 bg-background">
         <div className="container mx-auto px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -137,7 +183,10 @@ export default function Sobre() {
             <div className="w-16 h-1 mt-3 mx-auto" style={{ backgroundColor: "#93c748" }} />
           </motion.div>
 
-          <div className="max-w-5xl mx-auto space-y-16">
+          <div className="max-w-5xl mx-auto relative">
+            {/* Linha contínua vertical */}
+            <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2" style={{ backgroundColor: "#93c74840" }} />
+
             {isLoadingTrajetoria && (
               <div className="flex justify-center py-12">
                 <div className="w-8 h-8 rounded-full border-4 border-primary border-t-transparent animate-spin" />
@@ -161,7 +210,7 @@ export default function Sobre() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{ duration: 0.5 }}
-                  className="grid md:grid-cols-[1fr_auto_1fr] gap-8 items-center"
+                  className="grid md:grid-cols-[1fr_auto_1fr] gap-8 items-center py-8"
                 >
                   {/* Texto */}
                   <div className={`space-y-3 ${isEven ? 'md:order-1' : 'md:order-3'}`}>
@@ -177,11 +226,9 @@ export default function Sobre() {
                     </p>
                   </div>
 
-                  {/* Divisor vertical */}
-                  <div className="hidden md:flex md:order-2 flex-col items-center self-stretch py-2">
-                    <div className="w-px flex-1" style={{ backgroundColor: "#93c74840" }} />
-                    <div className="w-3 h-3 rounded-full my-2" style={{ backgroundColor: "#93c748" }} />
-                    <div className="w-px flex-1" style={{ backgroundColor: "#93c74840" }} />
+                  {/* Ponto central */}
+                  <div className="hidden md:flex md:order-2 flex-col items-center justify-center relative z-10">
+                    <div className="w-4 h-4 rounded-full ring-4 ring-background" style={{ backgroundColor: "#93c748" }} />
                   </div>
 
                   {/* Imagem */}
@@ -209,7 +256,7 @@ export default function Sobre() {
       </section>
 
       {/* Awards */}
-      {(isLoadingPremios || premios.length > 0) && <section className="py-20 bg-background">
+      {(!isLoadingPremios && premios.length > 0) && <section id="premios" className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -240,8 +287,8 @@ export default function Sobre() {
                     className="w-full h-auto block"
                   />
                 ) : (
-                  <div className="w-full h-32 bg-wood/10 flex items-center justify-center">
-                    <Award className="h-10 w-10 text-wood/40" />
+                  <div className="w-full h-48 bg-muted flex items-center justify-center">
+                    <Award className="h-16 w-16 text-muted-foreground" />
                   </div>
                 )}
                 <div className="p-5">
@@ -260,7 +307,7 @@ export default function Sobre() {
       {/* Skills */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -289,22 +336,6 @@ export default function Sobre() {
               <h3 className="font-serif text-xl font-semibold text-foreground mb-2">Quadrinhos</h3>
               <p className="text-muted-foreground text-sm">
                 Criação de histórias em quadrinhos autorais e comerciais.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="text-center"
-            >
-              <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
-                <Award className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-serif text-xl font-semibold text-foreground mb-2">Ensino</h3>
-              <p className="text-muted-foreground text-sm">
-                Workshops e cursos de desenho e narrativa visual.
               </p>
             </motion.div>
           </div>

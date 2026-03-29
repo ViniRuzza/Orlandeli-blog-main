@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(docker compose:*)",
-      "Bash(docker restart:*)"
+      "Bash(docker restart:*)",
+      "Bash(netstat -ano)"
     ]
   }
 }
