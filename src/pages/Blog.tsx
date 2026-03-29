@@ -447,24 +447,11 @@ export default function Blog() {
                       <MessageCircle className="h-4 w-4" />
                       Ver post completo
                     </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (navigator.share) {
-                          navigator.share({
-                            title: post.titulo,
-                            url: window.location.origin + "/blog?post=" + post.id
-                          });
-                        } else {
-                          navigator.clipboard.writeText(window.location.origin + "/blog?post=" + post.id);
-                          alert("Link copiado para a área de transferência!");
-                        }
-                      }}
-                      className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors font-medium px-3 py-1.5 rounded-md hover:bg-muted/40"
-                    >
-                      <Share2 className="h-4 w-4" />
-                      Compartilhar
-                    </button>
+                    <ShareMenu
+                      url={window.location.origin + "/blog?post=" + post.id}
+                      title={post.titulo}
+                      size="sm"
+                    />
                   </div>
                 </motion.article>
               ))}
