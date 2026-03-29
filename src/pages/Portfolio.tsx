@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import { Layout } from "@/components/Layout";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search, X, AlertCircle, ImageOff } from "lucide-react";
@@ -89,6 +88,8 @@ function IllustrationSkeleton() {
   );
 }
 
+const CATEGORIAS = ["Ilustração", "Caricatura", "Design"];
+
 export default function Portfolio() {
   const { data: ilustracoes, isLoading, isError, error } = useIlustracoes();
   const [searchQuery, setSearchQuery] = useState("");
@@ -100,12 +101,6 @@ export default function Portfolio() {
     const q = new URLSearchParams(location.search).get("q");
     if (q) setSearchQuery(q);
   }, [location.search]);
-
-  // Deriva tags únicas dos dados do Strapi
-  const allTags = useMemo(() => {
-    if (!ilustracoes) return [];
-    return Array.from(new Set(ilustracoes.flatMap((item) => item.tags)));
-  }, [ilustracoes]);
 
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
@@ -152,7 +147,7 @@ export default function Portfolio() {
             </h1>
             <div className="section-divider mb-6" />
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Explore a galeria de ilustrações, cartuns e artes criados ao longo de duas décadas de trabalho.
+              Explore a galeria de ilustrações, cartuns e artes criados.
             </p>
           </motion.div>
         </div>
@@ -160,47 +155,50 @@ export default function Portfolio() {
 
       {/* Filters — só exibe quando tiver dados */}
       {!isLoading && !isError && ilustracoes && ilustracoes.length > 0 && (
-        <section className="py-8 bg-background">
+        <section className="py-10 bg-background">
           <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div className="flex flex-col items-center gap-6">
+
+              {/* Categorias fixas */}
+              <div className="flex flex-wrap gap-3 justify-center">
+                {CATEGORIAS.map((cat) => {
+                  const isActive = selectedTags.includes(cat);
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => toggleTag(cat)}
+                      className={`px-6 py-2 rounded-full text-sm font-semibold border-2 transition-all duration-200 ${
+                        isActive
+                          ? "border-[#93c748] text-[#93c748] bg-[#93c74818] scale-105 shadow-sm"
+                          : "border-border text-muted-foreground hover:border-[#93c748]/70 hover:text-foreground hover:scale-105"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  );
+                })}
+                {selectedTags.length > 0 && (
+                  <button
+                    onClick={() => setSelectedTags([])}
+                    className="px-4 py-2 rounded-full text-sm font-semibold border-2 border-destructive/40 text-destructive hover:bg-destructive/10 transition-colors"
+                  >
+                    <X className="inline mr-1 h-3 w-3" />
+                    Limpar
+                  </button>
+                )}
+              </div>
+
               {/* Search */}
-              <div className="relative w-full md:w-80">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <div className="relative w-full max-w-md">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Buscar ilustrações..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 h-10 rounded-full border-border bg-muted/30 focus:bg-background transition-all"
                 />
               </div>
 
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 justify-center">
-                {allTags.map((tag) => (
-                  <Badge
-                    key={tag}
-                    variant={selectedTags.includes(tag) ? "default" : "outline"}
-                    className={`cursor-pointer capitalize transition-all ${selectedTags.includes(tag)
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-muted"
-                      }`}
-                    onClick={() => toggleTag(tag)}
-                  >
-                    {tag}
-                  </Badge>
-                ))}
-                {selectedTags.length > 0 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setSelectedTags([])}
-                    className="text-destructive hover:text-destructive"
-                  >
-                    <X className="mr-1 h-3 w-3" />
-                    Limpar
-                  </Button>
-                )}
-              </div>
             </div>
           </div>
         </section>

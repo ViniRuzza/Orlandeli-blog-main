@@ -8,7 +8,7 @@ import { Layout } from "@/components/Layout";
 import heroStudio from "@/assets/hero-studio.jpg";
 import carouselYang from "@/assets/carrossel_2.jpg.jpeg";
 import carouselCartoons from "@/assets/carousel-cartoons.jpg";
-import artistPortrait from "@/assets/image.png";
+import artistPortrait from "@/assets/Orlandeli_FT.jpeg";
 import placaYang1 from "@/assets/placas_yang_1.jpg.jpeg";
 import sapinImg from "@/assets/sapin.jpeg";
 import { useIlustracoes } from "@/hooks/useIlustracoes";
@@ -300,7 +300,7 @@ export default function Index() {
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="image-frame aspect-square max-w-md mx-auto md:mx-0"
+              className="image-frame aspect-[4/3] max-w-xl mx-auto md:mx-0"
             >
               <img
                 src={artistPortrait}
@@ -315,21 +315,29 @@ export default function Index() {
               viewport={{ once: true }}
               className="space-y-6"
             >
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground">
+              <h2 className="font-serif text-3x1 md:text-4xl font-bold text-foreground">
                 Sobre o Artista
               </h2>
               <div className="section-divider !mx-0" />
-              <p className="text-muted-foreground leading-relaxed">
-                Walmir Americo Orlandeli mora no Brasil e é um artista de quadrinhos, cartunista e ilustrador.
+              <p className="text-muted-foreground leading-1">
+                Walmir Americo Orlandeli é quadrinista e ilustrador. Formado em Comunicação Social pela faculdade Unilago.
+                Sócio proprietário da empresa W.A. Orlandeli - ME, onde realiza projetos de ilustração e design gráfico além de administrar o selo editorial Gambatte.
               </p>
-              <p className="text-muted-foreground leading-relaxed">
-                É autor de diversas publicações. Como artista de quadrinhos, participou das antologias MSP 50 e Front.
+              <p className="text-muted-foreground leading-1">
+                Já publicou em várias revistas e jornais, entre eles: Jornal Folha de São Paulo, revista Época, Revista Superinteressante etc.
               </p>
-              <p className="text-muted-foreground leading-relaxed">
-                Vencedor do Troféu HQMix em 2002 como "melhor revista de humor" (Grump), 2018 como "melhor publicação juvenil" (Chico Bento - Arvorada) e em 2024 como melhor design gráfico (Lusco Fusco). Vencedor do CCXP Awards em 2022 (Chico Bento - Verdade) e conquistou o Prêmio Jabuti em 2025 (Mais uma história para o velho Smih).
-              </p>
+              <div>
+                <p className="text-muted-foreground leading-1 mb-2">
+                  Vencedor de vários prêmios nacionais e internacionais, destacando:
+                </p>
+                <ul className="text-muted-foreground space-y-1 pl-4 list-disc">
+                  <li>Prêmio Jabuti (2025)</li>
+                  <li>Salão internacional de Humor de Piracicaba</li>
+                  <li>HQMix (2002, 2018 e 2024)</li>
+                </ul>
+              </div>
               <Link to="/sobre">
-                <Button className="bg-primary hover:bg-primary/90">
+                <Button className="bg-primary hover:bg-primary/90 mt-4">
                   Conhecer Trajetória
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
