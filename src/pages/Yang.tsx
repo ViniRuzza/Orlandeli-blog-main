@@ -16,9 +16,10 @@ import {
   Instagram,
   X,
   Calendar,
-  ExternalLink,
   User,
+  ExternalLink,
 } from "lucide-react";
+
 
 import cabecalhoVerdeYang from "@/assets/cabecalho_verde_yang.png";
 import yangLogoPreto from "@/assets/Yang_logonovo_preto.png";
@@ -29,30 +30,6 @@ import { useYangLivros } from "@/hooks/useYangLivros";
 import { useYangPersonagens } from "@/hooks/useYangPersonagens";
 import type { YangPost, YangLivro, YangPersonagem } from "@/lib/types";
 
-// Post de exemplo exibido quando não há dados no Strapi
-const EXEMPLO_POST: YangPost = {
-  id: -1,
-  titulo: "As Origens do Universo Yang",
-  descricao:
-    "Descubra a mitologia por trás do mundo criado por Orlandeli — os espíritos ancestrais, os clãs guerreiros e a profecia que moldou tudo.",
-  conteudo: `O universo de Yang não nasceu do nada. Antes das primeiras aldeias, antes dos guerreiros e dos impérios, havia apenas o Grande Equilíbrio — a força invisível que mantinha o mundo dos humanos separado do reino dos espíritos.
-
-Segundo a mitologia que Orlandeli construiu ao longo de anos de pesquisa e criação, o mundo foi dividido em três planos:
-
-O Plano dos Vivos, onde humanos constroem suas histórias sob o sol.
-
-O Plano dos Espíritos, um lugar de névoa eterna onde as almas dos guerreiros caídos guardam segredos ancestrais.
-
-O Plano das Sombras, corrompido por aqueles que ousaram romper o equilíbrio em busca de poder absoluto.
-
-Yang descende de uma linhagem de guardiões — seres escolhidos para transitar entre esses planos e manter a ordem. Mas quando a profecia dos Três Dragões começa a se cumprir, até mesmo os guardiões precisam escolher um lado.
-
-Esta é apenas a superfície de um universo rico, cheio de lendas, criaturas e histórias ainda por contar.`,
-  imagemCapaUrl: "",
-  imagensConteudoUrls: [],
-  data: "2025-01-15",
-  ordem: 1,
-};
 
 function formatarData(data: string) {
   if (!data) return "";
@@ -67,11 +44,12 @@ function formatarData(data: string) {
   }
 }
 
-function NewsletterModal({
-  post,
+
+function LivroModal({
+  livro,
   onClose,
 }: {
-  post: YangPost;
+  livro: YangLivro;
   onClose: () => void;
 }) {
   return (
@@ -90,7 +68,7 @@ function NewsletterModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.92, y: 20 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          className="relative bg-background w-full max-w-6xl max-h-[96vh] overflow-y-auto rounded-3xl shadow-2xl scrollbar-hide"
+          className="relative bg-background w-full max-w-md max-h-[96vh] overflow-y-auto rounded-3xl shadow-2xl"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -102,90 +80,57 @@ function NewsletterModal({
             <X className="h-4 w-4" />
           </button>
 
-          {/* Imagem de capa — cobre topo completamente */}
-          {post.imagemCapaUrl ? (
-            <div className="w-full aspect-[16/4] overflow-hidden rounded-t-3xl">
+          {/* Imagem quadrada */}
+          <div className="w-full aspect-square overflow-hidden rounded-t-3xl bg-muted">
+            {livro.capaUrl ? (
               <img
-                src={post.imagemCapaUrl}
-                alt={post.titulo}
+                src={livro.capaUrl}
+                alt={livro.titulo}
                 className="w-full h-full object-cover"
               />
-            </div>
-          ) : (
-            <div
-              className="w-full aspect-[16/4] rounded-t-3xl flex items-center justify-center"
-              style={{
-                background:
-                  "linear-gradient(135deg, #1a2a1a 0%, #2d4a1e 50%, #93c748 100%)",
-              }}
-            >
-              <span className="font-serif text-white/40 text-4xl font-bold tracking-widest">
-                Curiosidades
-              </span>
-            </div>
-          )}
+            ) : (
+              <div
+                className="w-full h-full flex items-center justify-center"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #1a2a1a 0%, #2d4a1e 50%, #93c748 100%)",
+                }}
+              >
+                <BookOpen className="h-16 w-16 text-white/30" />
+              </div>
+            )}
+          </div>
 
           {/* Conteúdo */}
           <div className="p-6 space-y-4">
-            {/* Cabeçalho */}
             <div>
-              <h2 className="font-serif text-2xl font-bold text-foreground leading-tight mb-2">
-                {post.titulo}
+              <h2 className="font-serif text-2xl font-bold text-foreground leading-tight mb-1">
+                {livro.titulo}
               </h2>
-              {post.data && (
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <Calendar className="h-3.5 w-3.5" />
-                  <span>{formatarData(post.data)}</span>
-                </div>
+              {livro.ano > 0 && (
+                <span className="text-xs text-muted-foreground">{livro.ano}</span>
               )}
             </div>
-
-            <div
-              className="w-12 h-0.5"
-              style={{ backgroundColor: "#93c748" }}
-            />
-
-            {/* Corpo do texto — parágrafos com imagens intercaladas */}
-            <div className="prose prose-sm max-w-none text-muted-foreground space-y-4">
-              {post.conteudo.split("\n\n").map((bloco, i) => {
-                // A cada 2 parágrafos, intercala uma imagem do conteúdo (se houver)
-                const imagemIdx = Math.floor(i / 2);
-                const temImagem =
-                  i % 2 === 1 && post.imagensConteudoUrls[imagemIdx];
-                return (
-                  <div key={i}>
-                    {temImagem && (
-                      <div className="my-3 overflow-hidden rounded-2xl">
-                        <img
-                          src={post.imagensConteudoUrls[imagemIdx]}
-                          alt={`Imagem ${imagemIdx + 1}`}
-                          className="w-full h-48 object-cover"
-                        />
-                      </div>
-                    )}
-                    <p className="leading-relaxed text-sm whitespace-pre-line">
-                      {bloco}
-                    </p>
-                  </div>
-                );
-              })}
-
-              {/* Imagens restantes que não foram intercaladas */}
-              {post.imagensConteudoUrls
-                .slice(Math.ceil(post.conteudo.split("\n\n").length / 4))
-                .map((url, i) => (
-                  <div
-                    key={`extra-${i}`}
-                    className="overflow-hidden rounded-2xl"
-                  >
-                    <img
-                      src={url}
-                      alt={`Imagem extra ${i + 1}`}
-                      className="w-full h-48 object-cover"
-                    />
-                  </div>
-                ))}
-            </div>
+            <div className="w-12 h-0.5" style={{ backgroundColor: "#93c748" }} />
+            {livro.sinopse && (
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {livro.sinopse}
+              </p>
+            )}
+            {livro.linkCompra && (
+              <a
+                href={livro.linkCompra}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button
+                  className="w-full py-3 rounded-xl font-semibold text-white text-sm transition-opacity hover:opacity-90 mt-2"
+                  style={{ backgroundColor: "#93c748" }}
+                >
+                  {livro.botaoTexto || "Saiba mais"}
+                </button>
+              </a>
+            )}
           </div>
         </motion.div>
       </motion.div>
@@ -204,6 +149,57 @@ function PostCard({
 }) {
   return (
     <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: idx * 0.1 }}
+      className="group flex flex-col rounded-lg border-0 hover:border hover:border-[#93c748] transition-all duration-300"
+    >
+      <div
+        className="aspect-square overflow-hidden rounded-t-lg relative bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2 cursor-pointer"
+        onClick={onClick}
+      >
+        {post.imagemCapaUrl ? (
+          <img
+            src={post.imagemCapaUrl}
+            alt={post.titulo}
+            className="w-full h-full object-contain object-top transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="w-full h-full bg-muted flex items-center justify-center">
+            <BookOpen className="h-12 w-12 text-muted-foreground/40" />
+          </div>
+        )}
+      </div>
+      <div className="p-3 pb-0 flex flex-col flex-1">
+        <h3
+          className="font-serif text-sm font-semibold text-foreground leading-tight cursor-pointer mb-1"
+          onClick={onClick}
+        >
+          {post.titulo}
+        </h3>
+        {post.data && (
+          <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
+            <Calendar className="h-3 w-3" />
+            <span>{formatarData(post.data)}</span>
+          </div>
+        )}
+        <div className="h-3" />
+      </div>
+    </motion.div>
+  );
+}
+
+function LivroCard({
+  livro,
+  onClick,
+  idx,
+}: {
+  livro: YangLivro;
+  onClick: () => void;
+  idx: number;
+}) {
+  return (
+    <motion.div
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -211,12 +207,12 @@ function PostCard({
       onClick={onClick}
       className="cursor-pointer group flex flex-col rounded-3xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300"
     >
-      {/* Imagem quadrada no topo */}
+      {/* Imagem quadrada */}
       <div className="aspect-square overflow-hidden bg-muted relative">
-        {post.imagemCapaUrl ? (
+        {livro.capaUrl ? (
           <img
-            src={post.imagemCapaUrl}
-            alt={post.titulo}
+            src={livro.capaUrl}
+            alt={livro.titulo}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
@@ -227,32 +223,31 @@ function PostCard({
                 "linear-gradient(135deg, #1a2a1a 0%, #2d4a1e 50%, #93c748 100%)",
             }}
           >
-            <span className="font-serif text-white/30 text-2xl font-bold tracking-widest">
-              YANG
-            </span>
+            <BookOpen className="h-16 w-16 text-white/30" />
           </div>
+        )}
+        {livro.ano > 0 && (
+          <span className="absolute top-3 left-3 text-xs font-bold px-2 py-1 rounded-full bg-black/60 text-white">
+            {livro.ano}
+          </span>
         )}
       </div>
 
       {/* Texto */}
       <div className="p-4 flex flex-col gap-2 flex-1">
-        {post.data && (
-          <span className="text-xs text-muted-foreground flex items-center gap-1">
-            <Calendar className="h-3 w-3" />
-            {formatarData(post.data)}
-          </span>
-        )}
         <h3 className="font-serif text-base font-semibold text-foreground leading-snug group-hover:text-primary transition-colors">
-          {post.titulo}
+          {livro.titulo}
         </h3>
-        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
-          {post.descricao}
-        </p>
+        {livro.sinopse && (
+          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
+            {livro.sinopse}
+          </p>
+        )}
         <span
           className="mt-auto text-xs font-medium"
           style={{ color: "#93c748" }}
         >
-          Ler mais →
+          Ver mais →
         </span>
       </div>
     </motion.div>
@@ -264,11 +259,11 @@ export default function Yang() {
   const { data: yangLivros = [] } = useYangLivros();
   const { data: yangPersonagens = [] } = useYangPersonagens();
   const [postAberto, setPostAberto] = useState<YangPost | null>(null);
+  const [livroAberto, setLivroAberto] = useState<YangLivro | null>(null);
   const [personagemAberto, setPersonagemAberto] =
     useState<YangPersonagem | null>(null);
 
-  const posts =
-    !yangPosts || yangPosts.length === 0 ? [EXEMPLO_POST] : yangPosts;
+  const posts = yangPosts ?? [];
 
   return (
     <Layout>
@@ -304,7 +299,7 @@ export default function Yang() {
               />
               <nav className="flex flex-wrap justify-center items-center gap-2">
                 {[
-                  { label: "Yang", href: "#universo" },
+                  { label: "Curiosidades", href: "#universo" },
                   { label: "Livros Publicados", href: "#livros" },
                   { label: "Personagens", href: "#personagens" },
                 ].map((item, idx, arr) => (
@@ -420,7 +415,7 @@ export default function Yang() {
               <img
                 src={placasYang3}
                 alt="Placa Yang"
-                className="w-full rounded-2xl object-cover"               
+                className="w-full rounded-2xl object-cover"
               />
             </div>
           </motion.div>
@@ -554,76 +549,19 @@ export default function Yang() {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
               {yangLivros.map((livro, idx) => (
-                <motion.div
+                <LivroCard
                   key={livro.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="flex flex-col rounded-2xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300 group"
-                >
-                  {/* Capa */}
-                  <div className="aspect-square overflow-hidden bg-muted relative">
-                    {livro.capaUrl ? (
-                      <img
-                        src={livro.capaUrl}
-                        alt={livro.titulo}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div
-                        className="w-full h-full flex items-center justify-center"
-                        style={{
-                          background:
-                            "linear-gradient(135deg, #1a2a1a 0%, #2d4a1e 50%, #93c748 100%)",
-                        }}
-                      >
-                        <BookOpen className="h-16 w-16 text-white/30" />
-                      </div>
-                    )}
-                    {livro.ano > 0 && (
-                      <span className="absolute top-3 left-3 text-xs font-bold px-2 py-1 rounded-full bg-black/60 text-white">
-                        {livro.ano}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Info */}
-                  <div className="p-3 flex flex-col gap-2 flex-1">
-                    <h3 className="font-serif text-sm font-bold text-foreground leading-snug">
-                      {livro.titulo}
-                    </h3>
-                    {livro.sinopse && (
-                      <p className="text-xs text-muted-foreground leading-relaxed flex-1 line-clamp-3">
-                        {livro.sinopse}
-                      </p>
-                    )}
-                    {livro.linkCompra && (
-                      <a
-                        href={livro.linkCompra}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Button
-                          size="sm"
-                          className="w-full mt-auto text-xs"
-                          style={{ backgroundColor: "#93c748", color: "#fff" }}
-                        >
-                          <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-                          Comprar
-                        </Button>
-                      </a>
-                    )}
-                  </div>
-                </motion.div>
+                  livro={livro}
+                  onClick={() => setLivroAberto(livro)}
+                  idx={idx}
+                />
               ))}
             </div>
           </div>
         </section>
       )}
 
-
-      {/* Seção: Posts do Universo Yang */}
+      {/* Seção: Curiosidades */}
       <section id="universo" className="py-20 bg-muted/20">
         <div className="container mx-auto px-4">
           <motion.div
@@ -633,10 +571,10 @@ export default function Yang() {
             className="mb-10"
           >
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-1">
-              Yang
+              Curiosidades
             </h2>
             <p className="text-muted-foreground text-base font-medium">
-              Sobre o Universo
+              Sobre os Livros
             </p>
             <div
               className="w-14 h-1 mt-3"
@@ -657,11 +595,66 @@ export default function Yang() {
         </div>
       </section>
 
-      {/* Modal Newsletter */}
-      {postAberto && (
-        <NewsletterModal
-          post={postAberto}
-          onClose={() => setPostAberto(null)}
+      {/* Modal Curiosidade */}
+      <Dialog open={!!postAberto} onOpenChange={() => setPostAberto(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          {postAberto && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="font-serif text-2xl">{postAberto.titulo}</DialogTitle>
+              </DialogHeader>
+              <div className="grid md:grid-cols-2 gap-6 mt-4">
+                {/* Imagem quadrada */}
+                <div className="aspect-square bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2 rounded-lg overflow-hidden">
+                  {postAberto.imagemCapaUrl ? (
+                    <img
+                      src={postAberto.imagemCapaUrl}
+                      alt={postAberto.titulo}
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-muted flex items-center justify-center">
+                      <BookOpen className="h-16 w-16 text-muted-foreground/40" />
+                    </div>
+                  )}
+                </div>
+                {/* Info */}
+                <div className="flex flex-col">
+                  <div className="space-y-4">
+                    {postAberto.data && (
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <Calendar className="h-3.5 w-3.5" />
+                        <span>{formatarData(postAberto.data)}</span>
+                      </div>
+                    )}
+                    {postAberto.descricao && (
+                      <p className="text-muted-foreground leading-relaxed text-sm">{postAberto.descricao}</p>
+                    )}
+                  </div>
+                  {postAberto.linkSaibaMais && (
+                    <a
+                      href={postAberto.linkSaibaMais}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-md self-start mt-auto pt-6"
+                      style={{ backgroundColor: "#93c748", color: "#fff" }}
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                      Saiba mais
+                    </a>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal Livro */}
+      {livroAberto && (
+        <LivroModal
+          livro={livroAberto}
+          onClose={() => setLivroAberto(null)}
         />
       )}
     </Layout>

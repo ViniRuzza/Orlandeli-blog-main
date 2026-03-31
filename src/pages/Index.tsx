@@ -5,7 +5,6 @@ import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/Layout";
 
-import heroStudio from "@/assets/hero-studio.jpg";
 import carouselYang from "@/assets/carrossel_2.jpg.jpeg";
 import carouselCartoons from "@/assets/carousel-cartoons.jpg";
 import artistPortrait from "@/assets/Orlandeli_FT.jpeg";
@@ -13,6 +12,8 @@ import placaYang1 from "@/assets/placas_yang_1.jpg.jpeg";
 import sapinImg from "@/assets/sapin.jpeg";
 import { useIlustracoes } from "@/hooks/useIlustracoes";
 import { useDestaques } from "@/hooks/useDestaques";
+import { useLivrosDestaque } from "@/hooks/useLivrosDestaque";
+import type { LivroDestaque } from "@/lib/types";
 import bookYang1 from "@/assets/Yang_OmundoDoMeio.webp";
 import sulImg from "@/assets/sul.jpeg";
 import darumaImg from "@/assets/darumaa.jpeg";
@@ -78,6 +79,7 @@ export default function Index() {
   const [slideCounter, setSlideCounter] = useState(0);
   const { data: todasIlustracoes = [], isLoading: isLoadingIlustracoes } = useIlustracoes();
   const { data: destaquesData = [], isLoading: isLoadingDestaques } = useDestaques();
+  const { data: livrosDestaqueData = [] } = useLivrosDestaque();
   const illustrations = todasIlustracoes.slice(0, 4);
 
   // Fallback to static slides ONLY if we finished loading and there's no data
@@ -213,7 +215,7 @@ export default function Index() {
                   to={link}
                   className="flex flex-col items-center gap-2 group focus:outline-none"
                 >
-                  <div className="relative w-28 h-28 rounded-full overflow-hidden border-4 border-transparent transition-all duration-300 group-hover:border-primary/60 group-hover:scale-105 group-hover:shadow-[0_0_12px_2px_hsl(var(--primary)/0.35)]">
+                  <div className="relative w-28 h-28 rounded-full overflow-hidden border-4 border-transparent transition-all duration-300 group-hover:border-[#93c748] group-hover:scale-105 group-hover:shadow-[0_0_12px_2px_hsl(var(--primary)/0.35)]">
                     <img
                       src={image}
                       alt={label}
@@ -262,20 +264,21 @@ export default function Index() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className="card-artistic group overflow-hidden"
                 >
-                  {item.imagemUrl && (
-                    <div className="aspect-square overflow-hidden bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2">
-                      <img
-                        src={item.imagemUrl}
-                        alt={item.titulo}
-                        className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
-                      />
+                  <Link to={`/portfolio?id=${item.id}`} className="card-artistic group overflow-hidden block cursor-pointer">
+                    {item.imagemUrl && (
+                      <div className="aspect-square overflow-hidden bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2">
+                        <img
+                          src={item.imagemUrl}
+                          alt={item.titulo}
+                          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
+                        />
+                      </div>
+                    )}
+                    <div className="p-4">
+                      <h3 className="font-medium text-foreground">{item.titulo}</h3>
                     </div>
-                  )}
-                  <div className="p-4">
-                    <h3 className="font-medium text-foreground">{item.titulo}</h3>
-                  </div>
+                  </Link>
                 </motion.div>
               ))
             )}
@@ -363,7 +366,7 @@ export default function Index() {
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {featuredBooks.map((book, idx) => (
+            {(livrosDestaqueData.length > 0 ? livrosDestaqueData : featuredBooks).map((book: LivroDestaque | typeof featuredBooks[0], idx: number) => (
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 30 }}
@@ -374,13 +377,15 @@ export default function Index() {
               >
                 <div className="aspect-[2/3] overflow-hidden rounded-t-lg bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2">
                   <img
-                    src={book.image}
-                    alt={book.title}
+                    src={"imagemUrl" in book ? book.imagemUrl : book.image}
+                    alt={"titulo" in book ? book.titulo : book.title}
                     className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
                 <div className="p-4 text-center">
-                  <h3 className="font-serif font-semibold text-foreground mb-2">{book.title}</h3>
+                  <h3 className="font-serif font-semibold text-foreground mb-2">
+                    {"titulo" in book ? book.titulo : book.title}
+                  </h3>
                   <a href={book.link} target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" size="sm" className="w-full border-wood text-wood-dark hover:bg-wood hover:text-background">
                       Ver na Loja

@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -96,16 +96,32 @@ export default function Portfolio() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedImage, setSelectedImage] = useState<Ilustracao | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const q = new URLSearchParams(location.search).get("q");
+    const params = new URLSearchParams(location.search);
+    const q = params.get("q");
     if (q) setSearchQuery(q);
-  }, [location.search]);
+
+    const tags = params.get("tags");
+    if (tags) setSelectedTags(tags.split(","));
+
+    const id = params.get("id");
+    if (id && ilustracoes) {
+      const found = ilustracoes.find((i) => String(i.id) === id);
+      if (found) setSelectedImage(found);
+    }
+  }, [location.search, ilustracoes]);
 
   const toggleTag = (tag: string) => {
-    setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
-    );
+    setSelectedTags((prev) => {
+      const next = prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag];
+      const params = new URLSearchParams(location.search);
+      if (next.length > 0) params.set("tags", next.join(","));
+      else params.delete("tags");
+      navigate({ search: params.toString() }, { replace: true });
+      return next;
+    });
   };
 
   const filteredItems = useMemo(() => {
@@ -179,7 +195,12 @@ export default function Portfolio() {
                 })}
                 {selectedTags.length > 0 && (
                   <button
-                    onClick={() => setSelectedTags([])}
+                    onClick={() => {
+                      setSelectedTags([]);
+                      const params = new URLSearchParams(location.search);
+                      params.delete("tags");
+                      navigate({ search: params.toString() }, { replace: true });
+                    }}
                     className="px-4 py-2 rounded-full text-sm font-semibold border-2 border-destructive/40 text-destructive hover:bg-destructive/10 transition-colors"
                   >
                     <X className="inline mr-1 h-3 w-3" />

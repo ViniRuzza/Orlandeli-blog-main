@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -202,6 +202,7 @@ export default function Blog() {
   const [comment, setComment] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { data: rawPosts = [], isLoading, isError } = usePostsBlog();
   const posts = (!isLoading && !isError && rawPosts.length === 0) ? [EXEMPLO_POST] : rawPosts;
@@ -212,19 +213,35 @@ export default function Blog() {
   );
 
   useEffect(() => {
-    const q = new URLSearchParams(location.search).get("q");
-    if (!q) return;
-    const matched = categories.filter((c) => c.toLowerCase().includes(q.toLowerCase()));
-    if (matched.length > 0) {
-      setSelectedCategories(matched.map((c) => c.toLowerCase()));
+    const params = new URLSearchParams(location.search);
+    const q = params.get("q");
+    if (q) {
+      const matched = categories.filter((c) => c.toLowerCase().includes(q.toLowerCase()));
+      if (matched.length > 0) setSelectedCategories(matched.map((c) => c.toLowerCase()));
+    }
+    const cat = params.get("cat");
+    if (cat) {
+      setSelectedCategories(cat.split(",").map((c) => c.toLowerCase()));
     }
   }, [location.search, categories]);
 
+  useEffect(() => {
+    const postId = new URLSearchParams(location.search).get("post");
+    if (!postId || posts.length === 0) return;
+    const found = posts.find((p) => String(p.id) === postId);
+    if (found) setSelectedPost(found);
+  }, [location.search, posts]);
+
   const toggleCategory = (cat: string) => {
     const lower = cat.toLowerCase();
-    setSelectedCategories((prev) =>
-      prev.includes(lower) ? prev.filter((c) => c !== lower) : [...prev, lower]
-    );
+    setSelectedCategories((prev) => {
+      const next = prev.includes(lower) ? prev.filter((c) => c !== lower) : [...prev, lower];
+      const params = new URLSearchParams(location.search);
+      if (next.length > 0) params.set("cat", next.join(","));
+      else params.delete("cat");
+      navigate({ search: params.toString() }, { replace: true });
+      return next;
+    });
   };
 
   const filteredPosts = posts.filter((post) => {
@@ -321,7 +338,12 @@ export default function Blog() {
                 })}
                 {selectedCategories.length > 0 && (
                   <button
-                    onClick={() => setSelectedCategories([])}
+                    onClick={() => {
+                      setSelectedCategories([]);
+                      const params = new URLSearchParams(location.search);
+                      params.delete("cat");
+                      navigate({ search: params.toString() }, { replace: true });
+                    }}
                     className="flex flex-col items-center gap-2 group focus:outline-none mb-0.5"
                   >
                     <div className="w-8 h-8 rounded-full bg-destructive/10 border-2 border-destructive/40 flex items-center justify-center group-hover:bg-destructive/20 transition-colors mt-6">

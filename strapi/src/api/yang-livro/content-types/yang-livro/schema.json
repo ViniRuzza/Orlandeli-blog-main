@@ -21,6 +21,9 @@
     "linkCompra": {
       "type": "string"
     },
+    "botaoTexto": {
+      "type": "string"
+    },
     "ano": {
       "type": "integer"
     },

@@ -86,7 +86,6 @@ export interface Ilustracao {
 export interface StrapiYangPost {
     titulo: string;
     descricao: string;
-    conteudo: string | null;
     imagemCapa: StrapiMedia | { data: StrapiMedia } | null;
     imagensConteudo: StrapiMedia[] | { data: StrapiMedia[] } | null;
     data: string | null;
@@ -97,11 +96,11 @@ export interface YangPost {
     id: number;
     titulo: string;
     descricao: string;
-    conteudo: string;
     imagemCapaUrl: string;
     imagensConteudoUrls: string[];
     data: string;
     ordem: number;
+    linkSaibaMais: string;
 }
 
 // Content Type: PostBlog
@@ -137,6 +136,7 @@ export interface YangLivro {
     titulo: string;
     sinopse: string;
     linkCompra: string;
+    botaoTexto: string;
     ano: number;
     ordem: number;
     capaUrl: string;
@@ -202,4 +202,14 @@ export interface Destaque {
     imagemUrl: string;
     link: string;
     textoBotao: string;
+}
+
+
+// Content Type: Livro em Destaque
+export interface LivroDestaque {
+    id: number;
+    titulo: string;
+    imagemUrl: string;
+    link: string;
+    ordem: number;
 }
