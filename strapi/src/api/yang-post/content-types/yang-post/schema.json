@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "yang_posts",
+  "info": {
+    "singularName": "yang-post",
+    "pluralName": "yang-posts",
+    "displayName": "Yang Post (Curiosidades)"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titulo": {
+      "type": "string",
+      "required": true
+    },
+    "descricao": {
+      "type": "text"
+    },
+    "imagemCapa": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "imagensConteudo": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": ["images"]
+    },
+    "data": {
+      "type": "date"
+    },
+    "ordem": {
+      "type": "integer",
+      "default": 0
+    },
+    "linkSaibaMais": {
+      "type": "string"
+    }
+  }
+}

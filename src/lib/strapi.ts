@@ -1,4 +1,4 @@
-import type { StrapiResponse, StrapiMedia, Quadrinho, Ilustracao, PostBlog, Destaque, TrajetoriaItem, YangPost, YangLivro, YangPersonagem, Premio } from "./types";
+import type { StrapiResponse, StrapiMedia, Quadrinho, Ilustracao, PostBlog, Destaque, TrajetoriaItem, YangPost, YangLivro, YangPersonagem, Premio, LivroDestaque } from "./types";
 
 export const STRAPI_URL = import.meta.env.VITE_STRAPI_URL ?? "http://localhost:1337";
 
@@ -203,11 +203,11 @@ export function normalizeYangPost(item: { id: number;[key: string]: unknown }): 
         id: item.id,
         titulo: (attrs.titulo as string) || "",
         descricao: (attrs.descricao as string) || "",
-        conteudo: (attrs.conteudo as string) || "",
         imagemCapaUrl: strapiMediaUrl(capa),
         imagensConteudoUrls: imagensArr.map(strapiMediaUrl).filter(Boolean),
         data: (attrs.data as string) || "",
         ordem: (attrs.ordem as number) ?? 0,
+        linkSaibaMais: (attrs.linkSaibaMais as string) || "",
     };
 }
 
@@ -222,6 +222,7 @@ export function normalizeYangLivro(item: { id: number;[key: string]: unknown }):
         titulo: (attrs.titulo as string) || "",
         sinopse: (attrs.sinopse as string) || "",
         linkCompra: (attrs.linkCompra as string) || "",
+        botaoTexto: (attrs.botaoTexto as string) || "",
         ano: (attrs.ano as number) ?? 0,
         ordem: (attrs.ordem as number) ?? 0,
         capaUrl: strapiMediaUrl(capa),
@@ -275,5 +276,19 @@ export function normalizeDestaque(item: { id: number;[key: string]: unknown }): 
         imagemUrl: strapiMediaUrl(imagem),
         link: (attrs.link as string) || (attrs.Link as string) || "",
         textoBotao: (attrs.textoBotao as string) || (attrs.texto_botao as string) || (attrs.TextoBotao as string) || "Saiba mais",
+    };
+}
+
+export function normalizeLivroDestaque(item: { id: number;[key: string]: unknown }): LivroDestaque {
+    const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
+    const rawImagem = attrs.imagem || attrs.Imagem;
+    const imagem = extractMedia(rawImagem);
+
+    return {
+        id: item.id,
+        titulo: (attrs.titulo as string) || "",
+        imagemUrl: strapiMediaUrl(imagem),
+        link: (attrs.link as string) || "",
+        ordem: (attrs.ordem as number) ?? 0,
     };
 }

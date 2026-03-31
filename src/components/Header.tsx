@@ -1,8 +1,13 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Instagram, Facebook, Youtube, Twitter, Search, Newspaper, Rss, Mail, Bookmark } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo.png";
+import iconeInsta from "@/assets/icone_insta.png";
+import iconeFace from "@/assets/icone_face.png";
+import iconeX from "@/assets/icone_x.png";
+import iconeYoutube from "@/assets/icone_youtube.png";
+import iconeSubstack from "@/assets/icone_substack.png";
 import { useQuadrinhos } from "@/hooks/useQuadrinhos";
 import { useIlustracoes } from "@/hooks/useIlustracoes";
 import { usePostsBlog } from "@/hooks/usePostsBlog";
@@ -23,11 +28,11 @@ const navLinks = [
 ];
 
 const socialLinks = [
-  { icon: Facebook, href: "https://facebook.com/orlandeli", label: "Facebook" },
-  { icon: Instagram, href: "https://instagram.com/orlandeli", label: "Instagram" },
-  { icon: Twitter, href: "https://twitter.com/orlandeli", label: "Twitter" },
-  { icon: Youtube, href: "https://www.youtube.com/@orlandeli1", label: "YouTube" },
-  {icon: Bookmark, href: "https://substack.com/@orlandeli", label: "Substack"}
+  { img: iconeInsta, href: "https://instagram.com/orlandeli", label: "Instagram" },
+  { img: iconeFace, href: "https://facebook.com/orlandeli", label: "Facebook" },
+  { img: iconeX, href: "https://twitter.com/orlandeli", label: "Twitter" },
+  { img: iconeYoutube, href: "https://www.youtube.com/@orlandeli1", label: "YouTube" },
+  { img: iconeSubstack, href: "https://substack.com/@orlandeli", label: "Substack" },
 ];
 
 type SearchResultType = "quadrinho" | "portfolio" | "blog";
@@ -290,12 +295,12 @@ export function Header() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="p-2 rounded transition-colors"
-                  style={{ color: "#cccccc" }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "#93c748")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "#cccccc")}
+                  className="p-2 rounded transition-opacity"
+                  style={{ opacity: 1 }}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                 >
-                  <social.icon className="h-4 w-4" />
+                  <img src={social.img} alt={social.label} className="h-4 w-4 object-contain" />
                 </a>
               ))}
             </div>
@@ -387,10 +392,9 @@ export function Header() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={social.label}
-                      className="p-2 rounded transition-colors bg-white/10 hover:bg-white/20"
-                      style={{ color: "#cccccc" }}
+                      className="p-2 rounded transition-opacity bg-white/10 hover:bg-white/20"
                     >
-                      <social.icon className="h-5 w-5" />
+                      <img src={social.img} alt={social.label} className="h-5 w-5 object-contain" />
                     </a>
                   ))}
                 </div>

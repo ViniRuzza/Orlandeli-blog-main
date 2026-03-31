@@ -495,6 +495,38 @@ export interface ApiIlustraca0Ilustraca0 extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiLivroDestaqueLivroDestaque
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'livros_destaque';
+  info: {
+    displayName: 'Livro em Destaque';
+    pluralName: 'livros-destaque';
+    singularName: 'livro-destaque';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    imagem: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    link: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::livro-destaque.livro-destaque'
+    > &
+      Schema.Attribute.Private;
+    ordem: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    publishedAt: Schema.Attribute.DateTime;
+    titulo: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPostBlogPostBlog extends Struct.CollectionTypeSchema {
   collectionName: 'post_blogs';
   info: {
@@ -646,6 +678,7 @@ export interface ApiYangLivroYangLivro extends Struct.CollectionTypeSchema {
   };
   attributes: {
     ano: Schema.Attribute.Integer;
+    botaoTexto: Schema.Attribute.String;
     capa: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -693,6 +726,40 @@ export interface ApiYangPersonagemYangPersonagem
     nome: Schema.Attribute.String & Schema.Attribute.Required;
     ordem: Schema.Attribute.Integer;
     publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiYangPostYangPost extends Struct.CollectionTypeSchema {
+  collectionName: 'yang_posts';
+  info: {
+    displayName: 'Yang Post (Curiosidades)';
+    pluralName: 'yang-posts';
+    singularName: 'yang-post';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    data: Schema.Attribute.Date;
+    descricao: Schema.Attribute.Text;
+    imagemCapa: Schema.Attribute.Media<'images'>;
+    imagensConteudo: Schema.Attribute.Media<'images', true>;
+    linkSaibaMais: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::yang-post.yang-post'
+    > &
+      Schema.Attribute.Private;
+    ordem: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    publishedAt: Schema.Attribute.DateTime;
+    titulo: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1212,12 +1279,14 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::destaque.destaque': ApiDestaqueDestaque;
       'api::ilustraca0.ilustraca0': ApiIlustraca0Ilustraca0;
+      'api::livro-destaque.livro-destaque': ApiLivroDestaqueLivroDestaque;
       'api::post-blog.post-blog': ApiPostBlogPostBlog;
       'api::premio.premio': ApiPremioPremio;
       'api::quadrinho.quadrinho': ApiQuadrinhoQuadrinho;
       'api::trajetoria-item.trajetoria-item': ApiTrajetoriaItemTrajetoriaItem;
       'api::yang-livro.yang-livro': ApiYangLivroYangLivro;
       'api::yang-personagem.yang-personagem': ApiYangPersonagemYangPersonagem;
+      'api::yang-post.yang-post': ApiYangPostYangPost;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
