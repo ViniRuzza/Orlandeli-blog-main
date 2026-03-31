@@ -428,132 +428,6 @@ export default function Yang() {
         </div>
       </section>
 
-      {/* Seção: Posts do Universo Yang */}
-      <section id="universo" className="py-20 bg-muted/20">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-10"
-          >
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-1">
-              Yang
-            </h2>
-            <p className="text-muted-foreground text-base font-medium">
-              Sobre o Universo
-            </p>
-            <div
-              className="w-14 h-1 mt-3"
-              style={{ backgroundColor: "#93c748" }}
-            />
-          </motion.div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {posts.map((post, idx) => (
-              <PostCard
-                key={post.id}
-                post={post}
-                onClick={() => setPostAberto(post)}
-                idx={idx}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Seção: Livros Publicados */}
-      {yangLivros.length > 0 && (
-        <section id="livros" className="py-20 bg-background">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="mb-10"
-            >
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-1">
-                Livros Publicados
-              </h2>
-              <p className="text-muted-foreground text-base font-medium">
-                A saga Yang em volumes
-              </p>
-              <div
-                className="w-14 h-1 mt-3"
-                style={{ backgroundColor: "#93c748" }}
-              />
-            </motion.div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
-              {yangLivros.map((livro, idx) => (
-                <motion.div
-                  key={livro.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="flex flex-col rounded-2xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300 group"
-                >
-                  {/* Capa */}
-                  <div className="aspect-square overflow-hidden bg-muted relative">
-                    {livro.capaUrl ? (
-                      <img
-                        src={livro.capaUrl}
-                        alt={livro.titulo}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div
-                        className="w-full h-full flex items-center justify-center"
-                        style={{
-                          background:
-                            "linear-gradient(135deg, #1a2a1a 0%, #2d4a1e 50%, #93c748 100%)",
-                        }}
-                      >
-                        <BookOpen className="h-16 w-16 text-white/30" />
-                      </div>
-                    )}
-                    {livro.ano > 0 && (
-                      <span className="absolute top-3 left-3 text-xs font-bold px-2 py-1 rounded-full bg-black/60 text-white">
-                        {livro.ano}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Info */}
-                  <div className="p-3 flex flex-col gap-2 flex-1">
-                    <h3 className="font-serif text-sm font-bold text-foreground leading-snug">
-                      {livro.titulo}
-                    </h3>
-                    {livro.sinopse && (
-                      <p className="text-xs text-muted-foreground leading-relaxed flex-1 line-clamp-3">
-                        {livro.sinopse}
-                      </p>
-                    )}
-                    {livro.linkCompra && (
-                      <a
-                        href={livro.linkCompra}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Button
-                          size="sm"
-                          className="w-full mt-auto text-xs"
-                          style={{ backgroundColor: "#93c748", color: "#fff" }}
-                        >
-                          <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-                          Comprar
-                        </Button>
-                      </a>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* Seção: Personagens */}
       {yangPersonagens.length > 0 && (
         <section id="personagens" className="py-20 bg-muted/20">
@@ -656,27 +530,130 @@ export default function Yang() {
         </DialogContent>
       </Dialog>
 
-      {/* CTA */}
-      <section className="py-16 bg-accent">
-        <div className="container mx-auto px-4 text-center">
+      {/* Seção: Livros Publicados */}
+      {yangLivros.length > 0 && (
+        <section id="livros" className="py-20 bg-background">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mb-10"
+            >
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-1">
+                Livros Publicados
+              </h2>
+              <p className="text-muted-foreground text-base font-medium">
+                A saga Yang em volumes
+              </p>
+              <div
+                className="w-14 h-1 mt-3"
+                style={{ backgroundColor: "#93c748" }}
+              />
+            </motion.div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
+              {yangLivros.map((livro, idx) => (
+                <motion.div
+                  key={livro.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="flex flex-col rounded-2xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300 group"
+                >
+                  {/* Capa */}
+                  <div className="aspect-square overflow-hidden bg-muted relative">
+                    {livro.capaUrl ? (
+                      <img
+                        src={livro.capaUrl}
+                        alt={livro.titulo}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full flex items-center justify-center"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #1a2a1a 0%, #2d4a1e 50%, #93c748 100%)",
+                        }}
+                      >
+                        <BookOpen className="h-16 w-16 text-white/30" />
+                      </div>
+                    )}
+                    {livro.ano > 0 && (
+                      <span className="absolute top-3 left-3 text-xs font-bold px-2 py-1 rounded-full bg-black/60 text-white">
+                        {livro.ano}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Info */}
+                  <div className="p-3 flex flex-col gap-2 flex-1">
+                    <h3 className="font-serif text-sm font-bold text-foreground leading-snug">
+                      {livro.titulo}
+                    </h3>
+                    {livro.sinopse && (
+                      <p className="text-xs text-muted-foreground leading-relaxed flex-1 line-clamp-3">
+                        {livro.sinopse}
+                      </p>
+                    )}
+                    {livro.linkCompra && (
+                      <a
+                        href={livro.linkCompra}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button
+                          size="sm"
+                          className="w-full mt-auto text-xs"
+                          style={{ backgroundColor: "#93c748", color: "#fff" }}
+                        >
+                          <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
+                          Comprar
+                        </Button>
+                      </a>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+
+      {/* Seção: Posts do Universo Yang */}
+      <section id="universo" className="py-20 bg-muted/20">
+        <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            className="mb-10"
           >
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-accent-foreground mb-4">
-              Comece sua Jornada no Mundo de Yang
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-1">
+              Yang
             </h2>
-            <p className="text-accent-foreground/80 mb-8">
-              Adquira o primeiro volume e embarque nesta aventura épica.
+            <p className="text-muted-foreground text-base font-medium">
+              Sobre o Universo
             </p>
-            <Link to="/loja">
-              <Button size="lg" variant="secondary" className="font-semibold">
-                Ir para a Loja
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
+            <div
+              className="w-14 h-1 mt-3"
+              style={{ backgroundColor: "#93c748" }}
+            />
           </motion.div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {posts.map((post, idx) => (
+              <PostCard
+                key={post.id}
+                post={post}
+                onClick={() => setPostAberto(post)}
+                idx={idx}
+              />
+            ))}
+          </div>
         </div>
       </section>
 

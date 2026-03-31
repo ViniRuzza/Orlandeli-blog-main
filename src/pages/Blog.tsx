@@ -409,11 +409,6 @@ export default function Blog() {
                           </Badge>
                         ))}
                       </div>
-                      <ShareMenu
-                        url={window.location.origin + "/blog?post=" + post.id}
-                        title={post.titulo}
-                        size="sm"
-                      />
                     </div>
                   </div>
 
