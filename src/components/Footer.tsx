@@ -1,11 +1,15 @@
 import { Link } from "react-router-dom";
-import { Instagram, Facebook, Youtube, Twitter, Mail, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
+import iconeInsta from "@/assets/icone_insta.png";
+import iconeFace from "@/assets/icone_face.png";
+import iconeX from "@/assets/icone_x.png";
+import iconeYoutube from "@/assets/icone_youtube.png";
 
 const socialLinks = [
-  { icon: Instagram, href: "https://instagram.com/orlandeli", label: "Instagram" },
-  { icon: Facebook, href: "https://facebook.com/orlandeli", label: "Facebook" },
-  { icon: Youtube, href: "https://youtube.com/orlandeli", label: "YouTube" },
-  { icon: Twitter, href: "https://twitter.com/orlandeli", label: "Twitter" },
+  { img: iconeInsta, href: "https://instagram.com/orlandeli", label: "Instagram" },
+  { img: iconeFace, href: "https://facebook.com/orlandeli", label: "Facebook" },
+  { img: iconeX, href: "https://twitter.com/orlandeli", label: "Twitter" },
+  { img: iconeYoutube, href: "https://www.youtube.com/@orlandeli1", label: "YouTube" },
 ];
 
 const quickLinks = [
@@ -39,7 +43,7 @@ export function Footer() {
                   className="p-2 rounded-lg bg-background/10 hover:bg-background/20 transition-colors"
                   aria-label={social.label}
                 >
-                  <social.icon className="h-5 w-5" />
+                  <img src={social.img} alt={social.label} className="h-5 w-5 object-contain" />
                 </a>
               ))}
             </div>

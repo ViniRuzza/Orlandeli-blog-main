@@ -494,7 +494,7 @@ export default function Yang() {
       >
         <DialogContent className="max-w-3xl p-0 overflow-hidden">
           {personagemAberto && (
-            <div className="flex flex-col md:flex-row md:h-[560px] overflow-y-auto">
+            <div className="flex flex-col md:flex-row h-[90vh] md:h-[560px] overflow-y-auto scrollbar-hidden">
               {/* Imagem */}
               {personagemAberto.imagemUrl && (
                 <div className="w-full md:w-96 md:shrink-0 bg-muted">
