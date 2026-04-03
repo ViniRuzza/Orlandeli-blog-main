@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight, BookOpen, Calendar, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Layout } from "@/components/Layout";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useNoticiasHome } from "@/hooks/useNoticiasHome";
+import type { NoticiaHome } from "@/lib/types";
 
 import carouselYang from "@/assets/carrossel_2.jpg.jpeg";
 import carouselCartoons from "@/assets/carousel-cartoons.jpg";
@@ -25,13 +28,13 @@ import iconePublicacoes from "@/assets/iconehome_publicacoes.png";
 import iconeBlog from "@/assets/iconehome_blog.png";
 import iconeSobre from "@/assets/carica_orlandeli.png"
 
-const HOME_NAV_ICONS = [
+const HOME_NAV_ICONS: { label: string; image: string; link: string; imageClass?: string }[] = [
   { label: "Publicações", image: iconePublicacoes, link: "/quadrinhos" },
   { label: "Portfólio", image: iconePortfolio, link: "/portfolio" },
   { label: "Loja", image: iconeLoja, link: "/loja" },
   { label: "Blog", image: iconeBlog, link: "/blog" },
   { label: "Yang", image: iconeYang, link: "/yang" },
-  {label: "Sobre", image: iconeSobre, link: "/sobre" }
+  { label: "Sobre", image: iconeSobre, link: "/sobre", imageClass: "w-full h-full object-cover scale-125" },
 ];
 
 const carouselSlides = [
@@ -77,7 +80,9 @@ const featuredBooks = [
 
 export default function Index() {
   const [slideCounter, setSlideCounter] = useState(0);
+  const [noticiaAberta, setNoticiaAberta] = useState<NoticiaHome | null>(null);
   const { data: todasIlustracoes = [], isLoading: isLoadingIlustracoes } = useIlustracoes();
+  const { data: noticiasHome = [] } = useNoticiasHome();
   const { data: destaquesData = [], isLoading: isLoadingDestaques } = useDestaques();
   const { data: livrosDestaqueData = [] } = useLivrosDestaque();
   const illustrations = todasIlustracoes.slice(0, 4);
@@ -137,8 +142,8 @@ export default function Index() {
               className="absolute inset-0 bg-cover bg-center bg-no-repeat mix-blend-normal"
               style={{ backgroundImage: `url("${activeSlides[currentSlide]?.image}")` }}
             />
-            {/* Gradiente por cima para dar leitura ao texto */}
-            <div className="absolute inset-0 bg-gradient-to-r from-foreground/90 via-foreground/50 to-transparent pointer-events-none" />
+            {/* Gradiente suave sobre a imagem toda */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent" />
           </motion.div>
         </AnimatePresence>
 
@@ -149,12 +154,12 @@ export default function Index() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -30 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="max-w-xl text-background"
+            className="text-background max-w-sm md:max-w-lg lg:max-w-xl"
           >
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+            <h1 className="font-serif text-2xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-3">
               {activeSlides[currentSlide]?.title}
             </h1>
-            <p className="text-lg md:text-xl text-background/90 mb-8">
+            <p className="text-sm md:text-base lg:text-lg text-background/90 mb-4 md:mb-6">
               {activeSlides[currentSlide]?.subtitle}
             </p>
             {!isLoadingDestaques && (
@@ -203,7 +208,7 @@ export default function Index() {
       <section className="py-10 bg-background">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap gap-8 justify-center items-end">
-            {HOME_NAV_ICONS.map(({ label, image, link }, idx) => (
+            {HOME_NAV_ICONS.map(({ label, image, link, imageClass }, idx) => (
               <motion.div
                 key={label}
                 initial={{ opacity: 0, y: 20 }}
@@ -219,7 +224,7 @@ export default function Index() {
                     <img
                       src={image}
                       alt={label}
-                      className="w-full h-full object-cover"
+                      className={imageClass ?? "w-full h-full object-cover"}
                     />
                   </div>
                   <span className="text-xs font-semibold text-muted-foreground group-hover:text-primary transition-colors duration-200">
@@ -231,6 +236,111 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      {/* Notícias */}
+      {noticiasHome.length > 0 && (
+        <section className="py-12 bg-muted/20">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mb-10"
+            >
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-1">
+                Notícias
+              </h2>
+              <div className="w-14 h-1 mt-3" style={{ backgroundColor: "#93c748" }} />
+            </motion.div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+              {noticiasHome.map((noticia, idx) => (
+                <motion.div
+                  key={noticia.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="flex flex-col rounded-2xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300 group cursor-pointer"
+                  onClick={() => setNoticiaAberta(noticia)}
+                >
+                  <div className="aspect-[3/4] overflow-hidden bg-muted relative">
+                    {noticia.imagemCapaUrl ? (
+                      <img
+                        src={noticia.imagemCapaUrl}
+                        alt={noticia.titulo}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full flex items-center justify-center"
+                        style={{ background: "linear-gradient(135deg, #1a2a1a 0%, #2d4a1e 50%, #93c748 100%)" }}
+                      >
+                        <BookOpen className="h-16 w-16 text-white/30" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3 flex flex-col items-center">
+                    <h3 className="font-serif text-base font-bold text-foreground text-center leading-snug group-hover:text-primary transition-colors">
+                      {noticia.titulo}
+                    </h3>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Modal Notícia */}
+      <Dialog open={!!noticiaAberta} onOpenChange={() => setNoticiaAberta(null)}>
+        <DialogContent className="max-w-3xl p-0 overflow-hidden">
+          {noticiaAberta && (
+            <div className="flex flex-col md:flex-row h-[90vh] md:h-[560px] overflow-y-auto scrollbar-hidden">
+              {/* Imagem */}
+              {noticiaAberta.imagemCapaUrl ? (
+                <div className="w-full md:w-96 md:shrink-0 bg-muted">
+                  <img
+                    src={noticiaAberta.imagemCapaUrl}
+                    alt={noticiaAberta.titulo}
+                    className="w-full h-auto md:h-full md:object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="w-full md:w-96 md:shrink-0 bg-muted flex items-center justify-center">
+                  <BookOpen className="h-16 w-16 text-muted-foreground/40" />
+                </div>
+              )}
+              {/* Conteúdo */}
+              <div className="flex flex-col gap-3 p-6 min-w-0">
+                <h2 className="font-serif text-3xl font-bold text-foreground leading-tight">
+                  {noticiaAberta.titulo}
+                </h2>
+                <div className="w-20 h-1 shrink-0" style={{ backgroundColor: "#93c748" }} />
+                {noticiaAberta.data && (
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Calendar className="h-3.5 w-3.5" />
+                    <span>{new Date(noticiaAberta.data).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })}</span>
+                  </div>
+                )}
+                {noticiaAberta.descricao && (
+                  <p className="text-muted-foreground leading-relaxed text-sm break-words">{noticiaAberta.descricao}</p>
+                )}
+                {noticiaAberta.linkSaibaMais && (
+                  <a href={noticiaAberta.linkSaibaMais} target="_blank" rel="noopener noreferrer">
+                    <button
+                      className="w-full py-3 rounded-xl font-semibold text-white text-sm transition-opacity hover:opacity-90 mt-2"
+                      style={{ backgroundColor: "#93c748" }}
+                    >
+                      Saiba mais
+                    </button>
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Illustrations Grid */}
       <section className="py-20 bg-background">
@@ -244,7 +354,7 @@ export default function Index() {
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
               Galeria de Ilustrações
             </h2>
-            <div className="section-divider" />
+            <div className="section-divider bg-[#93c748]" />
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -303,7 +413,7 @@ export default function Index() {
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="image-frame aspect-[4/3] max-w-xl mx-auto md:mx-0"
+              className="image-frame w-full mx-auto md:mx-0"
             >
               <img
                 src={artistPortrait}
@@ -321,7 +431,7 @@ export default function Index() {
               <h2 className="font-serif text-3x1 md:text-4xl font-bold text-foreground">
                 Sobre o Artista
               </h2>
-              <div className="section-divider !mx-0" />
+              <div className="section-divider !mx-0 bg-[#93c748]" />
               <p className="text-muted-foreground leading-1">
                 Walmir Americo Orlandeli é quadrinista e ilustrador. Formado em Comunicação Social pela faculdade Unilago.
                 Sócio proprietário da empresa W.A. Orlandeli - ME, onde realiza projetos de ilustração e design gráfico além de administrar o selo editorial Gambatte.
@@ -362,7 +472,7 @@ export default function Index() {
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
               Livros em Destaque
             </h2>
-            <div className="section-divider" />
+            <div className="section-divider bg-[#93c748]" />
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">

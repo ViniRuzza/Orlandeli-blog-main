@@ -150,40 +150,35 @@ function PostCard({
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       transition={{ delay: idx * 0.1 }}
-      className="group flex flex-col rounded-lg border-0 hover:border hover:border-[#93c748] transition-all duration-300"
+      className="flex flex-col rounded-2xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300 group cursor-pointer"
+      onClick={onClick}
     >
-      <div
-        className="aspect-square overflow-hidden rounded-t-lg relative bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2 cursor-pointer"
-        onClick={onClick}
-      >
+      <div className="aspect-[3/4] overflow-hidden bg-muted relative">
         {post.imagemCapaUrl ? (
           <img
             src={post.imagemCapaUrl}
             alt={post.titulo}
-            className="w-full h-full object-contain object-top transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full bg-muted flex items-center justify-center">
-            <BookOpen className="h-12 w-12 text-muted-foreground/40" />
+          <div
+            className="w-full h-full flex items-center justify-center"
+            style={{
+              background:
+                "linear-gradient(135deg, #1a2a1a 0%, #2d4a1e 50%, #93c748 100%)",
+            }}
+          >
+            <BookOpen className="h-16 w-16 text-white/30" />
           </div>
         )}
       </div>
-      <div className="p-3 pb-0 flex flex-col flex-1">
-        <h3
-          className="font-serif text-sm font-semibold text-foreground leading-tight cursor-pointer mb-1"
-          onClick={onClick}
-        >
+      <div className="p-3 flex flex-col items-center">
+        <h3 className="font-serif text-base font-bold text-foreground text-center leading-snug group-hover:text-primary transition-colors">
           {post.titulo}
         </h3>
-        {post.data && (
-          <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
-            <Calendar className="h-3 w-3" />
-            <span>{formatarData(post.data)}</span>
-          </div>
-        )}
-        <div className="h-3" />
       </div>
     </motion.div>
   );
@@ -346,7 +341,8 @@ export default function Yang() {
                   formatos: começou como tira semanal em jornal; experimentou
                   novas possibilidades gráficas com as narrativas longas das
                   graphic novels; e ampliou o seu alcance com o poder de
-                  compartilhamento das tiras em redes sociais (@omundodeyang).
+                  compartilhamento das tiras em redes sociais 
+                  (<a href="https://www.instagram.com/omundodeyang" target="_blank" className="text-[#93c748]">@omundodeyang</a>).
                 </p>
                 <p>
                   Essa trajetória rendeu três publicações: O mundo de Yang
@@ -597,58 +593,55 @@ export default function Yang() {
 
       {/* Modal Curiosidade */}
       <Dialog open={!!postAberto} onOpenChange={() => setPostAberto(null)}>
-        <DialogContent className="max-w-4xl p-0 overflow-hidden">
-          <div className="h-[90vh] overflow-y-auto scrollbar-hidden p-6">
+        <DialogContent className="max-w-3xl p-0 overflow-hidden">
           {postAberto && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="font-serif text-2xl">{postAberto.titulo}</DialogTitle>
-              </DialogHeader>
-              <div className="grid md:grid-cols-2 gap-6 mt-4">
-                {/* Imagem quadrada */}
-                <div className="aspect-square bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2 rounded-lg overflow-hidden">
-                  {postAberto.imagemCapaUrl ? (
-                    <img
-                      src={postAberto.imagemCapaUrl}
-                      alt={postAberto.titulo}
-                      className="w-full h-full object-contain"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-muted flex items-center justify-center">
-                      <BookOpen className="h-16 w-16 text-muted-foreground/40" />
-                    </div>
-                  )}
+            <div className="flex flex-col md:flex-row h-[90vh] md:h-[560px] overflow-y-auto scrollbar-hidden">
+              {/* Imagem */}
+              {postAberto.imagemCapaUrl ? (
+                <div className="w-full md:w-96 md:shrink-0 bg-muted">
+                  <img
+                    src={postAberto.imagemCapaUrl}
+                    alt={postAberto.titulo}
+                    className="w-full h-auto md:h-full md:object-cover"
+                  />
                 </div>
-                {/* Info */}
-                <div className="flex flex-col">
-                  <div className="space-y-4">
-                    {postAberto.data && (
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <Calendar className="h-3.5 w-3.5" />
-                        <span>{formatarData(postAberto.data)}</span>
-                      </div>
-                    )}
-                    {postAberto.descricao && (
-                      <p className="text-muted-foreground leading-relaxed text-sm">{postAberto.descricao}</p>
-                    )}
+              ) : (
+                <div className="w-full md:w-96 md:shrink-0 bg-muted flex items-center justify-center">
+                  <BookOpen className="h-16 w-16 text-muted-foreground/40" />
+                </div>
+              )}
+              {/* Conteúdo */}
+              <div className="flex flex-col gap-3 p-6 min-w-0">
+                <h2 className="font-serif text-3xl font-bold text-foreground leading-tight">
+                  {postAberto.titulo}
+                </h2>
+                <div className="w-20 h-1 shrink-0" style={{ backgroundColor: "#93c748" }} />
+                {postAberto.data && (
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Calendar className="h-3.5 w-3.5" />
+                    <span>{formatarData(postAberto.data)}</span>
                   </div>
-                  {postAberto.linkSaibaMais && (
-                    <a
-                      href={postAberto.linkSaibaMais}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-md self-start mt-auto pt-6"
-                      style={{ backgroundColor: "#93c748", color: "#fff" }}
+                )}
+                {postAberto.descricao && (
+                  <p className="text-muted-foreground leading-relaxed text-sm break-words">{postAberto.descricao}</p>
+                )}
+                {postAberto.linkSaibaMais && (
+                  <a
+                    href={postAberto.linkSaibaMais}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <button
+                      className="w-full py-3 rounded-xl font-semibold text-white text-sm transition-opacity hover:opacity-90 mt-2"
+                      style={{ backgroundColor: "#93c748" }}
                     >
-                      <ExternalLink className="h-3 w-3" />
                       Saiba mais
-                    </a>
-                  )}
-                </div>
+                    </button>
+                  </a>
+                )}
               </div>
-            </>
+            </div>
           )}
-          </div>
         </DialogContent>
       </Dialog>
 

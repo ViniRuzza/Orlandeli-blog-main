@@ -39,7 +39,7 @@ function IllustrationModal({ item, onClose }: { item: Ilustracao; onClose: () =>
           </button>
 
           {/* Imagem em destaque — ocupa quase tudo */}
-          <div className="w-full bg-black rounded-t-2xl flex items-center justify-center">
+          <div className="w-full bg-white rounded-t-2xl flex items-center justify-center">
             <img
               src={item.imagemUrl}
               alt={item.titulo}
@@ -283,7 +283,7 @@ export default function Portfolio() {
                   className="card-artistic group cursor-pointer overflow-hidden"
                   onClick={() => setSelectedImage(item)}
                 >
-                  <div className="aspect-square overflow-hidden bg-muted/20 dark:bg-muted/10 flex items-center justify-center p-2">
+                  <div className="aspect-square overflow-hidden bg-white flex items-center justify-center p-2">
                     {item.imagemUrl ? (
                       <img
                         src={item.imagemUrl}

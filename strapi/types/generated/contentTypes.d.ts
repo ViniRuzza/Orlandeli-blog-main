@@ -527,6 +527,39 @@ export interface ApiLivroDestaqueLivroDestaque
   };
 }
 
+export interface ApiNoticiaHomeNoticiaHome extends Struct.CollectionTypeSchema {
+  collectionName: 'noticias_home';
+  info: {
+    displayName: 'Not\u00EDcia Home';
+    pluralName: 'noticias-home';
+    singularName: 'noticia-home';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    data: Schema.Attribute.Date;
+    descricao: Schema.Attribute.Text;
+    imagemCapa: Schema.Attribute.Media<'images'>;
+    linkSaibaMais: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::noticia-home.noticia-home'
+    > &
+      Schema.Attribute.Private;
+    ordem: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    publishedAt: Schema.Attribute.DateTime;
+    titulo: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPostBlogPostBlog extends Struct.CollectionTypeSchema {
   collectionName: 'post_blogs';
   info: {
@@ -624,7 +657,7 @@ export interface ApiQuadrinhoQuadrinho extends Struct.CollectionTypeSchema {
       ['quadrinhos_autorais', 'literatura_infantil']
     > &
       Schema.Attribute.DefaultTo<'quadrinhos_autorais'>;
-    sinopse: Schema.Attribute.String;
+    sinopse: Schema.Attribute.Text;
     stats: Schema.Attribute.String;
     titulo: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
@@ -1280,6 +1313,7 @@ declare module '@strapi/strapi' {
       'api::destaque.destaque': ApiDestaqueDestaque;
       'api::ilustraca0.ilustraca0': ApiIlustraca0Ilustraca0;
       'api::livro-destaque.livro-destaque': ApiLivroDestaqueLivroDestaque;
+      'api::noticia-home.noticia-home': ApiNoticiaHomeNoticiaHome;
       'api::post-blog.post-blog': ApiPostBlogPostBlog;
       'api::premio.premio': ApiPremioPremio;
       'api::quadrinho.quadrinho': ApiQuadrinhoQuadrinho;

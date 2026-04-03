@@ -83,7 +83,7 @@ export function Footer() {
                 className="flex items-center gap-2 text-background/80 hover:text-background text-sm transition-colors"
               >
                 <Mail className="h-4 w-4" />
-                orlandeli50@icloud.com.br
+                orlandeli50@icloud.com
               </a>
               <div className="flex items-start gap-2 text-background/80 text-sm">
                 <MapPin className="h-4 w-4 mt-0.5" />

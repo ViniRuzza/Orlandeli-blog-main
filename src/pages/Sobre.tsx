@@ -44,7 +44,6 @@ export default function Sobre() {
             <nav className="flex flex-wrap justify-center items-center gap-2 mt-4">
               {[
                 { label: "O Artista", href: "#artista" },
-                { label: "Traços", href: "#tracos" },
                 { label: "Trajetória", href: "#trajetoria" },
                 { label: "Prêmios", href: "#premios" },
               ].map((item, idx, arr) => (
@@ -134,37 +133,20 @@ export default function Sobre() {
                 <li>Mais uma história para o velho Smith</li>
               </ul>
             </motion.div>
-          </div>
-        </div>
-      </section>
 
-      {/* Traços */}
-      <section id="tracos" className="py-16 bg-background">
-        <div className="container mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-8"
-          >
-            <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-2">
-              Traços
-            </h2>
-            <div className="w-16 h-1 mt-3 mx-auto" style={{ backgroundColor: "#93c748" }} />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="flex justify-center"
-          >
-            <img
-              src={caricaOrlandeli}
-              alt="Caricatura de Orlandeli"
-              className="w-[480px] md:w-[700px] h-auto"
-            />
-          </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="flex justify-center pt-6"
+            >
+              <img
+                src={caricaOrlandeli}
+                alt="Caricatura de Orlandeli"
+                className="w-48 md:w-72 h-auto"
+              />
+            </motion.div>
+          </div>
         </div>
       </section>
 
