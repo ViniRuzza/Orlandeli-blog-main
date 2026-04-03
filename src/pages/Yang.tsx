@@ -597,7 +597,8 @@ export default function Yang() {
 
       {/* Modal Curiosidade */}
       <Dialog open={!!postAberto} onOpenChange={() => setPostAberto(null)}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl p-0 overflow-hidden">
+          <div className="h-[90vh] overflow-y-auto scrollbar-hidden p-6">
           {postAberto && (
             <>
               <DialogHeader>
@@ -647,6 +648,7 @@ export default function Yang() {
               </div>
             </>
           )}
+          </div>
         </DialogContent>
       </Dialog>
 
