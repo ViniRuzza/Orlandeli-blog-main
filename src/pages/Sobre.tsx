@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Layout } from "@/components/Layout";
-import { BookOpen, Palette, Award, AlertCircle } from "lucide-react";
+import { BookOpen, Award, AlertCircle } from "lucide-react";
 
 import artistPortrait from "@/assets/Orlandeli_FT.jpeg";
 import caricaOrlandeli from "@/assets/carica_orlandeli.png";
@@ -140,11 +140,13 @@ export default function Sobre() {
               viewport={{ once: true }}
               className="flex justify-center pt-6"
             >
-              <img
-                src={caricaOrlandeli}
-                alt="Caricatura de Orlandeli"
-                className="w-48 md:w-72 h-auto"
-              />
+              <div className="image-frame aspect-[4/3] max-w-xl w-full">
+                <img
+                  src={caricaOrlandeli}
+                  alt="Caricatura de Orlandeli"
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </motion.div>
           </div>
         </div>
@@ -167,7 +169,7 @@ export default function Sobre() {
 
           <div className="max-w-5xl mx-auto relative">
             {/* Linha contínua vertical */}
-            <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2" style={{ backgroundColor: "#93c74840" }} />
+            <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-1 -translate-x-1/2 rounded-full" style={{ backgroundColor: "#93c748" }} />
 
             {isLoadingTrajetoria && (
               <div className="flex justify-center py-12">
@@ -196,7 +198,7 @@ export default function Sobre() {
                 >
                   {/* Texto */}
                   <div className={`space-y-3 ${isEven ? 'md:order-1' : 'md:order-3'}`}>
-                    <span className="inline-block text-sm font-bold px-3 py-1 rounded-full" style={{ backgroundColor: "#93c74822", color: "#93c748" }}>
+                    <span className="inline-block text-3xl md:text-4xl font-bold" style={{ color: "#93c748" }}>
                       {item.ano}
                     </span>
                     <h3 className="font-serif text-2xl font-semibold text-foreground">
@@ -249,7 +251,7 @@ export default function Sobre() {
             <h2 className="font-serif text-3xl font-bold text-foreground mb-4">
               Prêmios e Reconhecimentos
             </h2>
-            <div className="section-divider" />
+            <div className="section-divider bg-[#93c748]" />
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
@@ -286,43 +288,6 @@ export default function Sobre() {
         </div>
       </section>}
 
-      {/* Skills */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
-                <Palette className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-serif text-xl font-semibold text-foreground mb-2">Ilustração</h3>
-              <p className="text-muted-foreground text-sm">
-                Ilustrações para livros, revistas, capas e projetos editoriais.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-center"
-            >
-              <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
-                <BookOpen className="h-8 w-8 text-primary" />
-              </div>
-              <h3 className="font-serif text-xl font-semibold text-foreground mb-2">Quadrinhos</h3>
-              <p className="text-muted-foreground text-sm">
-                Criação de histórias em quadrinhos autorais e comerciais.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
     </Layout>
   );
 }

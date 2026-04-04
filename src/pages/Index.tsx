@@ -28,13 +28,13 @@ import iconePublicacoes from "@/assets/iconehome_publicacoes.png";
 import iconeBlog from "@/assets/iconehome_blog.png";
 import iconeSobre from "@/assets/carica_orlandeli.png"
 
-const HOME_NAV_ICONS: { label: string; image: string; link: string; imageClass?: string }[] = [
+const HOME_NAV_ICONS: { label: string; image: string; link: string; imageSize?: string; imageFit?: string }[] = [
   { label: "Publicações", image: iconePublicacoes, link: "/quadrinhos" },
   { label: "Portfólio", image: iconePortfolio, link: "/portfolio" },
   { label: "Loja", image: iconeLoja, link: "/loja" },
   { label: "Blog", image: iconeBlog, link: "/blog" },
   { label: "Yang", image: iconeYang, link: "/yang" },
-  { label: "Sobre", image: iconeSobre, link: "/sobre", imageClass: "w-full h-full object-cover scale-125" },
+  { label: "Sobre", image: iconeSobre, link: "/sobre", imageSize: "w-4/5 h-4/5", imageFit: "object-cover" },
 ];
 
 const carouselSlides = [
@@ -208,7 +208,7 @@ export default function Index() {
       <section className="py-10 bg-background">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap gap-8 justify-center items-end">
-            {HOME_NAV_ICONS.map(({ label, image, link, imageClass }, idx) => (
+            {HOME_NAV_ICONS.map(({ label, image, link, imageSize, imageFit }, idx) => (
               <motion.div
                 key={label}
                 initial={{ opacity: 0, y: 20 }}
@@ -224,7 +224,7 @@ export default function Index() {
                     <img
                       src={image}
                       alt={label}
-                      className={imageClass ?? "w-full h-full object-cover"}
+                      className={`absolute inset-0 m-auto ${imageFit ?? "object-cover"} ${imageSize ?? "w-full h-full"}`}
                     />
                   </div>
                   <span className="text-xs font-semibold text-muted-foreground group-hover:text-primary transition-colors duration-200">

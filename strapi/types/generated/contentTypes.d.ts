@@ -576,7 +576,7 @@ export interface ApiPostBlogPostBlog extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    data: Schema.Attribute.Date & Schema.Attribute.Required;
+    data: Schema.Attribute.DateTime & Schema.Attribute.Required;
     imagem: Schema.Attribute.Media<'images'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<

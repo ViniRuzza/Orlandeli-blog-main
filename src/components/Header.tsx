@@ -185,14 +185,14 @@ function SearchBar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.15 }}
-            className="absolute left-0 right-0 top-full mt-1 z-50 rounded-md shadow-xl overflow-hidden"
-            style={{ backgroundColor: "white", border: "1px solid #e5e7eb" }}
+            className="absolute left-0 top-full mt-1 z-50 rounded-md shadow-xl overflow-y-auto"
+            style={{ backgroundColor: "white", border: "1px solid #e5e7eb", width: "360px", maxHeight: "420px" }}
           >
             {results.length > 0 ? (
               results.map((result) => (
                 <button
                   key={result.id}
-                  className="w-full flex items-start gap-3 px-4 py-2.5 text-left border-b last:border-0 transition-colors hover:bg-gray-50"
+                  className="w-full flex items-start gap-3 px-4 py-3 text-left border-b last:border-0 transition-colors hover:bg-gray-50"
                   style={{ borderColor: "#f3f4f6" }}
                   onClick={() => {
                     navigate(`${result.path}?q=${encodeURIComponent(query)}`);
@@ -201,7 +201,7 @@ function SearchBar() {
                   }}
                 >
                   <span
-                    className="text-xs font-bold px-2 py-0.5 rounded-full shrink-0 mt-0.5"
+                    className="text-xs font-bold px-2 py-1 rounded-full shrink-0 mt-0.5"
                     style={{
                       backgroundColor: typeBg[result.type],
                       color: typeText[result.type],
@@ -210,15 +210,15 @@ function SearchBar() {
                     {typeLabel[result.type]}
                   </span>
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-gray-800 truncate">{result.title}</p>
+                    <p className="text-base font-semibold text-gray-800 truncate">{result.title}</p>
                     {result.subtitle && (
-                      <p className="text-xs text-gray-500 truncate">{result.subtitle}</p>
+                      <p className="text-sm text-gray-500 truncate">{result.subtitle}</p>
                     )}
                   </div>
                 </button>
               ))
             ) : (
-              <div className="px-4 py-3 text-sm text-gray-500">
+              <div className="px-4 py-4 text-sm text-gray-500">
                 Nenhum resultado encontrado para &ldquo;{query}&rdquo;
               </div>
             )}

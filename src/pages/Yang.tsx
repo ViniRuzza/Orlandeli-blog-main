@@ -80,13 +80,13 @@ function LivroModal({
             <X className="h-4 w-4" />
           </button>
 
-          {/* Imagem quadrada */}
-          <div className="w-full aspect-square overflow-hidden rounded-t-3xl bg-muted">
+          {/* Imagem capa — proporção natural */}
+          <div className="w-full overflow-hidden rounded-t-3xl bg-muted">
             {livro.capaUrl ? (
               <img
                 src={livro.capaUrl}
                 alt={livro.titulo}
-                className="w-full h-full object-cover"
+                className="w-full h-auto block"
               />
             ) : (
               <div
@@ -202,13 +202,13 @@ function LivroCard({
       onClick={onClick}
       className="cursor-pointer group flex flex-col rounded-3xl overflow-hidden border border-border bg-card shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-300"
     >
-      {/* Imagem quadrada */}
-      <div className="aspect-square overflow-hidden bg-muted relative">
+      {/* Imagem — proporção real, alinhada pelo topo */}
+      <div className="w-full overflow-hidden bg-muted relative" style={{ aspectRatio: "3/4" }}>
         {livro.capaUrl ? (
           <img
             src={livro.capaUrl}
             alt={livro.titulo}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-contain object-top transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div
@@ -229,12 +229,12 @@ function LivroCard({
       </div>
 
       {/* Texto */}
-      <div className="p-4 flex flex-col gap-2 flex-1">
-        <h3 className="font-serif text-base font-semibold text-foreground leading-snug group-hover:text-primary transition-colors">
+      <div className="p-4 flex flex-col gap-2 flex-1 min-w-0 overflow-hidden">
+        <h3 className="font-serif text-base font-semibold text-foreground leading-snug group-hover:text-primary transition-colors break-words">
           {livro.titulo}
         </h3>
         {livro.sinopse && (
-          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
+          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 break-words">
             {livro.sinopse}
           </p>
         )}
@@ -345,9 +345,9 @@ export default function Yang() {
                   (<a href="https://www.instagram.com/omundodeyang" target="_blank" className="text-[#93c748]">@omundodeyang</a>).
                 </p>
                 <p>
-                  Essa trajetória rendeu três publicações: O mundo de Yang
-                  (2015); O mundo de Yang - Rumo ao Sul (2019) e O mundo de
-                  Yang - Dois Cortes (2022).
+                  Essa trajetória rendeu quatro publicações: <a href="#livros" className="text-[#93c748] hover:underline">O mundo de Yang</a>{" "}
+                  (2015); <a href="#livros" className="text-[#93c748] hover:underline">O mundo de Yang - Rumo ao Sul</a> (2019); <a href="#livros" className="text-[#93c748] hover:underline">O mundo de
+                  Yang - Dois Cortes</a> (2022); <a href="#livros" className="text-[#93c748] hover:underline">O mundo de Yang - Caminho do Meio</a> (2025).
                 </p>
                 <p>
                   Uma década vivenciando a impermanência nas adaptações
@@ -569,9 +569,6 @@ export default function Yang() {
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-1">
               Curiosidades
             </h2>
-            <p className="text-muted-foreground text-base font-medium">
-              Sobre os Livros
-            </p>
             <div
               className="w-14 h-1 mt-3"
               style={{ backgroundColor: "#93c748" }}

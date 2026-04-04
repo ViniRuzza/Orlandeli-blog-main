@@ -244,14 +244,18 @@ export default function Blog() {
     });
   };
 
+  const normalize = (s: string) =>
+    s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
   const filteredPosts = posts.filter((post) => {
     const matchesCategory =
       selectedCategories.length === 0 ||
       post.categorias.some((c) => selectedCategories.includes(c.toLowerCase()));
+    const term = normalize(searchTerm);
     const matchesSearch =
-      post.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.conteudo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.categorias.some((c) => c.toLowerCase().includes(searchTerm.toLowerCase()));
+      normalize(post.titulo).includes(term) ||
+      normalize(post.conteudo).includes(term) ||
+      post.categorias.some((c) => normalize(c).includes(term));
     return matchesCategory && matchesSearch;
   });
 
@@ -291,7 +295,7 @@ export default function Blog() {
             </h1>
             <div className="section-divider mb-6" />
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Novidades, bastidores, dicas e reflexões sobre o mundo dos quadrinhos e ilustração.
+              Ilustrações para livros, revistas, capas e projetos editoriais.
             </p>
           </motion.div>
         </div>
@@ -484,16 +488,6 @@ export default function Blog() {
               </Button>
 
               <article className="space-y-8">
-                {selectedPost.imagemUrl && (
-                  <div className="image-frame overflow-hidden">
-                    <img
-                      src={selectedPost.imagemUrl}
-                      alt={selectedPost.titulo}
-                      className="w-full h-auto block"
-                    />
-                  </div>
-                )}
-
                 <div className="space-y-4">
                   <h1 className="font-serif text-3xl md:text-4xl font-bold text-foreground">
                     {selectedPost.titulo}
@@ -514,9 +508,35 @@ export default function Blog() {
                   </div>
                 </div>
 
+                {selectedPost.imagemUrl && (
+                  <div className="image-frame overflow-hidden">
+                    <img
+                      src={selectedPost.imagemUrl}
+                      alt={selectedPost.titulo}
+                      className="w-full h-auto block"
+                    />
+                  </div>
+                )}
+
                 {/* Rich text content */}
                 <div className="prose prose-xl md:prose-2xl max-w-none text-foreground leading-relaxed">
-                  <ReactMarkdown remarkPlugins={[remarkBreaks]}>{selectedPost.conteudo}</ReactMarkdown>
+                  <ReactMarkdown
+                    remarkPlugins={[remarkBreaks]}
+                    components={{
+                      img: ({ src, alt }) => (
+                        <figure className="my-6">
+                          <img src={src} alt={alt || ""} className="w-full h-auto rounded-xl" />
+                          {alt && alt !== src && (
+                            <figcaption className="text-left text-sm text-muted-foreground mt-2 italic">
+                              {alt}
+                            </figcaption>
+                          )}
+                        </figure>
+                      ),
+                    }}
+                  >
+                    {selectedPost.conteudo}
+                  </ReactMarkdown>
                 </div>
               </article>
             </motion.div>

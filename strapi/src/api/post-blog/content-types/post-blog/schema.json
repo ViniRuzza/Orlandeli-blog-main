@@ -27,7 +27,7 @@
       ]
     },
     "data": {
-      "type": "date",
+      "type": "datetime",
       "required": true
     },
     "categorias": {

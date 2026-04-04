@@ -263,7 +263,7 @@ export default function Quadrinhos() {
                       className="overflow-y-auto max-h-48 pr-1"
                       style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                     >
-                      <p className="text-muted-foreground leading-relaxed">{selectedComic.sinopse}</p>
+                      <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{selectedComic.sinopse}</p>
                     </div>
                   </div>
 
