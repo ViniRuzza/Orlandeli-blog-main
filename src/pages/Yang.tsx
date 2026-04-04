@@ -176,7 +176,7 @@ function PostCard({
         )}
       </div>
       <div className="p-3 flex flex-col items-center">
-        <h3 className="font-serif text-base font-bold text-foreground text-center leading-snug group-hover:text-primary transition-colors">
+        <h3 className="font-serif text-sm 14px font-bold text-foreground text-center leading-snug group-hover:text-primary transition-colors">
           {post.titulo}
         </h3>
       </div>
@@ -612,7 +612,7 @@ export default function Yang() {
               )}
               {/* Conteúdo */}
               <div className="flex flex-col gap-3 p-6 min-w-0">
-                <h2 className="font-serif text-3xl font-bold text-foreground leading-tight">
+                <h2 className="font-serif text-xl font-bold text-foreground leading-tight">
                   {postAberto.titulo}
                 </h2>
                 <div className="w-20 h-1 shrink-0" style={{ backgroundColor: "#93c748" }} />

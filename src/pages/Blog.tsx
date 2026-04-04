@@ -423,11 +423,6 @@ export default function Blog() {
                           <Calendar className="h-3 w-3" />
                           {formatDate(post.data)}
                         </span>
-                        {post.categorias.map((cat) => (
-                          <Badge key={cat} variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-muted/50 text-muted-foreground border-none font-normal">
-                            {cat}
-                          </Badge>
-                        ))}
                       </div>
                     </div>
                   </div>
@@ -500,13 +495,6 @@ export default function Blog() {
                 )}
 
                 <div className="space-y-4">
-                  <div className="flex flex-wrap gap-1">
-                    {selectedPost.categorias.map((cat) => (
-                      <Badge key={cat} variant="secondary">
-                        {cat}
-                      </Badge>
-                    ))}
-                  </div>
                   <h1 className="font-serif text-3xl md:text-4xl font-bold text-foreground">
                     {selectedPost.titulo}
                   </h1>
@@ -515,10 +503,6 @@ export default function Blog() {
                       <span className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
                         {formatDate(selectedPost.data)}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <MessageCircle className="h-4 w-4" />
-                        12 comentários
                       </span>
                     </div>
 

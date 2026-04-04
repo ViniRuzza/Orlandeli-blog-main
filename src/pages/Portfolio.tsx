@@ -55,15 +55,6 @@ function IllustrationModal({ item, onClose }: { item: Ilustracao; onClose: () =>
             {item.legenda && (
               <p className="text-sm text-muted-foreground leading-relaxed italic">{item.legenda}</p>
             )}
-            {item.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1 pt-1">
-                {item.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="text-xs capitalize">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            )}
           </div>
         </motion.div>
       </motion.div>
@@ -298,13 +289,6 @@ export default function Portfolio() {
                   </div>
                   <div className="p-4">
                     <h3 className="font-serif font-semibold text-foreground mb-2">{item.titulo}</h3>
-                    <div className="flex flex-wrap gap-1">
-                      {item.tags.map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs capitalize">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
                   </div>
                 </motion.div>
               ))}
