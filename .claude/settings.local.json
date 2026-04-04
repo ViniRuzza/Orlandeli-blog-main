@@ -3,7 +3,9 @@
     "allow": [
       "Bash(docker compose:*)",
       "Bash(docker restart:*)",
-      "Bash(netstat -ano)"
+      "Bash(netstat -ano)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)"
     ]
   }
 }
