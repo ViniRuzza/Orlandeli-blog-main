@@ -205,6 +205,17 @@ export interface Destaque {
 }
 
 
+// Content Type: NoticiaHome
+export interface NoticiaHome {
+    id: number;
+    titulo: string;
+    descricao: string;
+    imagemCapaUrl: string;
+    data: string;
+    ordem: number;
+    linkSaibaMais: string;
+}
+
 // Content Type: Livro em Destaque
 export interface LivroDestaque {
     id: number;

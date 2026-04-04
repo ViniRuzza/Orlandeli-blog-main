@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "noticias_home",
+  "info": {
+    "singularName": "noticia-home",
+    "pluralName": "noticias-home",
+    "displayName": "Notícia Home"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titulo": {
+      "type": "string",
+      "required": true
+    },
+    "descricao": {
+      "type": "text"
+    },
+    "imagemCapa": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "data": {
+      "type": "date"
+    },
+    "ordem": {
+      "type": "integer",
+      "default": 0
+    },
+    "linkSaibaMais": {
+      "type": "string"
+    }
+  }
+}

@@ -187,13 +187,13 @@ const EXEMPLO_POST: PostBlog = {
   categorias: ["Textos"],
 };
 
-const CATEGORY_BUTTONS = [
-  { label: "Yang", image: imgYang, category: "Yang" },
-  { label: "Grump", image: imgGrump, category: "Grump" },
-  { label: "SIC", image: imgSIC, category: "SIC" },
-  { label: "Piu e Phiu", image: imgPiuPhiu, category: "Piu e Phiu" },
-  { label: "Textos", image: imgTextos, category: "Textos" },
-  { label: "Charge", image: imgCharge, category: "Charge" },
+const CATEGORY_BUTTONS: { label: string; image: string; category: string; imageSize?: string; imageFit?: string }[] = [
+  { label: "Yang", image: imgYang, category: "Yang", imageSize:"w-full h-full" ,imageFit: "object-cover" },
+  { label: "Grump", image: imgGrump, category: "Grump", imageSize:"w-full h-full" ,imageFit: "object-cover" },
+  { label: "SIC", image: imgSIC, category: "SIC", imageSize:"w-full h-full" ,imageFit: "object-cover" },
+  { label: "Piu e Phiu", image: imgPiuPhiu, category: "Piu e Phiu", imageSize:"w-full h-full" ,imageFit: "object-cover" },
+  { label: "Textos", image: imgTextos, category: "Textos", imageSize: "w-3/5 h-3/5", imageFit: "object-cover" },
+  { label: "Charge", image: imgCharge, category: "Charge", imageSize:"w-full h-full" ,imageFit: "object-cover" },
 ];
 
 export default function Blog() {
@@ -298,13 +298,12 @@ export default function Blog() {
       </section>
 
       {/* Category Filter & Local Search */}
-      {!isLoading && !isError && posts.length > 0 && (
-        <section className="py-8 bg-background">
+      <section className="py-8 bg-background">
           <div className="container mx-auto px-4 max-w-4xl">
             <div className="flex flex-col items-center gap-6">
               {/* Image Category Buttons */}
               <div className="flex flex-wrap gap-6 justify-center items-end">
-                {CATEGORY_BUTTONS.map(({ label, image, category }) => {
+                {CATEGORY_BUTTONS.map(({ label, image, category, imageSize, imageFit }) => {
                   const isActive = selectedCategories.includes(category.toLowerCase());
                   return (
                     <button
@@ -321,7 +320,7 @@ export default function Blog() {
                         <img
                           src={image}
                           alt={label}
-                          className="w-full h-full object-cover"
+                          className={`absolute inset-0 m-auto ${imageFit ?? "object-contain"} ${imageSize ?? "w-4/5 h-4/5"}`}
                         />
                         {isActive && (
                           <div className="absolute inset-0 bg-[#93c748]/20 rounded-full" />
@@ -368,7 +367,6 @@ export default function Blog() {
             </div>
           </div>
         </section>
-      )}
 
       {/* Blog Posts */}
       <section className="py-16 bg-background">

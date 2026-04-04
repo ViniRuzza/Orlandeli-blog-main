@@ -15,7 +15,7 @@
       "type": "string"
     },
     "sinopse": {
-      "type": "string"
+      "type": "text"
     },
     "capa": {
       "type": "media",

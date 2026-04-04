@@ -1,4 +1,4 @@
-import type { StrapiResponse, StrapiMedia, Quadrinho, Ilustracao, PostBlog, Destaque, TrajetoriaItem, YangPost, YangLivro, YangPersonagem, Premio, LivroDestaque } from "./types";
+import type { StrapiResponse, StrapiMedia, Quadrinho, Ilustracao, PostBlog, Destaque, TrajetoriaItem, YangPost, YangLivro, YangPersonagem, Premio, LivroDestaque, NoticiaHome } from "./types";
 
 export const STRAPI_URL = import.meta.env.VITE_STRAPI_URL ?? "http://localhost:1337";
 
@@ -276,6 +276,20 @@ export function normalizeDestaque(item: { id: number;[key: string]: unknown }): 
         imagemUrl: strapiMediaUrl(imagem),
         link: (attrs.link as string) || (attrs.Link as string) || "",
         textoBotao: (attrs.textoBotao as string) || (attrs.texto_botao as string) || (attrs.TextoBotao as string) || "Saiba mais",
+    };
+}
+
+export function normalizeNoticiaHome(item: { id: number;[key: string]: unknown }): NoticiaHome {
+    const attrs = (item.attributes as { [key: string]: unknown }) ?? item;
+    const capa = extractMedia(attrs.imagemCapa);
+    return {
+        id: item.id,
+        titulo: (attrs.titulo as string) || "",
+        descricao: (attrs.descricao as string) || "",
+        imagemCapaUrl: strapiMediaUrl(capa),
+        data: (attrs.data as string) || "",
+        ordem: (attrs.ordem as number) ?? 0,
+        linkSaibaMais: (attrs.linkSaibaMais as string) || "",
     };
 }
 
