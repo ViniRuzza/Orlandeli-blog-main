@@ -409,18 +409,31 @@ export default function Index() {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="image-frame w-full mx-auto md:mx-0"
-            >
-              <img
-                src={artistPortrait}
-                alt="Orlandeli"
-                className="w-full h-full object-cover"
-              />
-            </motion.div>
+            <div className="w-full mx-auto md:mx-0">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="image-frame w-full"
+              >
+                <img
+                  src={artistPortrait}
+                  alt="Orlandeli"
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+              <p className="text-xs text-muted-foreground text-center mt-2">
+                Foto:{" "}
+                <a
+                  href="https://linktr.ee/g.almeida_fotografia"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-foreground transition-colors"
+                >
+                  Gabriel Almeida
+                </a>
+              </p>
+            </div>
 
             <motion.div
               initial={{ opacity: 0, x: 30 }}

@@ -91,12 +91,25 @@ export default function Sobre() {
               viewport={{ once: true }}
               className="flex justify-center"
             >
-              <div className="image-frame aspect-[4/3] max-w-xl w-full">
-                <img
-                  src={artistPortrait}
-                  alt="Orlandeli"
-                  className="w-full h-full object-cover"
-                />
+              <div className="max-w-xl w-full">
+                <div className="image-frame aspect-[4/3] w-full">
+                  <img
+                    src={artistPortrait}
+                    alt="Orlandeli"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground text-center mt-2">
+                  Foto:{" "}
+                  <a
+                    href="https://linktr.ee/g.almeida_fotografia"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-foreground transition-colors"
+                  >
+                    Gabriel Almeida
+                  </a>
+                </p>
               </div>
             </motion.div>
 
