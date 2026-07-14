@@ -1,5 +1,6 @@
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Headphones, Play, Download } from "lucide-react";
+import { Headphones, Play, Pause, Download } from "lucide-react";
 import { Layout } from "@/components/Layout";
 
 import bannerSmith from "@/assets/banner_smith_2.jpeg";
@@ -8,6 +9,22 @@ import capaSmith from "@/assets/capa_smith.png";
 import proacSmith from "@/assets/proac_smith.png";
 
 const VERDE = "#93c748";
+
+/**
+ * Faixas da áudio-descrição, na ordem de leitura.
+ * Os arquivos ficam em /public/audios e são servidos direto (não passam pelo bundle do Vite).
+ */
+const faixas = [
+  { titulo: "Introdução", paginas: "", src: "/audios/Smith-Introducao.mp3" },
+  { titulo: "Parte 1", paginas: "págs. 11–17", src: "/audios/Smith-Parte01-11-17.mp3" },
+  { titulo: "Parte 2", paginas: "págs. 18–27", src: "/audios/Smith-Parte02-18-27.mp3" },
+  { titulo: "Parte 3", paginas: "págs. 29–49", src: "/audios/Smith-Parte03-29-49.mp3" },
+  { titulo: "Parte 5", paginas: "págs. 72–100", src: "/audios/Smith-Parte05-72-100.mp3" },
+  { titulo: "Parte 6", paginas: "págs. 101–119", src: "/audios/Smith-Parte06-101-119.mp3" },
+  { titulo: "Parte 7", paginas: "págs. 120–125", src: "/audios/Smith-Parte07-120-125.mp3" },
+  { titulo: "Parte 8", paginas: "págs. 126–129", src: "/audios/Smith-Parte08-126-129.mp3" },
+  { titulo: "Parte 9", paginas: "págs. 130–fim", src: "/audios/Smith-Parte09-130-fim.mp3" },
+];
 
 /**
  * Ficha técnica da áudio-descrição.
@@ -28,6 +45,35 @@ const fichaTecnica = [
 ];
 
 export default function Smith() {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [faixaAtual, setFaixaAtual] = useState(0);
+  const [tocando, setTocando] = useState(false);
+
+  const selecionarFaixa = (idx: number) => {
+    const mesmaFaixa = idx === faixaAtual;
+    setFaixaAtual(idx);
+    // Aguarda o React trocar o src antes de dar play
+    requestAnimationFrame(() => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      if (mesmaFaixa && tocando) {
+        audio.pause();
+      } else {
+        audio.play().catch(() => {
+          /* navegador pode bloquear autoplay; ignora */
+        });
+      }
+    });
+  };
+
+  const proximaFaixa = () => {
+    if (faixaAtual < faixas.length - 1) {
+      selecionarFaixa(faixaAtual + 1);
+    } else {
+      setTocando(false);
+    }
+  };
+
   return (
     <Layout>
       {/* Banner topo */}
@@ -115,14 +161,14 @@ export default function Smith() {
           />
         </motion.div>
 
-        {/* Player de áudio (placeholder) */}
+        {/* Player de áudio */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="mt-12 rounded-2xl border border-border bg-card shadow-sm p-6 md:p-8"
         >
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-5">
             <div
               className="w-11 h-11 rounded-full flex items-center justify-center shrink-0"
               style={{ backgroundColor: VERDE }}
@@ -134,41 +180,84 @@ export default function Smith() {
                 Ouvir a áudio-descrição
               </h2>
               <p className="text-sm text-muted-foreground">
-                Mais uma história para o velho Smith
+                Tocando agora: {faixas[faixaAtual].titulo}
+                {faixas[faixaAtual].paginas ? ` · ${faixas[faixaAtual].paginas}` : ""}
               </p>
             </div>
           </div>
 
-          {/*
-            PLACEHOLDER DO PLAYER.
-            Quando o áudio estiver pronto, substitua o bloco abaixo por:
+          {/* Player HTML nativo — o arquivo é servido direto de /public/audios */}
+          <audio
+            ref={audioRef}
+            src={faixas[faixaAtual].src}
+            controls
+            preload="none"
+            className="w-full"
+            onPlay={() => setTocando(true)}
+            onPause={() => setTocando(false)}
+            onEnded={proximaFaixa}
+          >
+            Seu navegador não suporta o player de áudio.
+          </audio>
 
-            <audio controls className="w-full" preload="none">
-              <source src={audioSmith} type="audio/mpeg" />
-              Seu navegador não suporta o player de áudio.
-            </audio>
-
-            e importe o arquivo no topo:
-            import audioSmith from "@/assets/smith.mp3";
-            (ou coloque em /public e use src="/smith.mp3")
-          */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <button
-              disabled
-              className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-white text-sm opacity-60 cursor-not-allowed"
-              style={{ backgroundColor: VERDE }}
-            >
-              <Play className="h-4 w-4" />
-              Áudio em breve
-            </button>
-            <button
-              disabled
-              className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm border border-border text-muted-foreground opacity-60 cursor-not-allowed"
-            >
-              <Download className="h-4 w-4" />
-              Baixar áudio
-            </button>
-          </div>
+          {/* Lista de faixas */}
+          <ul className="mt-5 space-y-1.5">
+            {faixas.map((faixa, idx) => {
+              const ativa = idx === faixaAtual;
+              return (
+                <li
+                  key={faixa.src}
+                  className={`flex items-center gap-1 rounded-lg transition-colors ${
+                    ativa ? "bg-muted" : "hover:bg-muted/60"
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => selecionarFaixa(idx)}
+                    aria-current={ativa ? "true" : undefined}
+                    className="flex-1 min-w-0 flex items-center gap-3 px-3 py-2.5 text-left"
+                  >
+                    <span
+                      className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                      style={{
+                        backgroundColor: ativa ? VERDE : "transparent",
+                        border: ativa ? "none" : "1px solid hsl(var(--border))",
+                        color: ativa ? "#fff" : "inherit",
+                      }}
+                    >
+                      {ativa && tocando ? (
+                        <Pause className="h-4 w-4" />
+                      ) : (
+                        <Play className="h-4 w-4" />
+                      )}
+                    </span>
+                    <span className="flex-1 min-w-0">
+                      <span
+                        className={`block text-sm font-semibold truncate ${
+                          ativa ? "text-foreground" : "text-foreground/90"
+                        }`}
+                      >
+                        {faixa.titulo}
+                      </span>
+                      {faixa.paginas && (
+                        <span className="block text-xs text-muted-foreground">
+                          {faixa.paginas}
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                  <a
+                    href={faixa.src}
+                    download
+                    className="text-muted-foreground hover:text-foreground p-2 mr-1.5 rounded-md shrink-0"
+                    aria-label={`Baixar ${faixa.titulo}`}
+                  >
+                    <Download className="h-4 w-4" />
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
         </motion.div>
 
         {/* Ficha técnica */}
