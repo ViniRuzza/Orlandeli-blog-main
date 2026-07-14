@@ -2,9 +2,10 @@ import { motion } from "framer-motion";
 import { Headphones, Play, Download } from "lucide-react";
 import { Layout } from "@/components/Layout";
 
-import bannerSmith from "@/assets/banner_smith-1280x420.jpg";
-import boiaSmith from "@/assets/boia_smith-1000x1000.png";
-import proacSmith from "@/assets/proac_smith-1024x216.png";
+import bannerSmith from "@/assets/banner_smith_2.jpeg";
+import boiaSmith from "@/assets/boia_smith_2.png";
+import capaSmith from "@/assets/capa_smith.png";
+import proacSmith from "@/assets/proac_smith.png";
 
 const VERDE = "#93c748";
 
@@ -15,20 +16,14 @@ const VERDE = "#93c748";
 const fichaTecnica = [
   {
     nome: "ORLANDELI",
-    funcao: "Autor",
-    descricao:
-      "Roteiro, arte e idealização do projeto Mais uma história para o velho Smith.",
+    funcao: "Roteiro e desenhos",
+    descricao: "",
   },
   {
-    nome: "MILENA ROMERA",
-    funcao: "Áudio-descrição",
+    nome: "MILENA BERTONI",
+    funcao: "Versão em audiodescrição",
     descricao:
-      "Roteiro e consultoria de acessibilidade da versão em áudio-descrição.",
-  },
-  {
-    nome: "MILENA ROMERA",
-    funcao: "Narração",
-    descricao: "Narração da áudio-descrição.",
+      "Especialista em Educação Especial, Professora de Arte, Pedagoga, Arteterapeuta e Audiodescritora.",
   },
 ];
 
@@ -79,18 +74,18 @@ export default function Smith() {
             lembranças, depois que elas vão embora.
           </p>
           <p>
-            O projeto foi um dos contemplados pelo edital ProacSP, o edital
-            ajudou a levantar recursos e criou as condições necessárias para o
-            autor produzir esse material. Uma das contrapartidas do edital é
-            idealizar uma ação inclusiva, que tenha como ponto fundamental a
-            acessibilidade.
+            O projeto foi um dos contemplados pelo edital ProacSP, que ajudou a
+            levantar recursos e criou as condições necessárias para o autor
+            produzir esse material.
           </p>
           <p>
-            Pensando nisso resolvemos produzir uma versão em áudio-descrição,
-            tornando o material acessível aos deficientes visuais.
+            Uma das contrapartidas do edital é idealizar uma ação inclusiva, que
+            tenha como ponto fundamental a acessibilidade. Pensando nisso
+            resolvemos produzir uma versão em áudio descrição, tornando o
+            material acessível aos deficientes visuais.
           </p>
           <p>
-            Uma áudio-descrição feita especialmente para esse público é
+            Uma áudio descrição feita especialmente para esse público é
             diferente de um áudio book convencional, ainda mais se tratando de
             uma história em quadrinhos, onde a imagem tem papel fundamental na
             narrativa.
@@ -98,15 +93,26 @@ export default function Smith() {
           <p>
             Para produzir esse material foi fundamental encontrar uma
             profissional experiente, que atua e conhece as reais demandas de
-            pessoas com deficiência visual. Uma áudio-descrição não é o mesmo que
-            um áudio book convencional, ainda mais quando se trata de uma
-            história em quadrinhos, que tem na imagem uma das principais
-            ferramentas narrativas. A Milena fez um trabalho incrível.
+            pessoas com deficiência visual.
           </p>
           <p>
             Que essa versão da história do Smith consiga desenhar imagens e
             plantar lembranças dentro de cada um de vocês.
           </p>
+        </motion.div>
+
+        {/* Capa do livro */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-12 flex justify-center"
+        >
+          <img
+            src={capaSmith}
+            alt="Capa do livro Mais uma história para o velho Smith, de Orlandeli"
+            className="w-full max-w-sm h-auto rounded-lg shadow-lg"
+          />
         </motion.div>
 
         {/* Player de áudio (placeholder) */}
@@ -198,9 +204,11 @@ export default function Smith() {
                       </span>
                     )}
                   </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mt-1">
-                    {item.descricao}
-                  </p>
+                  {item.descricao && (
+                    <p className="text-sm text-muted-foreground leading-relaxed mt-1">
+                      {item.descricao}
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
