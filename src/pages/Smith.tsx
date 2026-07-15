@@ -9,6 +9,7 @@ import capaSmith from "@/assets/capa_smith.png";
 import proacSmith from "@/assets/proac_smith.png";
 
 const VERDE = "#93c748";
+const BRANCO = "#ffffff";
 
 /**
  * Faixas da áudio-descrição, na ordem de leitura.
@@ -39,8 +40,8 @@ const fichaTecnica = [
   {
     nome: "MILENA BERTONI",
     funcao: "Versão em audiodescrição",
-    descricao:
-      "Especialista em Educação Especial, Professora de Arte, Pedagoga, Arteterapeuta e Audiodescritora.",
+    descricao:"Especialista em Educação Especial, Professora de Arte, Pedagoga, Arteterapeuta e Audiodescritora.",
+    instagram: "https://www.instagram.com/milenabertoni?igsh=MWExanF1Y3ExdmI1eg==",
   },
 ];
 
@@ -171,7 +172,7 @@ export default function Smith() {
           <div className="flex items-center gap-3 mb-5">
             <div
               className="w-11 h-11 rounded-full flex items-center justify-center shrink-0"
-              style={{ backgroundColor: VERDE }}
+              style={{ backgroundColor: BRANCO }}
             >
               <Headphones className="h-5 w-5 text-white" />
             </div>
@@ -281,10 +282,10 @@ export default function Smith() {
               <div key={idx} className="flex items-stretch gap-5">
                 <div
                   className="w-16 md:w-20 shrink-0 rounded-md"
-                  style={{ backgroundColor: VERDE }}
+                  style={{ backgroundColor: BRANCO }}
                 />
                 <div className="py-1">
-                  <h3 className="font-serif text-base font-bold italic text-foreground">
+                  <h3 className="font-serif flex justify text-base font-bold italic text-foreground">
                     {item.nome}
                     {item.funcao && (
                       <span className="font-normal not-italic text-muted-foreground">
@@ -294,9 +295,22 @@ export default function Smith() {
                     )}
                   </h3>
                   {item.descricao && (
-                    <p className="text-sm text-muted-foreground leading-relaxed mt-1">
+                    <p className="text-sm align-center text-muted-foreground leading-relaxed mt-1">
                       {item.descricao}
                     </p>
+
+                    
+                    
+                  )}
+                   {item.instagram && (
+                    <p className="text-sm  align-center text-muted-foreground leading-relaxed mt-1">
+                    <a href={item.instagram} target="_blank" rel="noopener noreferrer">
+                      @milenabertoni
+                    </a>
+                    </p>  
+
+                    
+                    
                   )}
                 </div>
               </div>
