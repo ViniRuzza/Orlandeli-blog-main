@@ -20,6 +20,7 @@ const faixas = [
   { titulo: "Parte 1", paginas: "págs. 11–17", src: "/audios/Smith-Parte01-11-17.mp3" },
   { titulo: "Parte 2", paginas: "págs. 18–27", src: "/audios/Smith-Parte02-18-27.mp3" },
   { titulo: "Parte 3", paginas: "págs. 29–49", src: "/audios/Smith-Parte03-29-49.mp3" },
+  { titulo: "Parte 4", paginas: "págs. 50–71", src: "/audios/Smith-Parte04-50-71.mp3" },
   { titulo: "Parte 5", paginas: "págs. 72–100", src: "/audios/Smith-Parte05-72-100.mp3" },
   { titulo: "Parte 6", paginas: "págs. 101–119", src: "/audios/Smith-Parte06-101-119.mp3" },
   { titulo: "Parte 7", paginas: "págs. 120–125", src: "/audios/Smith-Parte07-120-125.mp3" },
@@ -40,7 +41,7 @@ const fichaTecnica = [
   {
     nome: "MILENA BERTONI",
     funcao: "Versão em audiodescrição",
-    descricao:"Especialista em Educação Especial, Professora de Arte, Pedagoga, Arteterapeuta e Audiodescritora.",
+    descricao: "Especialista em Educação Especial, Professora de Arte, Pedagoga, Arteterapeuta e Audiodescritora.",
     instagram: "https://www.instagram.com/milenabertoni?igsh=MWExanF1Y3ExdmI1eg==",
   },
 ];
@@ -208,9 +209,8 @@ export default function Smith() {
               return (
                 <li
                   key={faixa.src}
-                  className={`flex items-center gap-1 rounded-lg transition-colors ${
-                    ativa ? "bg-muted" : "hover:bg-muted/60"
-                  }`}
+                  className={`flex items-center gap-1 rounded-lg transition-colors ${ativa ? "bg-muted" : "hover:bg-muted/60"
+                    }`}
                 >
                   <button
                     type="button"
@@ -234,9 +234,8 @@ export default function Smith() {
                     </span>
                     <span className="flex-1 min-w-0">
                       <span
-                        className={`block text-sm font-semibold truncate ${
-                          ativa ? "text-foreground" : "text-foreground/90"
-                        }`}
+                        className={`block text-sm font-semibold truncate ${ativa ? "text-foreground" : "text-foreground/90"
+                          }`}
                       >
                         {faixa.titulo}
                       </span>
@@ -279,38 +278,31 @@ export default function Smith() {
 
           <div className="space-y-6">
             {fichaTecnica.map((item, idx) => (
-              <div key={idx} className="flex items-stretch gap-5">
+              <div key={idx} className="flex flex-col items-center text-center gap-3">
                 <div
-                  className="w-16 md:w-20 shrink-0 rounded-md"
+                  className="w-16 md:w-20 h-1.5 rounded-md"
                   style={{ backgroundColor: BRANCO }}
                 />
                 <div className="py-1">
-                  <h3 className="font-serif flex justify text-base font-bold italic text-foreground">
+                  <h3 className="font-serif text-base font-bold italic text-foreground">
                     {item.nome}
-                    {item.funcao && (
-                      <span className="font-normal not-italic text-muted-foreground">
-                        {" "}
-                        — {item.funcao}
-                      </span>
-                    )}
                   </h3>
+                  {item.funcao && (
+                    <p className="text-sm font-normal not-italic text-muted-foreground mt-0.5">
+                      {item.funcao}
+                    </p>
+                  )}
                   {item.descricao && (
-                    <p className="text-sm align-center text-muted-foreground leading-relaxed mt-1">
+                    <p className="text-sm text-muted-foreground leading-relaxed mt-1 max-w-xl mx-auto">
                       {item.descricao}
                     </p>
-
-                    
-                    
                   )}
-                   {item.instagram && (
-                    <p className="text-sm  align-center text-muted-foreground leading-relaxed mt-1">
-                    <a href={item.instagram} target="_blank" rel="noopener noreferrer">
-                      @milenabertoni
-                    </a>
-                    </p>  
-
-                    
-                    
+                  {item.instagram && (
+                    <p className="text-sm text-muted-foreground leading-relaxed mt-1">
+                      <a href={item.instagram} target="_blank" rel="noopener noreferrer">
+                        @milenabertoni
+                      </a>
+                    </p>
                   )}
                 </div>
               </div>
